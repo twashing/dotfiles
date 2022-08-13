@@ -1,0 +1,17 @@
+
+
+* Dotfiles
+
+These configuration are heavily inspired (read cribbed) from System Crafters work.
+- [How to Create a Dotfiles Folder](https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Dotfiles-02.org)
+
+* Managing Dotfiles with Stow
+
+Basics are below. For an overview see here.
+- [Using GNU Stow to Manage Symbolic Links for Your Dotfiles](https://systemcrafters.net/managing-your-dotfiles/using-gnu-stow/)
+
+
+From my local directory.
+```
+stow ."
+```
