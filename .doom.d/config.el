@@ -89,7 +89,6 @@
 (map! "C-c M-[" #'ace-swap-window)
 (map! "C-x M-[" #'ace-delete-window)
 (map! "M-y" #'browse-kill-ring)
-(map! "C-M-SPC" #'delete-whitespace-except-one)
 (map! "C-M-[" #'scroll-other-window-down)
 (map! "C-M-]" #'scroll-other-window)
 (map! "C-M-s" #'sp-splice-sexp)
@@ -139,6 +138,12 @@
 
 ;; Miscellaneous
 ;; To get information about any of these functions/macros, move the cursor over
+
+(defun delete-whitespace-except-one ()
+  (interactive)
+  (just-one-space -1))
+
+(map! "C-M-SPC" #'delete-whitespace-except-one)
 (map! "C-," #'+default/newline-above)
 (map! "C-." #'+default/newline-below)
 
