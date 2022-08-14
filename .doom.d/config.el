@@ -60,7 +60,8 @@
 
 
 ;; Swiper
-(map! "M-m s s" #'swiper)
+(map! "M-m" nil
+      "M-m s s" #'swiper)
 (map! "M-m s S" #'swiper-isearch-thing-at-point)
 (map! "M-m s B" #'swiper-all)  ;; search all buffers
 
@@ -68,7 +69,7 @@
 ;; Projectile
 (map! "M-m p p" #'projectile-switch-project)
 (map! "M-m p f" #'projectile-find-file)
-(map! "M-m p r" #'projectile-replace
+(map! "M-m p r" #'projectile-replace)
 (map! "M-m p R" #'projectile-replace-regexp)
 (map! "M-m p S" #'projectile-save-project-buffers)
 
@@ -78,13 +79,10 @@
 
 
 ;; Navigation
-;;(fset 'buf-move-up "\C-u10\C-p")
-;;(fset 'buf-move-down "\C-u10\C-n")
-(use-package! buffer-move
-  :config
-  (map! "\C-u10\C-p" #'buf-move-up)
-  (map! "\C-u10\C-n" #'buf-move-down))
-
+(fset 'buf-move-up "\C-u10\C-p")
+(fset 'buf-move-down "\C-u10\C-n")
+(map! "M-U" #'buf-move-up)
+(map! "M-D" #'buf-move-down)
 (map! "C-d" #'sp-kill-sexp)
 (map! "C-M-k" #'copy-sexp-at-point)
 (map! "M-[" #'ace-select-window)
@@ -100,33 +98,26 @@
 ;; Smartparens Navigation
 (map! "C-M-u" #'sp-up-sexp)
 (map! "M-u" #'sp-backward-up-sexp)
-
 (map! "C-M-d" #'sp-down-sexp)
 (map! "M-d" #'sp-backward-down-sexp)
-
 (map! "C-M-j" #'sp-forward-slurp-sexp)
 (map! "C-x C-M-j" #'sp-forward-barf-sexp)
-
 (map! "C-M-y" #'sp-backward-slurp-sexp)
 (map! "C-x C-M-y" #'sp-backward-barf-sexp)
-
 (map! "C-M-n" #'sp-next-sexp)
 (map! "M-r" #'sp-raise-sexp)
+
 
 ;; Multiple cursors
 (map! "C-c m n l" #'mc/mark-next-lines)
 (map! "C-c m n t" #'mc/mark-next-like-this)
-
 (map! "C-c m n w" #'mc/mark-next-like-this-word)
 (map! "C-c m n W" #'mc/mark-next-word-like-this)
-
 (map! "C-c m n s" #'mc/mark-next-like-this-symbol)
 (map! "C-c m n S" #'mc/mark-next-symbol-like-this)
-
 (map! "C-c s n" #'mc/skip-to-next-like-this)
 (map! "C-c s p" #'mc/skip-to-previous-like-this)
 (map! "C-c m i n" #'mc/insert-numbers)
-
 (map! "C-c m p l" #'mc/mark-previous-lines)
 (map! "C-c m a t" #'mc/mark-all-like-this)
 (map! "C-c m a w" #'mc/mark-all-words-like-this)
@@ -135,7 +126,6 @@
 (map! "C-c m a x" #'mc/mark-all-in-region-regexp)
 (map! "C-c m a d" #'mc/mark-all-like-this-dwim)
 (map! "C-c m a D" #'mc/mark-all-dwim)
-
 (map! "C-c m e l" #'mc/edit-lines)
 (map! "C-c m e b" #'mc/edit-beginnings-of-lines)
 (map! "C-c m e e" #'mc/edit-ends-of-lines)
@@ -149,8 +139,8 @@
 
 ;; Miscellaneous
 ;; To get information about any of these functions/macros, move the cursor over
-(map! "C-L" #'+default/newline-above)
-(map! "C-l" #'+default/newline-below)
+(map! "C-," #'+default/newline-above)
+(map! "C-." #'+default/newline-below)
 
 
 ;; Copy line
