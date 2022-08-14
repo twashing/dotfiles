@@ -158,10 +158,21 @@
 (map! "C-c K" #'avy-copy-line)
 
 
+;; Ace Window
+;; https://github.com/abo-abo/ace-window
+
 ;; Switch window letter SIZE
 (custom-set-faces
  '(aw-leading-char-face
-   ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+   ((t (:inherit ace-jump-face-foreground :height 6.0)))))
+
+;; Ensure ace-window works across frames.
+(setq aw-scope 'global)
+
+
+;; Avy
+;; https://github.com/abo-abo/avy
+(setq avy-all-windows 'all-frames)
 
 
 ;; To get information about any of these functions/macros, move the cursor over
