@@ -56,10 +56,14 @@
 (map! "C-c M-c" #'upcase-word)
 (map! "C-x M-x" #'isearch-forward-symbol-at-point)
 (map! "C-x RET" #'magit-status)
-(map! "M-W" #'whitespace-cleanup)
+(map! "M-W" #'delete-trailing-whitespace)
 
 
 ;; Swiper
+;; (setq ivy-virtual t)
+;; (setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+
 (map! "M-m" nil
       "M-m s s" #'swiper)
 (map! "M-m s S" #'swiper-isearch-thing-at-point)
@@ -84,7 +88,7 @@
 (map! "M-U" #'buf-move-up)
 (map! "M-D" #'buf-move-down)
 (map! "C-d" #'sp-kill-sexp)
-(map! "C-M-k" #'copy-sexp-at-point)
+(map! "C-M-k" #'sp-copy-sexp)
 (map! "M-[" #'ace-select-window)
 (map! "C-c M-[" #'ace-swap-window)
 (map! "C-x M-[" #'ace-delete-window)
@@ -92,9 +96,12 @@
 (map! "C-M-[" #'scroll-other-window-down)
 (map! "C-M-]" #'scroll-other-window)
 (map! "C-M-s" #'sp-splice-sexp)
+(map! "C-x b" #'counsel-ibuffer)
+(map! "C-M-l" #'transpose-lines)
 
 
 ;; Smartparens Navigation
+(turn-on-smartparens-strict-mode)
 (map! "C-M-u" #'sp-up-sexp)
 (map! "M-u" #'sp-backward-up-sexp)
 (map! "C-M-d" #'sp-down-sexp)
@@ -134,6 +141,12 @@
 (map! "C-o" #'hs-toggle-hiding)
 (map! "C-c @ C-M-h" #'hs-hide-all)
 (map! "C-c @ C-M-s" #'hs-show-all)
+
+
+;; Cider
+(map! "C-c M-c" #'cider-connect-clj)
+(map! "C-c C-k" #'cider-eval-buffer)
+(setq cider-repl-pop-to-buffer-on-connect nil)  ;; DONT open new window on cider-connect
 
 
 ;; Miscellaneous
