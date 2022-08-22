@@ -88,8 +88,26 @@
 (map! "M-U" #'buf-move-up)
 (map! "M-D" #'buf-move-down)
 (map! "C-d" #'sp-kill-sexp)
-(map! "C-M-k" #'sp-copy-sexp)
+
+(map! :map smartparens-mode-map
+      :after smartparens
+      "C-M-k" #'sp-copy-sexp)
+
+(after! ace-window
+
+  ;; https://github.com/abo-abo/ace-window
+
+  ;; Switch window letter SIZE
+  (custom-set-faces
+   '(aw-leading-char-face
+     ((t (:inherit ace-jump-face-foreground :height 6.0)))))
+
+  ;; Ensure ace-window works across frames.
+  (setq aw-scope 'global))
+
 (map! "M-[" #'ace-select-window)
+
+
 (map! "C-c M-[" #'ace-swap-window)
 (map! "C-x M-[" #'ace-delete-window)
 (map! "M-y" #'browse-kill-ring)
@@ -175,17 +193,6 @@
 (map! "C-c k" #'copy-line)
 (map! "C-c K" #'avy-copy-line)
 
-
-;; Ace Window
-;; https://github.com/abo-abo/ace-window
-
-;; Switch window letter SIZE
-(custom-set-faces
- '(aw-leading-char-face
-   ((t (:inherit ace-jump-face-foreground :height 6.0)))))
-
-;; Ensure ace-window works across frames.
-(setq aw-scope 'global)
 
 
 ;; Avy
