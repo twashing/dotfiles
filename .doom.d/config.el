@@ -89,9 +89,24 @@
 (map! "M-D" #'buf-move-down)
 (map! "C-d" #'sp-kill-sexp)
 
+
+;; Smartparens Navigation
+(after! smartparens
+  (turn-on-smartparens-strict-mode))
+
 (map! :map smartparens-mode-map
       :after smartparens
-      "C-M-k" #'sp-copy-sexp)
+      "C-M-k" #'sp-copy-sexp
+      "C-M-u" #'sp-up-sexp
+      "M-u" #'sp-backward-up-sexp
+      "C-M-d" #'sp-down-sexp
+      "M-d" #'sp-backward-down-sexp
+      "C-M-j" #'sp-forward-slurp-sexp
+      "C-x C-M-j" #'sp-forward-barf-sexp
+      "C-M-y" #'sp-backward-slurp-sexp
+      "C-x C-M-y" #'sp-backward-barf-sexp
+      "C-M-n" #'sp-next-sexp
+      "M-r" #'sp-raise-sexp)
 
 (after! ace-window
 
@@ -118,18 +133,18 @@
 (map! "C-M-l" #'transpose-lines)
 
 
-;; Smartparens Navigation
-(turn-on-smartparens-strict-mode)
-(map! "C-M-u" #'sp-up-sexp)
-(map! "M-u" #'sp-backward-up-sexp)
-(map! "C-M-d" #'sp-down-sexp)
-(map! "M-d" #'sp-backward-down-sexp)
-(map! "C-M-j" #'sp-forward-slurp-sexp)
-(map! "C-x C-M-j" #'sp-forward-barf-sexp)
-(map! "C-M-y" #'sp-backward-slurp-sexp)
-(map! "C-x C-M-y" #'sp-backward-barf-sexp)
-(map! "C-M-n" #'sp-next-sexp)
-(map! "M-r" #'sp-raise-sexp)
+;; ;; Smartparens Navigation
+;; (turn-on-smartparens-strict-mode)
+;; (map! "C-M-u" #'sp-up-sexp)
+;; (map! "M-u" #'sp-backward-up-sexp)
+;; (map! "C-M-d" #'sp-down-sexp)
+;; (map! "M-d" #'sp-backward-down-sexp)
+;; (map! "C-M-j" #'sp-forward-slurp-sexp)
+;; (map! "C-x C-M-j" #'sp-forward-barf-sexp)
+;; (map! "C-M-y" #'sp-backward-slurp-sexp)
+;; (map! "C-x C-M-y" #'sp-backward-barf-sexp)
+;; (map! "C-M-n" #'sp-next-sexp)
+;; (map! "M-r" #'sp-raise-sexp)
 
 
 ;; Multiple cursors
@@ -164,8 +179,10 @@
 ;; Cider
 (after! cider
 
-  ;; DONT open new window on cider-connect
-  (setq cider-repl-pop-to-buffer-on-connect nil))
+  ;; DONT open new window on cider-connect, et al
+  (setq cider-repl-pop-to-buffer-on-connect nil)
+  (setq cider-auto-select-test-report-buffer nil)
+  (setq cider-auto-select-error-buffer nil))
 
 (map! "C-c M-c" #'cider-connect-clj)
 (map! "C-c C-k" #'cider-eval-buffer)
