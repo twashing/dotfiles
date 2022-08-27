@@ -162,9 +162,13 @@
 
 
 ;; Cider
+(after! cider
+
+  ;; DONT open new window on cider-connect
+  (setq cider-repl-pop-to-buffer-on-connect nil))
+
 (map! "C-c M-c" #'cider-connect-clj)
 (map! "C-c C-k" #'cider-eval-buffer)
-(setq cider-repl-pop-to-buffer-on-connect nil)  ;; DONT open new window on cider-connect
 
 
 ;; Miscellaneous
