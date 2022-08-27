@@ -59,25 +59,11 @@
 (map! "M-W" #'delete-trailing-whitespace)
 
 
-;; Swiper
-;; (setq ivy-virtual t)
-;; (setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-
 (map! "M-m" nil
       "M-m s s" #'swiper)
 (map! "M-m s S" #'swiper-isearch-thing-at-point)
 (map! "M-m s B" #'swiper-all)  ;; search all buffers
 
-
-;; Projectile
-;; (after! projectile
-;;
-;;   (setq projectile-switch-project-action
-;;         (defun
-;;          (t)
-;;          nil
-;;          (+workspaces-set-project-action-fn))))
 
 (map! "M-m p p" #'projectile-switch-project)
 (map! "M-m p f" #'projectile-find-file)
