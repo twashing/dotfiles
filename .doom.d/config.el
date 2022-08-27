@@ -51,23 +51,18 @@
 
 
 ;; General
-(map! "M-<backspace>" #'sp-backward-kill-word)
-(map! "C-c C-k" #'eval-buffer)
-(map! "C-c M-c" #'upcase-word)
-(map! "C-x M-x" #'isearch-forward-symbol-at-point)
-(map! "C-x RET" #'magit-status)
-(map! "M-W" #'delete-trailing-whitespace)
+(map! "M-<backspace>" #'sp-backward-kill-word
+      "C-c C-k" #'eval-buffer
+      "C-c M-c" #'upcase-word
+      "C-x M-x" #'isearch-forward-symbol-at-point
+      "C-x RET" #'magit-status
+      "M-W" #'delete-trailing-whitespace)
 
 
 (map! "M-m" nil
       "M-m s s" #'swiper
       "M-m s S" #'swiper-isearch-thing-at-point
       "M-m s B" #'swiper-all)  ;; search all buffers
-
-;; (map! "M-m" nil
-;;       "M-m s s" #'swiper)
-;; (map! "M-m s S" #'swiper-isearch-thing-at-point)
-;; (map! "M-m s B" #'swiper-all)  ;; search all buffers
 
 
 (map! "M-m p p" #'projectile-switch-project
@@ -76,23 +71,18 @@
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
 
-;; (map! "M-m p p" #'projectile-switch-project)
-;; (map! "M-m p f" #'projectile-find-file)
-;; (map! "M-m p r" #'projectile-replace)
-;; (map! "M-m p R" #'projectile-replace-regexp)
-;; (map! "M-m p S" #'projectile-save-project-buffers)
-
 
 ;; Avy
+(setq avy-all-windows 'all-frames)
 (map! "C-c g c" #'avy-goto-char-2)
 
 
 ;; Navigation
 (fset 'buf-move-up "\C-u10\C-p")
 (fset 'buf-move-down "\C-u10\C-n")
-(map! "M-U" #'buf-move-up)
-(map! "M-D" #'buf-move-down)
-(map! "C-d" #'sp-kill-sexp)
+(map! "M-U" #'buf-move-up
+      "M-D" #'buf-move-down
+      "C-d" #'sp-kill-sexp)
 
 
 ;; Smartparens Navigation
@@ -124,44 +114,44 @@
   ;; Ensure ace-window works across frames.
   (setq aw-scope 'global))
 
-(map! "M-[" #'ace-select-window)
-(map! "C-c M-[" #'ace-swap-window)
-(map! "C-x M-[" #'ace-delete-window)
-(map! "M-y" #'browse-kill-ring)
-(map! "C-M-[" #'scroll-other-window-down)
-(map! "C-M-]" #'scroll-other-window)
-(map! "C-M-s" #'sp-splice-sexp)
-(map! "C-x b" #'counsel-ibuffer)
-(map! "C-M-l" #'transpose-lines)
+(map! "M-[" #'ace-select-window
+      "C-c M-[" #'ace-swap-window
+      "C-x M-[" #'ace-delete-window
+      "M-y" #'browse-kill-ring
+      "C-M-[" #'scroll-other-window-down
+      "C-M-]" #'scroll-other-window
+      "C-M-s" #'sp-splice-sexp
+      "C-x b" #'counsel-ibuffer
+      "C-M-l" #'transpose-lines)
 
 
 ;; Multiple cursors
-(map! "C-c m n l" #'mc/mark-next-lines)
-(map! "C-c m n t" #'mc/mark-next-like-this)
-(map! "C-c m n w" #'mc/mark-next-like-this-word)
-(map! "C-c m n W" #'mc/mark-next-word-like-this)
-(map! "C-c m n s" #'mc/mark-next-like-this-symbol)
-(map! "C-c m n S" #'mc/mark-next-symbol-like-this)
-(map! "C-c s n" #'mc/skip-to-next-like-this)
-(map! "C-c s p" #'mc/skip-to-previous-like-this)
-(map! "C-c m i n" #'mc/insert-numbers)
-(map! "C-c m p l" #'mc/mark-previous-lines)
-(map! "C-c m a t" #'mc/mark-all-like-this)
-(map! "C-c m a w" #'mc/mark-all-words-like-this)
-(map! "C-c m a s" #'mc/mark-all-symbols-like-this)
-(map! "C-c m a r" #'mc/mark-all-in-region)
-(map! "C-c m a x" #'mc/mark-all-in-region-regexp)
-(map! "C-c m a d" #'mc/mark-all-like-this-dwim)
-(map! "C-c m a D" #'mc/mark-all-dwim)
-(map! "C-c m e l" #'mc/edit-lines)
-(map! "C-c m e b" #'mc/edit-beginnings-of-lines)
-(map! "C-c m e e" #'mc/edit-ends-of-lines)
+(map! "C-c m n l" #'mc/mark-next-lines
+      "C-c m n t" #'mc/mark-next-like-this
+      "C-c m n w" #'mc/mark-next-like-this-word
+      "C-c m n W" #'mc/mark-next-word-like-this
+      "C-c m n s" #'mc/mark-next-like-this-symbol
+      "C-c m n S" #'mc/mark-next-symbol-like-this
+      "C-c s n" #'mc/skip-to-next-like-this
+      "C-c s p" #'mc/skip-to-previous-like-this
+      "C-c m i n" #'mc/insert-numbers
+      "C-c m p l" #'mc/mark-previous-lines
+      "C-c m a t" #'mc/mark-all-like-this
+      "C-c m a w" #'mc/mark-all-words-like-this
+      "C-c m a s" #'mc/mark-all-symbols-like-this
+      "C-c m a r" #'mc/mark-all-in-region
+      "C-c m a x" #'mc/mark-all-in-region-regexp
+      "C-c m a d" #'mc/mark-all-like-this-dwim
+      "C-c m a D" #'mc/mark-all-dwim
+      "C-c m e l" #'mc/edit-lines
+      "C-c m e b" #'mc/edit-beginnings-of-lines
+      "C-c m e e" #'mc/edit-ends-of-lines)
 
 
 ;; Hide / Show
-(map! "C-o" #'hs-toggle-hiding)
-(map! "C-c @ C-M-h" #'hs-hide-all)
-(map! "C-c @ C-M-s" #'hs-show-all)
+(map! "C-o" #'hs-toggle-hiding
+      "C-c @ C-M-h" #'hs-hide-all
+      "C-c @ C-M-s" #'hs-show-all)
 
 
 ;; Cider
@@ -172,8 +162,8 @@
   (setq cider-auto-select-test-report-buffer nil)
   (setq cider-auto-select-error-buffer nil))
 
-(map! "C-c M-c" #'cider-connect-clj)
-(map! "C-c C-k" #'cider-eval-buffer)
+(map! "C-c M-c" #'cider-connect-clj
+      "C-c C-k" #'cider-eval-buffer)
 
 
 ;; Miscellaneous
@@ -183,9 +173,9 @@
   (interactive)
   (just-one-space -1))
 
-(map! "C-M-SPC" #'delete-whitespace-except-one)
-(map! "C-," #'+default/newline-above)
-(map! "C-." #'+default/newline-below)
+(map! "C-M-SPC" #'delete-whitespace-except-one
+      "C-," #'+default/newline-above
+      "C-." #'+default/newline-below)
 
 
 ;; Copy line
@@ -199,14 +189,9 @@
         (kill-read-only-ok t))
     (kill-line arg)))
 
-(map! "C-c k" #'copy-line)
-(map! "C-c K" #'avy-copy-line)
+(map! "C-c k" #'copy-line
+      "C-c K" #'avy-copy-line)
 
-
-
-;; Avy
-;; https://github.com/abo-abo/avy
-(setq avy-all-windows 'all-frames)
 
 
 ;; To get information about any of these functions/macros, move the cursor over
