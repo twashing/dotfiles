@@ -92,7 +92,8 @@
 
 ;; Smartparens Navigation
 (after! smartparens
-  (turn-on-smartparens-strict-mode))
+  (turn-on-smartparens-strict-mode)
+  (sp-pair "(" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
       :after smartparens
@@ -131,20 +132,6 @@
 (map! "C-M-s" #'sp-splice-sexp)
 (map! "C-x b" #'counsel-ibuffer)
 (map! "C-M-l" #'transpose-lines)
-
-
-;; ;; Smartparens Navigation
-;; (turn-on-smartparens-strict-mode)
-;; (map! "C-M-u" #'sp-up-sexp)
-;; (map! "M-u" #'sp-backward-up-sexp)
-;; (map! "C-M-d" #'sp-down-sexp)
-;; (map! "M-d" #'sp-backward-down-sexp)
-;; (map! "C-M-j" #'sp-forward-slurp-sexp)
-;; (map! "C-x C-M-j" #'sp-forward-barf-sexp)
-;; (map! "C-M-y" #'sp-backward-slurp-sexp)
-;; (map! "C-x C-M-y" #'sp-backward-barf-sexp)
-;; (map! "C-M-n" #'sp-next-sexp)
-;; (map! "M-r" #'sp-raise-sexp)
 
 
 ;; Multiple cursors
