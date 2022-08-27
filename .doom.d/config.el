@@ -60,16 +60,27 @@
 
 
 (map! "M-m" nil
-      "M-m s s" #'swiper)
-(map! "M-m s S" #'swiper-isearch-thing-at-point)
-(map! "M-m s B" #'swiper-all)  ;; search all buffers
+      "M-m s s" #'swiper
+      "M-m s S" #'swiper-isearch-thing-at-point
+      "M-m s B" #'swiper-all)  ;; search all buffers
+
+;; (map! "M-m" nil
+;;       "M-m s s" #'swiper)
+;; (map! "M-m s S" #'swiper-isearch-thing-at-point)
+;; (map! "M-m s B" #'swiper-all)  ;; search all buffers
 
 
-(map! "M-m p p" #'projectile-switch-project)
-(map! "M-m p f" #'projectile-find-file)
-(map! "M-m p r" #'projectile-replace)
-(map! "M-m p R" #'projectile-replace-regexp)
-(map! "M-m p S" #'projectile-save-project-buffers)
+(map! "M-m p p" #'projectile-switch-project
+      "M-m p f" #'projectile-find-file
+      "M-m p r" #'projectile-replace
+      "M-m p R" #'projectile-replace-regexp
+      "M-m p S" #'projectile-save-project-buffers)
+
+;; (map! "M-m p p" #'projectile-switch-project)
+;; (map! "M-m p f" #'projectile-find-file)
+;; (map! "M-m p r" #'projectile-replace)
+;; (map! "M-m p R" #'projectile-replace-regexp)
+;; (map! "M-m p S" #'projectile-save-project-buffers)
 
 
 ;; Avy
@@ -105,8 +116,6 @@
 
 (after! ace-window
 
-  ;; https://github.com/abo-abo/ace-window
-
   ;; Switch window letter SIZE
   (custom-set-faces
    '(aw-leading-char-face
@@ -116,8 +125,6 @@
   (setq aw-scope 'global))
 
 (map! "M-[" #'ace-select-window)
-
-
 (map! "C-c M-[" #'ace-swap-window)
 (map! "C-x M-[" #'ace-delete-window)
 (map! "M-y" #'browse-kill-ring)
