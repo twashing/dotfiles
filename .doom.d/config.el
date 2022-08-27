@@ -71,6 +71,14 @@
 
 
 ;; Projectile
+;; (after! projectile
+;;
+;;   (setq projectile-switch-project-action
+;;         (defun
+;;          (t)
+;;          nil
+;;          (+workspaces-set-project-action-fn))))
+
 (map! "M-m p p" #'projectile-switch-project)
 (map! "M-m p f" #'projectile-find-file)
 (map! "M-m p r" #'projectile-replace)
