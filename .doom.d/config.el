@@ -193,6 +193,80 @@
       "C-c K" #'avy-copy-line)
 
 
+;; Completions
+;;
+;; > Context
+;;
+;; Exploring the optimal Emacs Completions with
+;;   Vertigo
+;;   vs helm
+;;   vs counsel (used in Doom)
+;;   vs consult (improvement over counsel? - https://github.com/minad/consult)
+;;
+;;   Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
+;;   https://www.youtube.com/watch?v=5ffb2at2d7w
+;;
+;;   Streamline Your Emacs Completions with Vertico
+;;   https://www.youtube.com/watch?v=J0OaRy85MOo
+;;   https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico/
+;;
+;;   https://github.com/minad/vertico
+;;
+;;
+;; > Research
+;;
+;; Emacs Completion Explained
+;; https://www.youtube.com/watch?v=fnE0lXoe7Y0
+;;
+;; Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
+;; https://www.youtube.com/watch?v=5ffb2at2d7w
+;; https://cestlaz.github.io/post/using-emacs-80-vertico/
+;;
+;; Emacs: completion framework (Embark,Consult,Orderless,etc.)
+;; https://www.youtube.com/watch?v=43Dg5zYPHTU
+;; https://protesilaos.com/codelog/2021-01-06-emacs-default-completion/
+;;
+;;
+;; "One important feature is that it plugs in directly to Emacs' own completion engine unlike Helm and Ivy which have their own layer on top."
+;; https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico/
+;;
+;; [no] Helm, Ivy, have been superceded
+;;
+;; [ok] Annotations exist on command execution and help menus. Addition not needed.
+;;   Marginalia - https://github.com/minad/marginalia
+;;
+;;
+;; > Outcome
+;;
+;; A. These are the packages I settled on.
+;;
+;; ```
+;; Vertico - https://github.com/minad/vertico
+;; Consult - https://github.com/minad/consult
+;; Embark - https://github.com/oantolin/embark
+;;
+;; Orderless (vs Prescient, Selectrum)
+;;   https://github.com/oantolin/orderless
+;;   https://github.com/radian-software/prescient.el
+;;   https://github.com/radian-software/selectrum
+;;
+;; Corfu - https://github.com/minad/corfu
+;;   Replaces Company for Completions
+;; ```
+;;
+;; B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico/` module.
+;; So all I had to do was enable it: `(doom! :completion  vertico)`.
+;;
+;; https://github.com/doomemacs/doomemacs/tree/master/modules/completion/vertico
+;;
+;; ```
+;; Vertico, which provides the vertical completion user interface
+;; Consult, which provides a suite of useful commands using completing-read
+;; Embark, which provides a set of minibuffer actions
+;; Marginalia, which provides annotations to completion candidates
+;; Orderless, which provides better filtering methods
+;; ```
+
 
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
