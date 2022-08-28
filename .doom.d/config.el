@@ -65,6 +65,16 @@
       "M-m s B" #'swiper-all)  ;; search all buffers
 
 
+;; consult-line
+;; consult-line-multi
+;; consult-yank-from-kill-ring
+;; orderless-flex
+(map! :after consult
+      "M-m s l" #'consult-line
+      "M-m s m" #'consult-line-multi
+      "M-y" #'consult-yank-from-kill-ring)
+
+
 (map! "M-m p p" #'projectile-switch-project
       "M-m p f" #'projectile-find-file
       "M-m p r" #'projectile-replace
@@ -117,12 +127,13 @@
 (map! "M-[" #'ace-select-window
       "C-c M-[" #'ace-swap-window
       "C-x M-[" #'ace-delete-window
-      "M-y" #'browse-kill-ring
+      ;; "M-y" #'browse-kill-ring
       "C-M-[" #'scroll-other-window-down
       "C-M-]" #'scroll-other-window
       "C-M-s" #'sp-splice-sexp
-      "C-x b" #'counsel-ibuffer
+      "C-x b" #'consult-buffer
       "C-M-l" #'transpose-lines)
+
 
 
 ;; Multiple cursors
@@ -266,7 +277,9 @@
 ;; Marginalia, which provides annotations to completion candidates
 ;; Orderless, which provides better filtering methods
 ;; ```
+(after! vertico
 
+  (vertico-buffer-mode))
 
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
