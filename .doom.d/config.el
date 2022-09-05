@@ -81,6 +81,17 @@
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
 
+;; (orderless-matching-styles
+;;  '(orderless-flex                       ; Basically fuzzy finding
+;;    orderless-regexp
+;;    ;; orderless-literal
+;;    ;; orderless-prefixes
+;;    ;; orderless-initialism
+;;    ;; orderless-strict-leading-initialism
+;;    ;; orderless-strict-initialism
+;;    ;; orderless-strict-full-initialism
+;;    ;; orderless-without-literal          ; Recommended for dispatches instead
+;;    ))
 
 ;; Avy
 (setq avy-all-windows 'all-frames)
@@ -137,16 +148,18 @@
 
 
 ;; Multiple cursors
-(map! "C-c m n l" #'mc/mark-next-lines
-      "C-c m n t" #'mc/mark-next-like-this
-      "C-c m n w" #'mc/mark-next-like-this-word
-      "C-c m n W" #'mc/mark-next-word-like-this
-      "C-c m n s" #'mc/mark-next-like-this-symbol
-      "C-c m n S" #'mc/mark-next-symbol-like-this
+(map! "C-c m N l" #'mc/mark-next-lines
+      "C-c m N t" #'mc/mark-next-like-this
+      "C-c m N w" #'mc/mark-next-like-this-word
+      "C-c m N W" #'mc/mark-next-word-like-this
+      "C-c m N s" #'mc/mark-next-like-this-symbol
+      "C-c m N S" #'mc/mark-next-symbol-like-this
+      "C-c m P l" #'mc/mark-previous-lines
+
       "C-c s n" #'mc/skip-to-next-like-this
       "C-c s p" #'mc/skip-to-previous-like-this
       "C-c m i n" #'mc/insert-numbers
-      "C-c m p l" #'mc/mark-previous-lines
+
       "C-c m a t" #'mc/mark-all-like-this
       "C-c m a w" #'mc/mark-all-words-like-this
       "C-c m a s" #'mc/mark-all-symbols-like-this
@@ -154,15 +167,41 @@
       "C-c m a x" #'mc/mark-all-in-region-regexp
       "C-c m a d" #'mc/mark-all-like-this-dwim
       "C-c m a D" #'mc/mark-all-dwim
+
       "C-c m e l" #'mc/edit-lines
       "C-c m e b" #'mc/edit-beginnings-of-lines
       "C-c m e e" #'mc/edit-ends-of-lines)
+
+(defhydra hydra-multiple-cursors-next (general-override-mode-map "C-c m n")
+  "
+   Mark next"
+  ("l" mc/mark-next-lines "lines")
+  ("t" mc/mark-next-like-this "next")
+  ("w" mc/mark-next-like-this-word "word")
+  ("s" mc/mark-next-like-this-symbol "symbol")
+  ("W" mc/mark-next-word-like-this "whole word")
+  ("S" mc/mark-next-symbol-like-this "whole symbol")
+
+  ("q" nil "quit" :color blue))
+
+(defhydra hydra-multiple-cursors-previous (general-override-mode-map "C-c m p")
+  "
+   Mark previous"
+  ("l" mc/mark-previous-lines "lines")
+  ("t" mc/mark-previous-like-this "previous")
+  ("w" mc/mark-previous-like-this-word "word")
+  ("s" mc/mark-previous-like-this-symbol "symbol")
+  ("W" mc/mark-previous-word-like-this "whole word")
+  ("S" mc/mark-previous-symbol-like-this "whole symbol")
+
+  ("q" nil "quit" :color blue))
 
 
 ;; Hide / Show
 (map! "C-o" #'hs-toggle-hiding
       "C-c @ C-M-h" #'hs-hide-all
       "C-c @ C-M-s" #'hs-show-all)
+
 
 
 ;; Cider
@@ -173,8 +212,14 @@
   (setq cider-auto-select-test-report-buffer nil)
   (setq cider-auto-select-error-buffer nil))
 
-(map! "C-c M-c" #'cider-connect-clj
-      "C-c C-k" #'cider-eval-buffer)
+;; (map! "C-c M-c" #'cider-connect-clj
+;;       "C-c C-k" #'cider-eval-buffer)
+
+(map! :after cider-mode
+      :map clojure-mode-map
+      "C-c M-c" #'cider-connect-clj
+      "C-c C-k" #'cider-eval-buffer
+      "," #'cider-eval-last-sexp)
 
 
 ;; Miscellaneous
@@ -280,6 +325,7 @@
 (after! vertico
 
   (vertico-buffer-mode))
+
 
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
