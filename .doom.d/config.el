@@ -59,19 +59,23 @@
       "M-W" #'delete-trailing-whitespace)
 
 
-(map! "M-m" nil
-      "M-m s s" #'swiper
-      "M-m s S" #'swiper-isearch-thing-at-point
-      "M-m s B" #'swiper-all)  ;; search all buffers
+;; (map! "M-m" nil
+;;       "M-m s s" #'swiper
+;;       "M-m s S" #'swiper-isearch-thing-at-point
+;;       "M-m s B" #'swiper-all)  ;; search all buffers
 
 
 ;; consult-line
 ;; consult-line-multi
 ;; consult-yank-from-kill-ring
 ;; orderless-flex
+;; (map! :after consult
+;;       "M-m s l" #'consult-line
+;;       "M-m s m" #'consult-line-multi
+;;       "M-y" #'consult-yank-from-kill-ring)
 (map! :after consult
-      "M-m s l" #'consult-line
-      "M-m s m" #'consult-line-multi
+      "M-m s s" #'consult-line
+      "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
 
 
@@ -211,9 +215,6 @@
   (setq cider-repl-pop-to-buffer-on-connect nil)
   (setq cider-auto-select-test-report-buffer nil)
   (setq cider-auto-select-error-buffer nil))
-
-;; (map! "C-c M-c" #'cider-connect-clj
-;;       "C-c C-k" #'cider-eval-buffer)
 
 (map! :after cider-mode
       :map clojure-mode-map
