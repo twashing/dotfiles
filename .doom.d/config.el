@@ -50,6 +50,9 @@
 ;; - `map!' for binding new keys
 
 
+(load! "sunra")
+
+
 ;; General
 (map! "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
@@ -79,7 +82,8 @@
       "M-y" #'consult-yank-from-kill-ring)
 
 
-(map! "M-m p p" #'projectile-switch-project
+(map! :map general-override-mode-map
+      "M-m p p" #'projectile-switch-project
       "M-m p f" #'projectile-find-file
       "M-m p r" #'projectile-replace
       "M-m p R" #'projectile-replace-regexp
