@@ -1,5 +1,17 @@
-;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
+#+title: Sunra
+#+PROPERTY: header-args :tangle sunra.el
 
+
+** Preamble
+
+#+BEGIN_SRC elisp
+;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
+#+END_SRC
+
+
+** General
+
+#+BEGIN_SRC elisp
 (map! "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
       "C-c M-c" #'upcase-word
@@ -20,15 +32,32 @@
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
 
+#+END_SRC
+
+
+** Avy
+
+#+BEGIN_SRC elisp
 (setq avy-all-windows 'all-frames)
 (map! "C-c g c" #'avy-goto-char-2)
+#+END_SRC
 
+
+** Navigation
+
+#+BEGIN_SRC elisp
 (fset 'buf-move-up "\C-u10\C-p")
 (fset 'buf-move-down "\C-u10\C-n")
 (map! "M-U" #'buf-move-up
       "M-D" #'buf-move-down
       "C-d" #'sp-kill-sexp)
 
+#+END_SRC
+
+
+** Smartparens Navigation
+
+#+BEGIN_SRC elisp
 (after! smartparens
   (turn-on-smartparens-strict-mode)
   (sp-pair "(" nil :unless '(:rem sp-point-before-word-p)))
@@ -67,6 +96,12 @@
       "C-x b" #'consult-buffer
       "C-M-l" #'transpose-lines)
 
+#+END_SRC
+
+
+** Multiple cursors
+
+#+BEGIN_SRC elisp
 (map! "C-c m N l" #'mc/mark-next-lines
       "C-c m N t" #'mc/mark-next-like-this
       "C-c m N w" #'mc/mark-next-like-this-word
@@ -115,10 +150,22 @@
 
   ("q" nil "quit" :color blue))
 
+#+END_SRC
+
+
+** Hide / Show
+
+#+BEGIN_SRC elisp
 (map! "C-o" #'hs-toggle-hiding
       "C-c @ C-M-h" #'hs-hide-all
       "C-c @ C-M-s" #'hs-show-all)
 
+#+END_SRC
+
+
+** Cider
+
+#+BEGIN_SRC elisp
 (after! cider
 
   ;; DONT open new window on cider-connect, et al
@@ -132,6 +179,14 @@
       "C-c C-k" #'cider-eval-buffer
       "," #'cider-eval-last-sexp)
 
+#+END_SRC
+
+
+** Miscellaneous
+
+To get information about any of these functions/macros, move the cursor over
+
+#+BEGIN_SRC elisp
 (defun delete-whitespace-except-one ()
   (interactive)
   (just-one-space -1))
@@ -140,6 +195,12 @@
       "C-," #'+default/newline-above
       "C-." #'+default/newline-below)
 
+#+END_SRC
+
+
+** Copy line
+
+#+BEGIN_SRC elisp
 (defun copy-line (&optional arg)
   "Do a kill-line but copy rather than kill.  This function directly calls
   kill-line, so see documentation of kill-line for how to use it including prefix
@@ -153,6 +214,84 @@
 (map! "C-c k" #'copy-line
       "C-c K" #'avy-copy-line)
 
+#+END_SRC
+
+
+** Completions
+
+> Context
+
+Exploring the optimal Emacs Completions with
+  Vertigo
+  vs helm
+  vs counsel (used in Doom)
+  vs consult (improvement over counsel? - https://github.com/minad/consult)
+
+  Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
+  https://www.youtube.com/watch?v=5ffb2at2d7w
+
+  Streamline Your Emacs Completions with Vertico
+  https://www.youtube.com/watch?v=J0OaRy85MOo
+  https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico/
+
+  https://github.com/minad/vertico
+
+
+> Research
+
+Emacs Completion Explained
+https://www.youtube.com/watch?v=fnE0lXoe7Y0
+
+Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
+https://www.youtube.com/watch?v=5ffb2at2d7w
+https://cestlaz.github.io/post/using-emacs-80-vertico/
+
+Emacs: completion framework (Embark,Consult,Orderless,etc.)
+https://www.youtube.com/watch?v=43Dg5zYPHTU
+https://protesilaos.com/codelog/2021-01-06-emacs-default-completion/
+
+
+"One important feature is that it plugs in directly to Emacs' own completion engine unlike Helm and Ivy which have their own layer on top."
+https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico/
+
+[no] Helm, Ivy, have been superceded
+
+[ok] Annotations exist on command execution and help menus. Addition not needed.
+  Marginalia - https://github.com/minad/marginalia
+
+
+> Outcome
+
+A. These are the packages I settled on.
+
+```
+Vertico - https://github.com/minad/vertico
+Consult - https://github.com/minad/consult
+Embark - https://github.com/oantolin/embark
+
+Orderless (vs Prescient, Selectrum)
+  https://github.com/oantolin/orderless
+  https://github.com/radian-software/prescient.el
+  https://github.com/radian-software/selectrum
+
+Corfu - https://github.com/minad/corfu
+  Replaces Company for Completions
+```
+
+B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico/` module.
+So all I had to do was enable it: `(doom! :completion  vertico)`.
+
+https://github.com/doomemacs/doomemacs/tree/master/modules/completion/vertico
+
+```
+Vertico, which provides the vertical completion user interface
+Consult, which provides a suite of useful commands using completing-read
+Embark, which provides a set of minibuffer actions
+Marginalia, which provides annotations to completion candidates
+Orderless, which provides better filtering methods
+```
+#+BEGIN_SRC elisp
 (after! vertico
 
   (vertico-buffer-mode))
+#+END_SRC
