@@ -155,4 +155,5 @@
 
 (after! vertico
 
-  (vertico-buffer-mode))
+  (vertico-buffer-mode)
+  (setq completion-styles '(basic partial-completion emacs22 flex orderless)))

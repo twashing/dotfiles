@@ -233,7 +233,7 @@ Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
 
 Streamline Your Emacs Completions with Vertico
 - https://www.youtube.com/watch?v=J0OaRy85MOo
-- https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico/
+- https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico
 - https://github.com/minad/vertico
 
 
@@ -244,31 +244,30 @@ Emacs Completion Explained
 
 Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
 - https://www.youtube.com/watch?v=5ffb2at2d7w
-- https://cestlaz.github.io/post/using-emacs-80-vertico/
+- https://cestlaz.github.io/post/using-emacs-80-vertico
 
-Emacs: completion framework (Embark,Consult,Orderless,etc.)
+Emacs: completion framework (Embark, Consult, Orderless, etc.)
 - https://www.youtube.com/watch?v=43Dg5zYPHTU
-- https://protesilaos.com/codelog/2021-01-06-emacs-default-completion/
+- https://protesilaos.com/codelog/2021-01-06-emacs-default-completion
 
 
 "One important feature is that it plugs in directly to Emacs' own completion engine unlike Helm and Ivy which have their own layer on top."
-- https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico/
+- https://systemcrafters.cc/emacs-tips/streamline-completions-with-vertico
 
 [no] Helm, Ivy, have been superceded
 
 [ok] Annotations exist on command execution and help menus. Addition not needed.
-- [Marginalia](https://github.com/minad/marginalia)
+- Marginalia - https://github.com/minad/marginalia
 
 
 *** Outcome
 
 A. These are the packages I settled on.
 
-- [Vertico](https://github.com/minad/vertico)
-- [Consult](https://github.com/minad/consult)
-- [Embark](https://github.com/oantolin/embark)
-
-Orderless (vs Prescient, Selectrum)
+- Vertico - https://github.com/minad/vertico
+- Consult - https://github.com/minad/consult
+- Embark - https://github.com/oantolin/embark
+- Orderless (vs Prescient, Selectrum)
   - https://github.com/oantolin/orderless
   - https://github.com/radian-software/prescient.el
   - https://github.com/radian-software/selectrum
@@ -289,5 +288,6 @@ So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://
 #+BEGIN_SRC elisp
 (after! vertico
 
-  (vertico-buffer-mode))
+  (vertico-buffer-mode)
+  (setq completion-styles '(basic partial-completion emacs22 flex orderless)))
 #+END_SRC
