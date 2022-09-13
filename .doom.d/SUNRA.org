@@ -265,16 +265,14 @@ Emacs: completion framework (Embark, Consult, Orderless, etc.)
 A. These are the packages I settled on.
 
 - Vertico - https://github.com/minad/vertico
+  - Completion-at-point - https://github.com/minad/vertico#completion-at-point-and-completion-in-region
+  - Corfu - https://github.com/minad/corfu
 - Consult - https://github.com/minad/consult
 - Embark - https://github.com/oantolin/embark
 - Orderless (vs Prescient, Selectrum)
   - https://github.com/oantolin/orderless
   - https://github.com/radian-software/prescient.el
   - https://github.com/radian-software/selectrum
-
-[Corfu](https://github.com/minad/corfu)
-  - Replaces Company for Completions
-
 
 B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico/` module.
 So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://github.com/doomemacs/doomemacs/tree/master/modules/completion/vertico)).
