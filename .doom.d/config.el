@@ -124,7 +124,7 @@
 ;;       "C-M-k" #'sp-copy-sexp
 ;;       "C-M-u" #'sp-up-sexp
 ;;       "M-u" #'sp-backward-up-sexp
-;;       "C-M-d" #'sp-down-sexp
+;;       "C-M-d" #'sp-down-sexple
 ;;       "M-d" #'sp-backward-down-sexp
 ;;       "C-M-j" #'sp-forward-slurp-sexp
 ;;       "C-x C-M-j" #'sp-forward-barf-sexp

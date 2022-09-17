@@ -126,7 +126,7 @@
   (setq cider-auto-select-test-report-buffer nil)
   (setq cider-auto-select-error-buffer nil))
 
-(map! :after cider-mode
+(map! :after clojure-mode
       :map clojure-mode-map
       "C-c M-c" #'cider-connect-clj
       "C-c C-k" #'cider-eval-buffer
@@ -156,4 +156,5 @@
 (after! vertico
 
   (vertico-buffer-mode)
+  (setq completion-styles '(basic partial-completion emacs22 flex orderless))
   (setq completion-styles '(basic partial-completion emacs22 flex orderless)))
