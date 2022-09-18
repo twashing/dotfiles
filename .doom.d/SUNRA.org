@@ -12,6 +12,7 @@
 ** General
 
 #+BEGIN_SRC elisp
+
 (map! "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
       "C-c M-c" #'upcase-word
@@ -282,10 +283,24 @@ So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://
 - Marginalia, which provides annotations to completion candidates
 - Orderless, which provides better filtering methods
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC #+begin_src emacs-lisp :tangle yes
+
+#+end_src
 (after! vertico
 
   (vertico-buffer-mode)
-  (setq completion-styles '(basic partial-completion emacs22 flex orderless))
-  (setq completion-styles '(basic partial-completion emacs22 flex orderless)))
+  (setq completion-styles '(orderless basic)))
 #+END_SRC
+
+** TODOs
+
+*** Richer Completion configs
+
+*** Failing :after config
+
+```
+(map! :after consult
+      "M-m s s" #'consult-line
+      "M-m s S" #'consult-line-multi
+      "M-y" #'consult-yank-from-kill-ring)
+```
