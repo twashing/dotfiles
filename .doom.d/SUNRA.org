@@ -275,7 +275,7 @@ Emacs: completion framework (Embark, Consult, Orderless, etc.)
 
 *** Outcome
 
-A. These are the packages I settled on.
+**** A. These are the packages I settled on.
 
 - Vertico - https://github.com/minad/vertico
   - Completion-at-point - https://github.com/minad/vertico#completion-at-point-and-completion-in-region
@@ -287,7 +287,8 @@ A. These are the packages I settled on.
   - https://github.com/radian-software/prescient.el
   - https://github.com/radian-software/selectrum
 
-B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico/` module.
+
+**** B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico/` module.
 So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://github.com/doomemacs/doomemacs/tree/master/modules/completion/vertico)).
 
 - Vertico, which provides the vertical completion user interface
@@ -346,6 +347,52 @@ So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://
 #+END_SRC
 
 
+**** CAPFs
+
+#+BEGIN_QUOTE
+Completions are either provided by commands like dabbrev-completion or by pluggable backends (completion-at-point-functions, Capfs).
+Most programming language major modes implement a Capf. Furthermore the language server packages, Eglot and Lsp-mode, use Capfs which talk to the LSP server to retrieve the completions.
+
+Corfu does not include its own completion backends.
+The Emacs built-in Capfs and the Capfs provided by other programming language packages are usually sufficient.
+A few additional Capfs and completion utilities are provided by the Cape package.
+#+END_QUOTE
+
+From this blurb taken from the [[https://github.com/minad/corfu#corfuel---completion-overlay-region-function][corfu.el repo]], I'm settling on these `completion-aat-point-functions`.
+
+- [[https://github.com/minad/cape][Cape]] - Completion At Point Extensions
+- [[https://github.com/joaotavora/eglot][Eglot]] - A client for LSP servers
+
+Initial config stolen from this thread.
+- [[https://git.sr.ht/~gagbo/doom-config/tree/master/item/modules/completion/corfu][B]]
+  - [[https://github.com/doomemacs/doomemacs/issues/5600][A]]
+
+#+BEGIN_SRC elisp
+
+(use-package! cape
+  :defer t
+  :init
+  (map! [remap dabbrev-expand] 'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
+
+
+(use-package! corfu-history
+  :after corfu
+  :hook (corfu-mode . (lambda ()
+                        (corfu-history-mode 1)
+                        (savehist-mode 1)
+                        (add-to-list 'savehist-additional-variables 'corfu-history))))
+
+(use-package! corfu-quick
+  :after corfu
+  :bind (:map corfu-map
+         ("M-q" . corfu-quick-complete)
+         ("C-q" . corfu-quick-insert)))
+
+#+END_SRC
+
+
 ** Org-Roam
 
 These are references and notes, including howto videos.
@@ -357,6 +404,7 @@ These are references and notes, including howto videos.
 - [[https://www.youtube.com/watch?v=rH3ZH95zjKM][Org Roam Setup · Emacs Doomcasts 25]]
 - [[https://www.youtube.com/watch?v=83JoRBjTXog][Aliases in Org Roam Emacs Doom · Emacs Doomcasts 26]]
 - [[https://www.youtube.com/watch?v=AyhPmypHDEw][Getting Started with Org Roam - Build a Second Brain in Emacs]]
+- [[https://www.youtube.com/watch?v=3H38Yglw1dU][The Goal: Building My Second Brain with Emacs and Org-Roam (An Overview)]]
 
 #+BEGIN_SRC elisp
 
@@ -373,21 +421,33 @@ These are references and notes, including howto videos.
 #+END_SRC
 
 
+** Emacs Client
+
+
+[[https://www.youtube.com/watch?v=ZjCRxAMPdNc][Unlock the Power of the Daemon with emacsclient]]
+Reload Doom config
+
+emacs --daemon
+emacsclient
+
+. Setting these guys
+$EDITOR=emacsclient
+/Applications/Emacs.app/Contents/MacOS/Emacs --daemon
+/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -cn
+
+. Created EmacsDaemon, EmacsClient as launchable apps, as per:
+https://stackoverflow.com/questions/10376206/what-is-the-preferred-bash-shebang
+
+
 ** TODOs
 
 *** Configure Completion
 
-Richer Completion configs, including:
-
-Completion-at-point
-https://github.com/minad/vertico#completion-at-point-and-completion-in-region
-
-Corfu
-Corfu Completion: Clojure
-https://github.com/minad/corfu
-
-Clojure
-Elisp
+Configure Capfs:
+- cape
+- corfu-history
+- corfu-quick
+- eglot (Clojure)
 
 Orderless
 Consult
@@ -395,6 +455,12 @@ Embark
 
 
 *** Consult search, ignore case
+
+
+*** Navigate Mark Ring
+
+Start with these resources.
+- [[https://www.youtube.com/watch?v=Dq5UOt63Mms&t=1364s][Efficient Text Selection with Emacs Key Bindings - Emacs Essentials #3 / Remember Your Place with the Mark Ring]]
 
 
 *** Master Keymaps
@@ -417,10 +483,14 @@ https://emacs-guix.gitlab.io/website/manual/latest/emacs-guix.html#Top
 
 *** Org-Roam Existing Notes
 
+
 *** Org Journaling
+
 
 *** Org Presenting
 
+
+*** Spellcheck Tools and Completions
 
 ** Errors
 
@@ -429,9 +499,12 @@ https://emacs-guix.gitlab.io/website/manual/latest/emacs-guix.html#Top
 Details here:
 https://discord.com/channels/406534637242810369/406554085794381833/1023291683129004042
 
+
 *** Ripgrep is missing from path
 
 
 *** Hydra mc/mark-next-line double marks cursor
 
 Ie, pressing next selects the next n, instead of the next 1.
+
+*** smartparens open square bracket fails to add closing bracket, when touched by a character

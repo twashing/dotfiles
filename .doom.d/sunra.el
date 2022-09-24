@@ -202,6 +202,27 @@
   ;; `completion-at-point' is often bound to M-TAB.
   (setq tab-always-indent 'complete))
 
+(use-package! cape
+  :defer t
+  :init
+  (map! [remap dabbrev-expand] 'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
+
+
+(use-package! corfu-history
+  :after corfu
+  :hook (corfu-mode . (lambda ()
+                        (corfu-history-mode 1)
+                        (savehist-mode 1)
+                        (add-to-list 'savehist-additional-variables 'corfu-history))))
+
+(use-package! corfu-quick
+  :after corfu
+  :bind (:map corfu-map
+         ("M-q" . corfu-quick-complete)
+         ("C-q" . corfu-quick-insert)))
+
 (after! org-roam
 
   (setq org-roam-directory "~/roam")

@@ -50,3 +50,5 @@
 ;(unpin! t)
 
 (package! corfu)
+(package! cape)
+(package! eglot)
