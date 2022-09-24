@@ -360,9 +360,18 @@ These are references and notes, including howto videos.
 
 #+BEGIN_SRC elisp
 
-(setq org-roam-directory "~/roam")
+(after! org-roam
+
+  (setq org-roam-directory "~/roam")
+
+  ;; Configs taken from the home repo
+  ;; https://github.com/org-roam/org-roam#configuration
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  ;; (org-roam-db-autosync-mode)
+  )
 
 #+END_SRC
+
 
 ** TODOs
 
@@ -385,8 +394,6 @@ Consult
 Embark
 
 
-*** Org-Roam
-
 *** Consult search, ignore case
 
 
@@ -407,9 +414,23 @@ Fix some key sequences that don't work in all environs
 . Emacs Guix
 https://emacs-guix.gitlab.io/website/manual/latest/emacs-guix.html#Top
 
+
+*** Org-Roam Existing Notes
+
+*** Org Journaling
+
+*** Org Presenting
+
+
 ** Errors
 
+*** `org-roam-insert` doesn't find new notes
+
+Details here:
+https://discord.com/channels/406534637242810369/406554085794381833/1023291683129004042
+
 *** Ripgrep is missing from path
+
 
 *** Hydra mc/mark-next-line double marks cursor
 

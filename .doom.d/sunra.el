@@ -2,8 +2,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
-(map! :map general-override-mode-map
-      "M-<backspace>" #'sp-backward-kill-word
+(map! "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
       "C-c M-c" #'upcase-word
       "C-x M-x" #'isearch-forward-symbol-at-point
@@ -203,4 +202,12 @@
   ;; `completion-at-point' is often bound to M-TAB.
   (setq tab-always-indent 'complete))
 
-(setq org-roam-directory "~/roam")
+(after! org-roam
+
+  (setq org-roam-directory "~/roam")
+
+  ;; Configs taken from the home repo
+  ;; https://github.com/org-roam/org-roam#configuration
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  ;; (org-roam-db-autosync-mode)
+  )
