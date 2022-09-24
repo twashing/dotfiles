@@ -109,6 +109,10 @@ General Navigation and text actions.
 
 ** Multiple cursors
 
+Mark next and previous key bindings.
+
+Also key bindings for [[https://github.com/abo-abo/hydra][Hydra]] multiple cursors.
+
 #+BEGIN_SRC elisp
 (map! "C-c m N l" #'mc/mark-next-lines
       "C-c m N t" #'mc/mark-next-like-this
@@ -230,10 +234,12 @@ To get information about any of these functions/macros, move the cursor over
 
 Exploring the optimal Emacs Completions with
 
-> Vertigo
-> vs Helm
-> vs Counsel (used in Doom)
-> vs Consult (improvement over counsel? - https://github.com/minad/consult)
+#+BEGIN_VERSE
+Vertigo
+vs Helm
+vs Counsel (used in Doom)
+vs Consult (improvement over counsel? - https://github.com/minad/consult)
+#+END_VERSE
 
 Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
 - https://www.youtube.com/watch?v=5ffb2at2d7w
@@ -290,7 +296,7 @@ So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://
 - Marginalia, which provides annotations to completion candidates
 - Orderless, which provides better filtering methods
 
-#+begin_src emacs-lisp
+#+begin_src elisp
 (after! vertico
 
   (vertico-buffer-mode)
@@ -340,10 +346,71 @@ So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://
 #+END_SRC
 
 
+** Org-Roam
+
+These are references and notes, including howto videos.
+
+- https://www.orgroam.com/
+- https://github.com/org-roam/org-roam
+- https://lucidmanager.org/productivity/taking-notes-with-emacs-org-mode-and-org-roam/
+[[How I Take Notes with Org-Roam][- https://jethrokuan.github.io/org-roam-guide/]]
+- [[https://www.youtube.com/watch?v=rH3ZH95zjKM][Org Roam Setup · Emacs Doomcasts 25]]
+- [[https://www.youtube.com/watch?v=83JoRBjTXog][Aliases in Org Roam Emacs Doom · Emacs Doomcasts 26]]
+- [[https://www.youtube.com/watch?v=AyhPmypHDEw][Getting Started with Org Roam - Build a Second Brain in Emacs]]
+
+#+BEGIN_SRC elisp
+
+(setq org-roam-directory "~/roam")
+
+#+END_SRC
+
 ** TODOs
 
-*** Richer Completion configs
+*** Configure Completion
 
-*** Corfu Completion: Clojure
+Richer Completion configs, including:
+
+Completion-at-point
+https://github.com/minad/vertico#completion-at-point-and-completion-in-region
+
+Corfu
+Corfu Completion: Clojure
+https://github.com/minad/corfu
+
+Clojure
+Elisp
+
+Orderless
+Consult
+Embark
+
 
 *** Org-Roam
+
+*** Consult search, ignore case
+
+
+*** Master Keymaps
+
+[ok] What is full Keymap tree
+  https://www.masteringemacs.org/article/mastering-key-bindings-emacs#what-is-a-keymap
+  M-x describe-keymap
+
+Fix some key sequences that don't work in all environs
+
+
+*** Misc
+
+. smartparens, (STRONG) highlight parens
+. eval repl (from .clj .edn)
+
+. Emacs Guix
+https://emacs-guix.gitlab.io/website/manual/latest/emacs-guix.html#Top
+
+** Errors
+
+*** Ripgrep is missing from path
+
+*** Hydra mc/mark-next-line double marks cursor
+
+Ie, pressing next selects the next n, instead of the next 1.

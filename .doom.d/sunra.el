@@ -2,7 +2,8 @@
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
-(map! "M-<backspace>" #'sp-backward-kill-word
+(map! :map general-override-mode-map
+      "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
       "C-c M-c" #'upcase-word
       "C-x M-x" #'isearch-forward-symbol-at-point
@@ -201,3 +202,5 @@
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
   (setq tab-always-indent 'complete))
+
+(setq org-roam-directory "~/roam")
