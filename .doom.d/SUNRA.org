@@ -11,6 +11,14 @@
 
 ** General
 
+Use Org Mode for all files ending with .notes.
+
+#+BEGIN_SRC elisp
+(add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
+#+END_SRC
+
+General Navigation and text actions.
+
 #+BEGIN_SRC elisp
 
 (map! "M-<backspace>" #'sp-backward-kill-word
@@ -32,7 +40,6 @@
       "M-m p r" #'projectile-replace
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
-
 #+END_SRC
 
 
@@ -154,7 +161,7 @@
 #+END_SRC
 
 
-** Hide / Show
+** Hide-Show
 
 #+BEGIN_SRC elisp
 (map! "C-o" #'hs-toggle-hiding
@@ -332,8 +339,11 @@ So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://
   (setq tab-always-indent 'complete))
 #+END_SRC
 
+
 ** TODOs
 
 *** Richer Completion configs
 
 *** Corfu Completion: Clojure
+
+*** Org-Roam

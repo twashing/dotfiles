@@ -1,5 +1,7 @@
 ;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
 
+(add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
+
 (map! "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
       "C-c M-c" #'upcase-word
