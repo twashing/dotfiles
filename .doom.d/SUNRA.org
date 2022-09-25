@@ -442,7 +442,10 @@ https://stackoverflow.com/questions/10376206/what-is-the-preferred-bash-shebang
 
 ** TODOs
 
+*** Add Table Of Contents to this file
+
 *** Org-Roam Existing Notes
+
 
 *** Configure Completion
 
