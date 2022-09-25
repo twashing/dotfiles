@@ -1,6 +1,7 @@
 #+title: Sunra
 #+PROPERTY: header-args :tangle sunra.el
 
+#+OPTIONS: TOC:2
 
 ** Preamble
 
@@ -441,6 +442,8 @@ https://stackoverflow.com/questions/10376206/what-is-the-preferred-bash-shebang
 
 ** TODOs
 
+*** Org-Roam Existing Notes
+
 *** Configure Completion
 
 Configure Capfs:
@@ -448,6 +451,8 @@ Configure Capfs:
 - corfu-history
 - corfu-quick
 - eglot (Clojure)
+
+  See notes: [[https://www.youtube.com/watch?v=ROnceqt3kpE][Using Emacs 74 - Eglot]]
 
 Orderless
 Consult
@@ -481,9 +486,6 @@ Fix some key sequences that don't work in all environs
 https://emacs-guix.gitlab.io/website/manual/latest/emacs-guix.html#Top
 
 
-*** Org-Roam Existing Notes
-
-
 *** Org Journaling
 
 
@@ -491,6 +493,7 @@ https://emacs-guix.gitlab.io/website/manual/latest/emacs-guix.html#Top
 
 
 *** Spellcheck Tools and Completions
+
 
 ** Errors
 
