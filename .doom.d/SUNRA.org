@@ -380,12 +380,12 @@ Initial config stolen from this thread.
   (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
 
 
-(use-package! corfu-history
-  :after corfu
-  :hook (corfu-mode . (lambda ()
-                        (corfu-history-mode 1)
-                        (savehist-mode 1)
-                        (add-to-list 'savehist-additional-variables 'corfu-history))))
+;; (use-package! corfu-history
+;;   :after corfu
+;;   :hook (corfu-mode . (lambda ()
+;;                         (corfu-history-mode 1)
+;;                         (savehist-mode 1)
+;;                         (add-to-list 'savehist-additional-variables 'corfu-history))))
 
 (use-package! corfu-quick
   :after corfu
@@ -410,10 +410,18 @@ These are references and notes, including howto videos.
 - [[https://www.youtube.com/watch?v=3H38Yglw1dU][The Goal: Building My Second Brain with Emacs and Org-Roam (An Overview)]]
 
 #+BEGIN_SRC elisp
+(use-package! md-roam ; load immediately, before org-roam
+  :config
+  (setq md-roam-file-extension-single "md"))
+
 
 (after! org-roam
 
   (setq org-roam-directory "~/roam")
+
+  ;; add markdown extension to org-roam-file-extensions list
+  (setq org-roam-file-extensions '("org" "md"))
+  (setq org-roam-title-sources '((mdtitle title mdheadline headline) (mdalias alias)))
 
   ;; Configs taken from the home repo
   ;; https://github.com/org-roam/org-roam#configuration

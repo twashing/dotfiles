@@ -52,3 +52,5 @@
 (package! corfu)
 (package! cape)
 (package! eglot)
+(package! md-roam :recipe
+  (:host github :repo "nobiot/md-roam"))

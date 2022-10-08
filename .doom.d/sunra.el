@@ -9,8 +9,7 @@
       "C-x RET" #'magit-status
       "M-W" #'delete-trailing-whitespace)
 
-(map! ;; :after consult
-      :map general-override-mode-map
+(map! :after consult
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
@@ -226,9 +225,18 @@
          ("M-q" . corfu-quick-complete)
          ("C-q" . corfu-quick-insert)))
 
+(use-package! md-roam ; load immediately, before org-roam
+  :config
+  (setq md-roam-file-extension-single "md"))
+
+
 (after! org-roam
 
   (setq org-roam-directory "~/roam")
+
+  ;; add markdown extension to org-roam-file-extensions list
+  (setq org-roam-file-extensions '("org" "md"))
+  (setq org-roam-title-sources '((mdtitle title mdheadline headline) (mdalias alias)))
 
   ;; Configs taken from the home repo
   ;; https://github.com/org-roam/org-roam#configuration
