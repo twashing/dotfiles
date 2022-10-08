@@ -69,7 +69,9 @@ General Navigation and text actions.
 #+BEGIN_SRC elisp
 (after! smartparens
   (turn-on-smartparens-strict-mode)
-  (sp-pair "(" nil :unless '(:rem sp-point-before-word-p)))
+  (sp-pair "(" nil :unless '(:rem sp-point-before-word-p))
+  (sp-pair "{" nil :unless '(:rem sp-point-before-word-p))
+  (sp-pair "[" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
       :after smartparens

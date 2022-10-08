@@ -9,7 +9,8 @@
       "C-x RET" #'magit-status
       "M-W" #'delete-trailing-whitespace)
 
-(map! :after consult
+(map! ;; :after consult
+      :map general-override-mode-map
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
@@ -33,7 +34,9 @@
 
 (after! smartparens
   (turn-on-smartparens-strict-mode)
-  (sp-pair "(" nil :unless '(:rem sp-point-before-word-p)))
+  (sp-pair "(" nil :unless '(:rem sp-point-before-word-p))
+  (sp-pair "{" nil :unless '(:rem sp-point-before-word-p))
+  (sp-pair "[" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
       :after smartparens
@@ -210,12 +213,12 @@
   (add-to-list 'completion-at-point-functions #'cape-dabbrev t))
 
 
-(use-package! corfu-history
-  :after corfu
-  :hook (corfu-mode . (lambda ()
-                        (corfu-history-mode 1)
-                        (savehist-mode 1)
-                        (add-to-list 'savehist-additional-variables 'corfu-history))))
+;; (use-package! corfu-history
+;;   :after corfu
+;;   :hook (corfu-mode . (lambda ()
+;;                         (corfu-history-mode 1)
+;;                         (savehist-mode 1)
+;;                         (add-to-list 'savehist-additional-variables 'corfu-history))))
 
 (use-package! corfu-quick
   :after corfu
