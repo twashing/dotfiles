@@ -52,5 +52,17 @@
 (package! corfu)
 (package! cape)
 (package! eglot)
+
+;; (package! org-roam-v1 :disable t)
+;; (package! org-roam)
+
+;; ============
+;; Org Roam
+;; ============
+(package! dash)
+(package! f)
+(package! s)
+(package! org)
+(package! emacsql-sqlite)
 (package! md-roam :recipe
   (:host github :repo "nobiot/md-roam"))

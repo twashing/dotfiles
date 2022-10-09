@@ -10,6 +10,7 @@
       "M-W" #'delete-trailing-whitespace)
 
 (map! :after consult
+      :map general-override-mode-map
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
@@ -225,21 +226,42 @@
          ("M-q" . corfu-quick-complete)
          ("C-q" . corfu-quick-insert)))
 
-(use-package! md-roam ; load immediately, before org-roam
-  :config
-  (setq md-roam-file-extension-single "md"))
+
+;; (require 'org-roam)
+;; (setq org-roam-directory (file-truename "path/to/org-roam-directory"))
+;; ;; file-truename is optional; it seems required when you use symbolic
+;; ;; links, which Org-roam does not resolve
+;; (setq org-roam-file-extensions '("org" "md")) ; enable Org-roam for a markdown extension
+;; (add-to-list 'load-path "path/to/md-roam") ; installation as above
+
+;; (require 'md-roam)
+;; (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
+;; (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
+;; (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 
 
 (after! org-roam
 
-  (setq org-roam-directory "~/roam")
+  (setq org-roam-directory (file-truename "~/roam"))
 
   ;; add markdown extension to org-roam-file-extensions list
-  (setq org-roam-file-extensions '("org" "md"))
+  (setq org-roam-file-extensions '("org" "md")) ; enable Org-roam for a markdown extension
   (setq org-roam-title-sources '((mdtitle title mdheadline headline) (mdalias alias)))
+
+  (add-to-list 'load-path (file-truename "~/.emacs.d/.local/straight/repos/md-roam"))
 
   ;; Configs taken from the home repo
   ;; https://github.com/org-roam/org-roam#configuration
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  ;; (org-roam-db-autosync-mode)
   )
+
+;; (unpin! org-roam)
+
+;; (use-package! md-roam
+;;  :config
+;;
+;;  ;; (setq md-roam-file-extension-single "md")
+;;  (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
+;;  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
+;;  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
+;;  )
