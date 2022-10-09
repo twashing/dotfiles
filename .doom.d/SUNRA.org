@@ -425,7 +425,12 @@ These are references and notes, including howto videos.
   ;; https://github.com/org-roam/org-roam#configuration
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   )
+#+END_SRC
 
+Note: I had to manually eval `use-package md-roam`, in order to have it compile and run.
+Otherwise I ran into [this error](https://discord.com/channels/406534637242810369/1028497228148518932) loading the package.
+
+#+BEGIN_SRC elisp
 (use-package! md-roam
  :config
 
@@ -434,7 +439,6 @@ These are references and notes, including howto videos.
  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
  )
-
 #+END_SRC
 
 
