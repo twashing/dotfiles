@@ -437,7 +437,15 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
  (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
- )
+
+ (add-to-list 'org-roam-capture-templates
+              '("m" "Markdown" plain "" :target
+                (file+head "${slug}.md"
+                           "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
+                :unnarrowed t))
+
+ (with-eval-after-load 'markdown-mode
+  (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 #+END_SRC
 
 
