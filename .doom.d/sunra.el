@@ -131,7 +131,8 @@
   (setq cider-auto-select-error-buffer nil))
 
 (map! ;; :after clojure-mode
-      :map clojure-mode-map
+      ;; :map clojure-mode-map
+      :map general-override-mode-map
       "C-c M-c" #'cider-connect-clj
       "C-c C-k" #'cider-eval-buffer
       ;; "," #'cider-eval-last-sexp
