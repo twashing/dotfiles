@@ -38,7 +38,7 @@
   (sp-pair "[" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
-      :after smartparens
+      ;; :after smartparens
       "C-M-k" #'sp-copy-sexp
       "C-M-u" #'sp-up-sexp
       "M-u" #'sp-backward-up-sexp
@@ -130,11 +130,12 @@
   (setq cider-auto-select-test-report-buffer nil)
   (setq cider-auto-select-error-buffer nil))
 
-(map! :after clojure-mode
+(map! ;; :after clojure-mode
       :map clojure-mode-map
       "C-c M-c" #'cider-connect-clj
       "C-c C-k" #'cider-eval-buffer
-      "," #'cider-eval-last-sexp)
+      ;; "," #'cider-eval-last-sexp
+      )
 
 (defun delete-whitespace-except-one ()
   (interactive)
@@ -220,7 +221,7 @@
 ;;                         (add-to-list 'savehist-additional-variables 'corfu-history))))
 
 (use-package! corfu-quick
-  :after corfu
+  ;; :after corfu
   :bind (:map corfu-map
          ("M-q" . corfu-quick-complete)
          ("C-q" . corfu-quick-insert)))
