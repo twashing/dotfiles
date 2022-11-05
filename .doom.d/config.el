@@ -38,6 +38,10 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
+;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
+(setq confirm-kill-emacs nil)
+
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;

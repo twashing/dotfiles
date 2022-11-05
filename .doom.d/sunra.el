@@ -9,8 +9,7 @@
       "C-x RET" #'magit-status
       "M-W" #'delete-trailing-whitespace)
 
-(map! :after consult
-      :map general-override-mode-map
+(map! :map general-override-mode-map
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
