@@ -1,5 +1,24 @@
 ;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
 
+(setq
+
+  ;; If you use `org' and don't want your org files in the default location below,
+  ;; change `org-directory'. It must be set before org loads!
+  org-directory "~/org/"
+
+  ;; This determines the style of line numbers in effect. If set to `nil', line
+  ;; numbers are disabled. For relative line numbers, set this to `relative'.
+  display-line-numbers-type t
+
+  ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
+  ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
+  confirm-kill-emacs nil
+
+  ;; Disable auto-comment on `newline-and-indent`
+  ;; https://discord.com/channels/406534637242810369/1038583508140048425
+  +default-want-RET-continue-comments nil
+  +evil-want-o/O-to-continue-comments nil)
+
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
 (map! "M-<backspace>" #'sp-backward-kill-word
