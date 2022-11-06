@@ -30,23 +30,6 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one)
 
-;; ;; If you use `org' and don't want your org files in the default location below,
-;; ;; change `org-directory'. It must be set before org loads!
-;; (setq org-directory "~/org/")
-;;
-;; ;; This determines the style of line numbers in effect. If set to `nil', line
-;; ;; numbers are disabled. For relative line numbers, set this to `relative'.
-;; (setq display-line-numbers-type t)
-;;
-;; ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
-;; ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
-;; (setq confirm-kill-emacs nil)
-;;
-;; ;; Disable auto-comment on `newline-and-indent`
-;; ;; https://discord.com/channels/406534637242810369/1038583508140048425
-;; (setq +default-want-RET-continue-comments nil
-;;       +evil-want-o/O-to-continue-comments nil)
-
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
