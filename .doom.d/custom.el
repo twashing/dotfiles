@@ -3,9 +3,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ignored-local-variable-values
+   '((cider-clojure-cli-global-options . "-A:dev:test")
+     (cider-clojure-cli-global-options . "-A:test")))
  '(package-selected-packages '(corfu))
  '(safe-local-variable-values
-   '((org-roam-directory . "/Users/vn545yy/Projects/eReceipts-core/docs")))
+   '((cider-clojure-cli-global-options . "-A:dev:test")
+     (org-roam-directory . "/Users/vn545yy/Projects/eReceipts-core/docs")))
  '(warning-suppress-types '((org-element-cache) (org-element-cache) (defvaralias)) t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
