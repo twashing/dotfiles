@@ -43,6 +43,26 @@
 (load! "sunra")
 
 
+;; https://github.com/tumashu/vertico-posframe
+;; not working... (require 'vertico-posframe)
+
+;; (load! "vertico-posframe")
+;; (vertico-posframe-mode nil)
+;;
+;; (setq vertico-multiform-commands
+;;       '((consult-line
+;;          posframe
+;;          (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+;;          (vertico-posframe-border-width . 10)
+;;          ;; NOTE: This is useful when emacs is used in both in X and
+;;          ;; terminal, for posframe do not work well in terminal, so
+;;          ;; vertico-buffer-mode will be used as fallback at the
+;;          ;; moment.
+;;          (vertico-posframe-fallback-mode . vertico-buffer-mode))
+;;         (t posframe)))
+;; (vertico-multiform-mode 1)
+
+
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.

@@ -2,36 +2,62 @@
 
 (setq
 
-  ;; If you use `org' and don't want your org files in the default location below,
-  ;; change `org-directory'. It must be set before org loads!
-  org-directory "~/org/"
+ ;; If you use `org' and don't want your org files in the default location below,
+ ;; change `org-directory'. It must be set before org loads!
+ org-directory "~/org/"
 
-  ;; This determines the style of line numbers in effect. If set to `nil', line
-  ;; numbers are disabled. For relative line numbers, set this to `relative'.
-  display-line-numbers-type t
+ ;; This determines the style of line numbers in effect. If set to `nil', line
+ ;; numbers are disabled. For relative line numbers, set this to `relative'.
+ display-line-numbers-type t
 
-  ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
-  ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
-  confirm-kill-emacs nil
+ ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
+ ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
+ confirm-kill-emacs nil
 
-  ;; Disable auto-comment on `newline-and-indent`
-  ;; https://discord.com/channels/406534637242810369/1038583508140048425
-  +default-want-RET-continue-comments nil
-  +evil-want-o/O-to-continue-comments nil)
+ ;; Disable auto-comment on `newline-and-indent`
+ ;; https://discord.com/channels/406534637242810369/1038583508140048425
+ +default-want-RET-continue-comments nil
+ +evil-want-o/O-to-continue-comments nil)
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
-(map! "M-<backspace>" #'sp-backward-kill-word
-      "C-c C-k" #'eval-buffer
-      "C-c M-c" #'upcase-word
-      "C-x M-x" #'isearch-forward-symbol-at-point
-      "C-x RET" #'magit-status
-      "M-W" #'delete-trailing-whitespace)
 
-(map! :map general-override-mode-map
-      "M-m s s" #'consult-line
-      "M-m s S" #'consult-line-multi
-      "M-y" #'consult-yank-from-kill-ring)
+;; TODO
+;; keybindings for
+;;   'pp-macro-expand-last-expression
+;;   'eval-defun-at-point
+;; "M-:" show minibuffer to eval expressions
+;; set *scratch* buffer to lisp-interaction-mode
+;; "M-m s s" 'consult-line should be case insensitive
+
+
+;; C.
+;; (global-set-key (kbd "C-c C-s") 'save-buffer)
+;; (define-key global-map (kbd "C-c M-c") nil)
+(let ((map global-map))
+  (define-key map (kbd "M-<backspace>") #'sp-backward-kill-word)
+  (define-key map (kbd "C-c C-k") #'eval-buffer)
+  (define-key map (kbd "C-c M-c") #'upcase-word)
+  (define-key map (kbd "C-x M-x") #'isearch-forward-symbol-at-point)
+  (define-key map (kbd "C-x RET") #'magit-status)
+  (define-key map (kbd "M-W") #'delete-trailing-whitespace))
+
+(define-key general-override-mode-map (kbd "C-c M-c") nil)
+
+
+;; (map! :map global-map
+;;       "M-<backspace>" #'sp-backward-kill-word
+;;       "C-c C-k" #'eval-buffer
+;;       "C-c M-c" #'upcase-word
+;;       "C-x M-x" #'isearch-forward-symbol-at-point
+;;       "C-x RET" #'magit-status
+;;       "M-W" #'delete-trailing-whitespace)
+
+(map! ;; :after consult
+ :map general-override-mode-map
+ "M-m s s" #'consult-line
+ "M-m s S" #'consult-line-multi
+ "M-y" #'consult-yank-from-kill-ring)
 
 
 (map! :map general-override-mode-map
@@ -57,7 +83,7 @@
   (sp-pair "[" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
-      ;; :after smartparens
+      :after smartparens
       "C-M-k" #'sp-copy-sexp
       "C-M-u" #'sp-up-sexp
       "M-u" #'sp-backward-up-sexp
@@ -142,20 +168,50 @@
       "C-c @ C-M-h" #'hs-hide-all
       "C-c @ C-M-s" #'hs-show-all)
 
-(after! cider
 
-  ;; DONT open new window on cider-connect, et al
-  (setq cider-repl-pop-to-buffer-on-connect nil)
-  (setq cider-auto-select-test-report-buffer nil)
-  (setq cider-auto-select-error-buffer nil))
-
-(map! ;; :after clojure-mode
-      ;; :map clojure-mode-map
-      :map general-override-mode-map
+(map! :after cider
+      :map cider-mode-map
+      ;; :map general-override-mode-map
       "C-c M-c" #'cider-connect-clj
-      "C-c C-k" #'cider-eval-buffer
-      ;; "," #'cider-eval-last-sexp
-      )
+      "C-c C-k" #'cider-eval-buffer)
+
+(map! :after clojure
+      :map clojure-mode-map
+      "C-c M-c" #'cider-connect-clj)
+
+
+;; (map! :after cider
+;;       :map cider-mode-map
+;;       ;; :map general-override-mode-map
+;;       "C-c M-c" #'cider-connect-clj
+;;       "C-c C-k" #'cider-eval-buffer
+;;       ;; "," #'cider-eval-last-sexp
+;;
+;;       (after! cider
+;;
+;;         ;; DONT open new window on cider-connect, et al
+;;         (setq cider-repl-pop-to-buffer-on-connect nil)
+;;         (setq cider-auto-select-test-report-buffer nil)
+;;         (setq cider-auto-select-error-buffer nil))
+;;       )
+
+;; A.
+;; (use-package! cider
+
+;;   :config
+;;   (message "A")
+;;   (setq cider-repl-pop-to-buffer-on-connect nil)
+;;   (setq cider-auto-select-test-report-buffer nil)
+;;   (setq cider-auto-select-error-buffer nil)
+;;   (define-key cider-mode-map (kbd "C-c M-c") #'cider-connect-clj)
+;;   (define-key cider-mode-map (kbd "C-c C-M-c") #'cider-connect-clj)
+;;   (message "B")
+;;   ;; (general-define-key :keymaps
+;;   ;;                     '(cider-mode-map)
+;;   ;;                     "C-c M-c" #'cider-connect-clj
+;;   ;;                     "C-c C-k" #'cider-eval-buffer)
+;;  )
+
 
 (defun delete-whitespace-except-one ()
   (interactive)
@@ -183,6 +239,7 @@
   (vertico-buffer-mode)
   (setq completion-styles '(orderless basic)))
 
+
 (use-package! corfu
 
   ;; Optional customizations
@@ -209,6 +266,7 @@
   ;; See also `corfu-excluded-modes'.
   :init
   (global-corfu-mode))
+
 
 ;; A few more useful configurations...
 (use-package! emacs
@@ -241,10 +299,10 @@
 ;;                         (add-to-list 'savehist-additional-variables 'corfu-history))))
 
 (use-package! corfu-quick
-  ;; :after corfu
+  ;;  corfu
   :bind (:map corfu-map
-         ("M-q" . corfu-quick-complete)
-         ("C-q" . corfu-quick-insert)))
+              ("M-q" . corfu-quick-complete)
+              ("C-q" . corfu-quick-insert)))
 
 (after! org-roam
 
@@ -258,22 +316,31 @@
 
   ;; Configs taken from the home repo
   ;; https://github.com/org-roam/org-roam#configuration
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  )
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))))
+
+(use-package! flymake
+  :config
+  (setq flymake-start-on-flymake-mode t)
+  (setq flymake-no-changes-timeout nil)
+  (setq flymake-start-on-save-buffer t))
+
+(use-package! flymake-kondor
+  :ensure t
+  :hook (clojure-mode . flymake-kondor-setup))
 
 (use-package! md-roam
- :config
+  :config
 
- ;; (setq md-roam-file-extension-single "md")
- (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
- (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
- (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
+  ;; (setq md-roam-file-extension-single "md")
+  (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
+  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
+  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 
- (add-to-list 'org-roam-capture-templates
-              '("m" "Markdown" plain "" :target
-                (file+head "${slug}.md"
-                           "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
-                :unnarrowed t))
+  (add-to-list 'org-roam-capture-templates
+               '("m" "Markdown" plain "" :target
+                 (file+head "${slug}.md"
+                            "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
+                 :unnarrowed t))
 
- (with-eval-after-load 'markdown-mode
-  (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
+  (with-eval-after-load 'markdown-mode
+    (advice-add #'markdown-indent-line :before-until #'completion-at-point)))

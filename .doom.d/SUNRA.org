@@ -317,6 +317,7 @@ Emacs: completion framework (Embark, Consult, Orderless, etc.)
 
 
 **** B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico/` module.
+
 So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://github.com/doomemacs/doomemacs/tree/master/modules/completion/vertico)).
 
 - Vertico, which provides the vertical completion user interface
@@ -393,7 +394,7 @@ From this blurb taken from the [[https://github.com/minad/corfu#corfuel---comple
 
 Initial config stolen from this thread.
 - [[https://git.sr.ht/~gagbo/doom-config/tree/master/item/modules/completion/corfu][B]]
-  - [[https://github.com/doomemacs/doomemacs/issues/5600][A]]
+- [[https://github.com/doomemacs/doomemacs/issues/5600][A]]
 
 #+BEGIN_SRC elisp
 
