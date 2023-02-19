@@ -10,6 +10,12 @@
 #+END_SRC
 
 
+** Reference
+
+#+BEGIN_SRC elisp
+M-:  # Show minibuffer to eval expressions.
+#+END_SRC
+
 ** General
 
 Miscellaneous configuration

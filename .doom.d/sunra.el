@@ -23,35 +23,22 @@
 
 
 ;; TODO
-;; keybindings for
-;;   'pp-macro-expand-last-expression
-;;   'eval-defun-at-point
 ;; "M-:" show minibuffer to eval expressions
 ;; set *scratch* buffer to lisp-interaction-mode
 ;; "M-m s s" 'consult-line should be case insensitive
 
+(global-set-key (kbd "C-c C-s") 'save-buffer)
 
-;; C.
-;; (global-set-key (kbd "C-c C-s") 'save-buffer)
-;; (define-key global-map (kbd "C-c M-c") nil)
-(let ((map global-map))
-  (define-key map (kbd "M-<backspace>") #'sp-backward-kill-word)
-  (define-key map (kbd "C-c C-k") #'eval-buffer)
-  (define-key map (kbd "C-c M-c") #'upcase-word)
-  (define-key map (kbd "C-x M-x") #'isearch-forward-symbol-at-point)
-  (define-key map (kbd "C-x RET") #'magit-status)
-  (define-key map (kbd "M-W") #'delete-trailing-whitespace))
+(map! :map global-map
+      "M-<backspace>" #'sp-backward-kill-word
+      "C-c C-k" #'eval-buffer
+      "C-c M-c" #'upcase-word
+      "C-x M-x" #'isearch-forward-symbol-at-point
+      "C-x RET" #'magit-status
+      "M-W" #'delete-trailing-whitespace)
 
 (define-key general-override-mode-map (kbd "C-c M-c") nil)
 
-
-;; (map! :map global-map
-;;       "M-<backspace>" #'sp-backward-kill-word
-;;       "C-c C-k" #'eval-buffer
-;;       "C-c M-c" #'upcase-word
-;;       "C-x M-x" #'isearch-forward-symbol-at-point
-;;       "C-x RET" #'magit-status
-;;       "M-W" #'delete-trailing-whitespace)
 
 (map! ;; :after consult
  :map general-override-mode-map
@@ -171,47 +158,12 @@
 
 (map! :after cider
       :map cider-mode-map
-      ;; :map general-override-mode-map
       "C-c M-c" #'cider-connect-clj
       "C-c C-k" #'cider-eval-buffer)
 
 (map! :after clojure
       :map clojure-mode-map
       "C-c M-c" #'cider-connect-clj)
-
-
-;; (map! :after cider
-;;       :map cider-mode-map
-;;       ;; :map general-override-mode-map
-;;       "C-c M-c" #'cider-connect-clj
-;;       "C-c C-k" #'cider-eval-buffer
-;;       ;; "," #'cider-eval-last-sexp
-;;
-;;       (after! cider
-;;
-;;         ;; DONT open new window on cider-connect, et al
-;;         (setq cider-repl-pop-to-buffer-on-connect nil)
-;;         (setq cider-auto-select-test-report-buffer nil)
-;;         (setq cider-auto-select-error-buffer nil))
-;;       )
-
-;; A.
-;; (use-package! cider
-
-;;   :config
-;;   (message "A")
-;;   (setq cider-repl-pop-to-buffer-on-connect nil)
-;;   (setq cider-auto-select-test-report-buffer nil)
-;;   (setq cider-auto-select-error-buffer nil)
-;;   (define-key cider-mode-map (kbd "C-c M-c") #'cider-connect-clj)
-;;   (define-key cider-mode-map (kbd "C-c C-M-c") #'cider-connect-clj)
-;;   (message "B")
-;;   ;; (general-define-key :keymaps
-;;   ;;                     '(cider-mode-map)
-;;   ;;                     "C-c M-c" #'cider-connect-clj
-;;   ;;                     "C-c C-k" #'cider-eval-buffer)
-;;  )
-
 
 (defun delete-whitespace-except-one ()
   (interactive)
