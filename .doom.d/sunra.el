@@ -2,6 +2,12 @@
 
 (setq
 
+ ;; Set *scratch* buffer to lisp-interaction-mode
+ ;; https://emacsredux.com/blog/2014/07/25/configure-the-scratch-buffers-mode/
+ ;; https://emacs.stackexchange.com/questions/3830/why-does-lisp-interaction-mode-exist-and-do-we-ever-need-it
+ initial-major-mode 'lisp-interaction-mode
+
+
  ;; If you use `org' and don't want your org files in the default location below,
  ;; change `org-directory'. It must be set before org loads!
  org-directory "~/org/"
