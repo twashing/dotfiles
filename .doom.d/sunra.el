@@ -17,7 +17,12 @@
  ;; Disable auto-comment on `newline-and-indent`
  ;; https://discord.com/channels/406534637242810369/1038583508140048425
  +default-want-RET-continue-comments nil
- +evil-want-o/O-to-continue-comments nil)
+ +evil-want-o/O-to-continue-comments nil
+
+ ;; When minibuffer offers tab completion, make that case-insensitive
+ ;; https://emacs.stackexchange.com/a/32408/10528
+ completion-ignore-case t)
+
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
@@ -29,6 +34,14 @@
 
 (global-set-key (kbd "C-c C-s") 'save-buffer)
 
+;; (let ((map global-map))
+;;   (define-key map (kbd "M-<backspace>") #'sp-backward-kill-word)
+;;   (define-key map (kbd "C-c C-k") #'eval-buffer)
+;;   (define-key map (kbd "C-c M-c") #'upcase-word)
+;;   (define-key map (kbd "C-x M-x") #'isearch-forward-symbol-at-point)
+;;   (define-key map (kbd "C-x RET") #'magit-status)
+;;   (define-key map (kbd "M-W") #'delete-trailing-whitespace))
+
 (map! :map global-map
       "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
@@ -37,14 +50,11 @@
       "C-x RET" #'magit-status
       "M-W" #'delete-trailing-whitespace)
 
-(define-key general-override-mode-map (kbd "C-c M-c") nil)
-
-
-(map! ;; :after consult
- :map general-override-mode-map
- "M-m s s" #'consult-line
- "M-m s S" #'consult-line-multi
- "M-y" #'consult-yank-from-kill-ring)
+(map! :after consult
+      :map general-override-mode-map
+      "M-m s s" #'consult-line
+      "M-m s S" #'consult-line-multi
+      "M-y" #'consult-yank-from-kill-ring)
 
 
 (map! :map general-override-mode-map
@@ -164,6 +174,14 @@
 (map! :after clojure
       :map clojure-mode-map
       "C-c M-c" #'cider-connect-clj)
+
+(with-eval-after-load 'general
+  (define-key general-override-mode-map (kbd "C-c M-c") nil)
+  ;; (define-key clojure-mode-map (kbd "C-c M-c") 'my-clojure-command)
+  )
+
+;; (after! clojure
+;;   (define-key general-override-mode-map (kbd "C-c M-c") nil))
 
 (defun delete-whitespace-except-one ()
   (interactive)
