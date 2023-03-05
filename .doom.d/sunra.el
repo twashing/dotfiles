@@ -320,3 +320,18 @@
 
   (with-eval-after-load 'markdown-mode
     (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
+
+(use-package! substitute
+  :config
+
+  ;; If you want a message reporting the matches that changed in the
+  ;; given context.  We don't do it by default.
+  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
+
+  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
+  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
+  (let ((map global-map))
+    (define-key map (kbd "M-# s") #'substitute-target-below-point)
+    (define-key map (kbd "M-# r") #'substitute-target-above-point)
+    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
+    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))

@@ -49,6 +49,9 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+;; ============
+;; Completions
+;; ============
 (package! corfu)
 (package! cape)
 (package! eglot)
@@ -66,3 +69,9 @@
 (package! emacsql-sqlite)
 (package! md-roam :recipe
   (:host github :repo "nobiot/md-roam"))
+
+
+;; ============
+;; General
+;; ============
+(package! substitute)
