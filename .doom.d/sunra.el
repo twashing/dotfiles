@@ -1,5 +1,7 @@
 ;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
 
+;; M-:  # Show minibuffer to eval expressions.
+
 (setq
 
  ;; Set *scratch* buffer to lisp-interaction-mode
@@ -29,24 +31,9 @@
  ;; https://emacs.stackexchange.com/a/32408/10528
  completion-ignore-case t)
 
-
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
-
-;; TODO
-;; "M-:" show minibuffer to eval expressions
-;; set *scratch* buffer to lisp-interaction-mode
-;; "M-m s s" 'consult-line should be case insensitive
-
 (global-set-key (kbd "C-c C-s") 'save-buffer)
-
-;; (let ((map global-map))
-;;   (define-key map (kbd "M-<backspace>") #'sp-backward-kill-word)
-;;   (define-key map (kbd "C-c C-k") #'eval-buffer)
-;;   (define-key map (kbd "C-c M-c") #'upcase-word)
-;;   (define-key map (kbd "C-x M-x") #'isearch-forward-symbol-at-point)
-;;   (define-key map (kbd "C-x RET") #'magit-status)
-;;   (define-key map (kbd "M-W") #'delete-trailing-whitespace))
 
 (map! :map global-map
       "M-<backspace>" #'sp-backward-kill-word
@@ -169,8 +156,15 @@
 
 (map! "C-o" #'hs-toggle-hiding
       "C-c @ C-M-h" #'hs-hide-all
-      "C-c @ C-M-s" #'hs-show-all)
+      "C-c @ C-M-s" #'hs-show-all
+      "C-c @ C-M-l" #'hs-hide-level)
 
+(after! cider
+
+  ;; DONT open new window on cider-connect, et al
+  (setq cider-repl-pop-to-buffer-on-connect nil)
+  (setq cider-auto-select-test-report-buffer nil)
+  (setq cider-auto-select-error-buffer nil))
 
 (map! :after cider
       :map cider-mode-map
@@ -182,12 +176,7 @@
       "C-c M-c" #'cider-connect-clj)
 
 (with-eval-after-load 'general
-  (define-key general-override-mode-map (kbd "C-c M-c") nil)
-  ;; (define-key clojure-mode-map (kbd "C-c M-c") 'my-clojure-command)
-  )
-
-;; (after! clojure
-;;   (define-key general-override-mode-map (kbd "C-c M-c") nil))
+  (define-key general-override-mode-map (kbd "C-c M-c") nil))
 
 (defun delete-whitespace-except-one ()
   (interactive)
@@ -215,7 +204,6 @@
   (vertico-buffer-mode)
   (setq completion-styles '(orderless basic)))
 
-
 (use-package! corfu
 
   ;; Optional customizations
@@ -242,7 +230,6 @@
   ;; See also `corfu-excluded-modes'.
   :init
   (global-corfu-mode))
-
 
 ;; A few more useful configurations...
 (use-package! emacs
@@ -275,10 +262,10 @@
 ;;                         (add-to-list 'savehist-additional-variables 'corfu-history))))
 
 (use-package! corfu-quick
-  ;;  corfu
+  ;; :after corfu
   :bind (:map corfu-map
-              ("M-q" . corfu-quick-complete)
-              ("C-q" . corfu-quick-insert)))
+         ("M-q" . corfu-quick-complete)
+         ("C-q" . corfu-quick-insert)))
 
 (after! org-roam
 
@@ -292,46 +279,22 @@
 
   ;; Configs taken from the home repo
   ;; https://github.com/org-roam/org-roam#configuration
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))))
-
-(use-package! flymake
-  :config
-  (setq flymake-start-on-flymake-mode t)
-  (setq flymake-no-changes-timeout nil)
-  (setq flymake-start-on-save-buffer t))
-
-(use-package! flymake-kondor
-  :ensure t
-  :hook (clojure-mode . flymake-kondor-setup))
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  )
 
 (use-package! md-roam
-  :config
+ :config
 
-  ;; (setq md-roam-file-extension-single "md")
-  (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
-  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
-  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
+ ;; (setq md-roam-file-extension-single "md")
+ (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
+ (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
+ (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 
-  (add-to-list 'org-roam-capture-templates
-               '("m" "Markdown" plain "" :target
-                 (file+head "${slug}.md"
-                            "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
-                 :unnarrowed t))
+ (add-to-list 'org-roam-capture-templates
+              '("m" "Markdown" plain "" :target
+                (file+head "${slug}.md"
+                           "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
+                :unnarrowed t))
 
-  (with-eval-after-load 'markdown-mode
-    (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
-
-(use-package! substitute
-  :config
-
-  ;; If you want a message reporting the matches that changed in the
-  ;; given context.  We don't do it by default.
-  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
-
-  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
-  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
-  (let ((map global-map))
-    (define-key map (kbd "M-# s") #'substitute-target-below-point)
-    (define-key map (kbd "M-# r") #'substitute-target-above-point)
-    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
-    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
+ (with-eval-after-load 'markdown-mode
+  (advice-add #'markdown-indent-line :before-until #'completion-at-point)))

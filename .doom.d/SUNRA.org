@@ -12,53 +12,74 @@
 
 ** Reference
 
+*** Eval expressions in minibuffer
+
 #+BEGIN_SRC elisp
-M-:  # Show minibuffer to eval expressions.
+;; M-:  # Show minibuffer to eval expressions.
 #+END_SRC
+
+*** Kill groups of buffers
+
+Use ibuffer (also use w/ embark)
+Follow the same pattern as dired... Mark then delete
+
 
 ** General
 
-Miscellaneous configuration
+*** Miscellaneous configuration
 
 #+BEGIN_SRC elisp
 (setq
 
-  ;; If you use `org' and don't want your org files in the default location below,
-  ;; change `org-directory'. It must be set before org loads!
-  org-directory "~/org/"
+ ;; Set *scratch* buffer to lisp-interaction-mode
+ ;; https://emacsredux.com/blog/2014/07/25/configure-the-scratch-buffers-mode/
+ ;; https://emacs.stackexchange.com/questions/3830/why-does-lisp-interaction-mode-exist-and-do-we-ever-need-it
+ initial-major-mode 'lisp-interaction-mode
 
-  ;; This determines the style of line numbers in effect. If set to `nil', line
-  ;; numbers are disabled. For relative line numbers, set this to `relative'.
-  display-line-numbers-type t
 
-  ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
-  ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
-  confirm-kill-emacs nil
+ ;; If you use `org' and don't want your org files in the default location below,
+ ;; change `org-directory'. It must be set before org loads!
+ org-directory "~/org/"
 
-  ;; Disable auto-comment on `newline-and-indent`
-  ;; https://discord.com/channels/406534637242810369/1038583508140048425
-  +default-want-RET-continue-comments nil
-  +evil-want-o/O-to-continue-comments nil)
+ ;; This determines the style of line numbers in effect. If set to `nil', line
+ ;; numbers are disabled. For relative line numbers, set this to `relative'.
+ display-line-numbers-type t
+
+ ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
+ ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
+ confirm-kill-emacs nil
+
+ ;; Disable auto-comment on `newline-and-indent`
+ ;; https://discord.com/channels/406534637242810369/1038583508140048425
+ +default-want-RET-continue-comments nil
+ +evil-want-o/O-to-continue-comments nil
+
+ ;; When minibuffer offers tab completion, make that case-insensitive
+ ;; https://emacs.stackexchange.com/a/32408/10528
+ completion-ignore-case t)
 #+END_SRC
 
-Use Org Mode for all files ending with .notes.
+*** Use Org Mode for all files ending with .notes.
 
 #+BEGIN_SRC elisp
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 #+END_SRC
 
-General Navigation and text actions.
+*** General Navigation and text actions.
 
 #+BEGIN_SRC elisp
+(global-set-key (kbd "C-c C-s") 'save-buffer)
 
-(map! "M-<backspace>" #'sp-backward-kill-word
+(map! :map global-map
+      "M-<backspace>" #'sp-backward-kill-word
       "C-c C-k" #'eval-buffer
       "C-c M-c" #'upcase-word
       "C-x M-x" #'isearch-forward-symbol-at-point
       "C-x RET" #'magit-status
       "M-W" #'delete-trailing-whitespace)
 
-(map! :map general-override-mode-map
+(map! :after consult
+      :map general-override-mode-map
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
@@ -72,6 +93,28 @@ General Navigation and text actions.
       "M-m p S" #'projectile-save-project-buffers)
 #+END_SRC
 
+*** Substitute
+
+Source and config taken from here.
+- https://github.com/protesilaos/substitute
+- https://protesilaos.com/emacs/substitute
+
+#+BEGIN_SRC
+(use-package! substitute
+  :config
+
+  ;; If you want a message reporting the matches that changed in the
+  ;; given context.  We don't do it by default.
+  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
+
+  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
+  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
+  (let ((map global-map))
+    (define-key map (kbd "M-# s") #'substitute-target-below-point)
+    (define-key map (kbd "M-# r") #'substitute-target-above-point)
+    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
+    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
+#+END_SRC
 
 ** Avy
 
@@ -103,7 +146,7 @@ General Navigation and text actions.
   (sp-pair "[" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
-      ;; :after smartparens
+      :after smartparens
       "C-M-k" #'sp-copy-sexp
       "C-M-u" #'sp-up-sexp
       "M-u" #'sp-backward-up-sexp
@@ -135,7 +178,6 @@ General Navigation and text actions.
       "C-M-s" #'sp-splice-sexp
       "C-x b" #'consult-buffer
       "C-M-l" #'transpose-lines)
-
 #+END_SRC
 
 
@@ -202,12 +244,14 @@ Also key bindings for [[https://github.com/abo-abo/hydra][Hydra]] multiple curso
 #+BEGIN_SRC elisp
 (map! "C-o" #'hs-toggle-hiding
       "C-c @ C-M-h" #'hs-hide-all
-      "C-c @ C-M-s" #'hs-show-all)
-
+      "C-c @ C-M-s" #'hs-show-all
+      "C-c @ C-M-l" #'hs-hide-level)
 #+END_SRC
 
 
 ** Cider
+
+We have to clear out `C-c M-c` before we can rebind it.
 
 #+BEGIN_SRC elisp
 (after! cider
@@ -217,13 +261,17 @@ Also key bindings for [[https://github.com/abo-abo/hydra][Hydra]] multiple curso
   (setq cider-auto-select-test-report-buffer nil)
   (setq cider-auto-select-error-buffer nil))
 
-(map! ;; :after clojure-mode
-      ;; :map clojure-mode-map
-      :map general-override-mode-map
+(map! :after cider
+      :map cider-mode-map
       "C-c M-c" #'cider-connect-clj
-      "C-c C-k" #'cider-eval-buffer
-      ;; "," #'cider-eval-last-sexp
-      )
+      "C-c C-k" #'cider-eval-buffer)
+
+(map! :after clojure
+      :map clojure-mode-map
+      "C-c M-c" #'cider-connect-clj)
+
+(with-eval-after-load 'general
+  (define-key general-override-mode-map (kbd "C-c M-c") nil))
 #+END_SRC
 
 
@@ -322,7 +370,7 @@ Emacs: completion framework (Embark, Consult, Orderless, etc.)
   - https://github.com/radian-software/selectrum
 
 
-**** B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico/` module.
+**** B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico` module.
 
 So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://github.com/doomemacs/doomemacs/tree/master/modules/completion/vertico)).
 
@@ -425,6 +473,20 @@ Initial config stolen from this thread.
          ("M-q" . corfu-quick-complete)
          ("C-q" . corfu-quick-insert)))
 
+#+END_SRC
+
+And Flymake configs for Eglot.
+
+#+BEGIN_SRC
+(use-package! flymake
+  :config
+  (setq flymake-start-on-flymake-mode t)
+  (setq flymake-no-changes-timeout nil)
+  (setq flymake-start-on-save-buffer t))
+
+(use-package! flymake-kondor
+  :ensure t
+  :hook (clojure-mode . flymake-kondor-setup))
 #+END_SRC
 
 
