@@ -57,6 +57,21 @@
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
 
+(use-package! substitute
+  :config
+
+  ;; If you want a message reporting the matches that changed in the
+  ;; given context.  We don't do it by default.
+  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
+
+  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
+  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
+  (let ((map global-map))
+    (define-key map (kbd "M-# s") #'substitute-target-below-point)
+    (define-key map (kbd "M-# r") #'substitute-target-above-point)
+    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
+    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
+
 (setq avy-all-windows 'all-frames)
 (map! "C-c g c" #'avy-goto-char-2)
 
@@ -266,6 +281,16 @@
   :bind (:map corfu-map
          ("M-q" . corfu-quick-complete)
          ("C-q" . corfu-quick-insert)))
+
+(use-package! flymake
+  :config
+  (setq flymake-start-on-flymake-mode t)
+  (setq flymake-no-changes-timeout nil)
+  (setq flymake-start-on-save-buffer t))
+
+(use-package! flymake-kondor
+  :ensure t
+  :hook (clojure-mode . flymake-kondor-setup))
 
 (after! org-roam
 
