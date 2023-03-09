@@ -33,22 +33,48 @@ For a large structured file (.org .el etc), =consult-outline= and =consult-imenu
 This works as an index of buffer positions, that acts as a "table of contents".
 =embark-occur= produces a persistent buffer.
 
-#+BEGIN_SRC elisp
-;; consult-outline
-;; consult-imenu
-;; embark-occur
-#+END_SRC
+#+BEGIN_QUOTE
+consult-outline
+consult-imenu
+embark-occur
+#+END_QUOTE
 
 outline-minor-mode let's you define outline regex as a heading.
 The variable outline-regexp can be changed to control what is a heading.
 A line is a heading if outline-regexp matches something at the
 beginning of the line. The longer the match, the deeper the level.
 
-#+BEGIN_SRC elisp
-;; outline-minor-mode ;; Let's you define outline regex as a heading
-;; outline-regexp
-#+END_SRC
+#+BEGIN_QUOTE
+outline-minor-mode ;; Let's you define outline regex as a heading
+outline-regexp
+#+END_QUOTE
 
+**** Replace across files, grep, wgrep mode
+
+Search w/ grep (results must be on one line)
+
+#+BEGIN_QUOTE
+grep
+projectile-grep
+grep-find  # Perform rgrep in the project.
+find-grep
+find-grep-dired  # Find output is put into dired buffer
+#+END_QUOTE
+
+Replace + Write changes of multiple matches
+C-c C-c (commit change)
+
+#+BEGIN_QUOTE
+wgrep-change-to-wgrep-mode     Change to wgrep mode.
+wgrep-save-all-buffers         Save the buffers that wgrep changed.
+wgrep-finish-edit           (C-x C-s)    Apply changes to file buffers.
+wgrep-exit                  (C-x C-q)    Return to original mode.
+wgrep-abort-changes            Discard all changes and return to original mo…
+wgrep-mark-deletion            Mark as delete to current line.
+wgrep-remove-change         (C-c C-r)    Remove changes in the region between BEG and …
+wgrep-remove-all-change        Remove changes in the whole buffer.
+wgrep-toggle-readonly-area     Toggle read-only area to remove a whole line.
+#+END_QUOTE
 
 ** General
 
@@ -125,7 +151,7 @@ Source and config taken from here.
 - https://github.com/protesilaos/substitute
 - https://protesilaos.com/emacs/substitute
 
-#+BEGIN_SRC
+#+BEGIN_SRC elisp
 (use-package! substitute
   :config
 
@@ -503,7 +529,7 @@ Initial config stolen from this thread.
 
 And Flymake configs for Eglot.
 
-#+BEGIN_SRC
+#+BEGIN_SRC elisp
 (use-package! flymake
   :config
   (setq flymake-start-on-flymake-mode t)
