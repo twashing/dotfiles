@@ -132,8 +132,14 @@ Recreates variables at startup (including buffers, frames, registers...).
 
  ;; When minibuffer offers tab completion, make that case-insensitive
  ;; https://emacs.stackexchange.com/a/32408/10528
- completion-ignore-case t)
+ completion-ignore-case t
+
+ ;; Disable annoying whitespace markup in files
+ global-whitespace-mode nil
+ whitespace-mode nil)
 #+END_SRC
+
+#+RESULTS:
 
 *** Use Org Mode for all files ending with .notes.
 

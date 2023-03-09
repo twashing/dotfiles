@@ -35,7 +35,11 @@
 
  ;; When minibuffer offers tab completion, make that case-insensitive
  ;; https://emacs.stackexchange.com/a/32408/10528
- completion-ignore-case t)
+ completion-ignore-case t
+
+ ;; Disable annoying whitespace markup in files
+ global-whitespace-mode nil
+ whitespace-mode nil)
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
