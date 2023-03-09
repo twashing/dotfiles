@@ -2,6 +2,12 @@
 
 ;; M-:  # Show minibuffer to eval expressions.
 
+(desktop-save-mode 1)
+
+(add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
+(add-to-list 'desktop-globals-to-save 'kmacro-ring)
+(add-to-list 'desktop-globals-to-save 'kill-ring)
+
 (setq
 
  ;; Set *scratch* buffer to lisp-interaction-mode

@@ -23,9 +23,7 @@
 Use ibuffer (also use w/ embark)
 Follow the same pattern as dired... Mark then delete
 
-*** Completion
-
-**** Index of buffer positions
+*** Index of buffer positions
 
 https://protesilaos.com/codelog/2021-01-06-emacs-default-completion/
 
@@ -49,7 +47,7 @@ outline-minor-mode ;; Let's you define outline regex as a heading
 outline-regexp
 #+END_QUOTE
 
-**** Replace across files, grep, wgrep mode
+*** Replace across files, grep, wgrep mode
 
 Search w/ grep (results must be on one line)
 
@@ -75,6 +73,32 @@ wgrep-remove-change         (C-c C-r)    Remove changes in the region between BE
 wgrep-remove-all-change        Remove changes in the whole buffer.
 wgrep-toggle-readonly-area     Toggle read-only area to remove a whole line.
 #+END_QUOTE
+
+
+*** Changes across files
+
+Keyboard macros let us make multi-line changes across files.
+
+#+BEGIN_QUOTE
+kmacro-start-macro-or-insert-counter  # <f3>
+kmacro-end-or-call-macro  # <f4>
+kmacro-ring
+desktop-save-mode  # saves keyboard macros, registers, any variable
+#+END_QUOTE
+
+Recreates variables at startup (including buffers, frames, registers...).
+
+#+BEGIN_SRC elisp
+(desktop-save-mode 1)
+
+(add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
+(add-to-list 'desktop-globals-to-save 'kmacro-ring)
+(add-to-list 'desktop-globals-to-save 'kill-ring)
+#+END_SRC
+
+*** Completion
+
+
 
 ** General
 
