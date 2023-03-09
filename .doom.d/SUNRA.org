@@ -23,6 +23,32 @@
 Use ibuffer (also use w/ embark)
 Follow the same pattern as dired... Mark then delete
 
+*** Completion
+
+**** Index of buffer positions
+
+https://protesilaos.com/codelog/2021-01-06-emacs-default-completion/
+
+For a large structured file (.org .el etc), =consult-outline= and =consult-imenu= produce outline buffers.
+This works as an index of buffer positions, that acts as a "table of contents".
+=embark-occur= produces a persistent buffer.
+
+#+BEGIN_SRC elisp
+;; consult-outline
+;; consult-imenu
+;; embark-occur
+#+END_SRC
+
+outline-minor-mode let's you define outline regex as a heading.
+The variable outline-regexp can be changed to control what is a heading.
+A line is a heading if outline-regexp matches something at the
+beginning of the line. The longer the match, the deeper the level.
+
+#+BEGIN_SRC elisp
+;; outline-minor-mode ;; Let's you define outline regex as a heading
+;; outline-regexp
+#+END_SRC
+
 
 ** General
 
