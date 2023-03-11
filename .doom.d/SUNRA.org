@@ -3,6 +3,11 @@
 
 #+OPTIONS: TOC:2
 
+# NOTE preserve line breaks
+# https://emacs.stackexchange.com/questions/21556/org-mode-export-how-to-force-newline-on-lines-between-paragraphs
+#+OPTIONS: \n:t
+
+
 ** Preamble
 
 #+BEGIN_SRC elisp
