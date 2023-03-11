@@ -75,3 +75,4 @@
 ;; General
 ;; ============
 (package! substitute)
+(package! free-keys)

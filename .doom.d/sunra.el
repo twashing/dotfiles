@@ -38,7 +38,7 @@
  completion-ignore-case t
 
  ;; Disable annoying whitespace markup in files
- global-whitespace-mode nil
+ global-whitespace-modes nil
  whitespace-mode nil)
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
@@ -51,7 +51,8 @@
       "C-c M-c" #'upcase-word
       "C-x M-x" #'isearch-forward-symbol-at-point
       "C-x RET" #'magit-status
-      "M-W" #'delete-trailing-whitespace)
+      "M-W" #'delete-trailing-whitespace
+      "C-/" #'org-cycle-global)
 
 (map! :after consult
       :map general-override-mode-map
@@ -81,6 +82,8 @@
     (define-key map (kbd "M-# r") #'substitute-target-above-point)
     (define-key map (kbd "M-# d") #'substitute-target-in-defun)
     (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
+
+(use-package! free-keys)
 
 (setq avy-all-windows 'all-frames)
 (map! "C-c g c" #'avy-goto-char-2)
@@ -155,34 +158,37 @@
       "C-c m e b" #'mc/edit-beginnings-of-lines
       "C-c m e e" #'mc/edit-ends-of-lines)
 
-(defhydra hydra-multiple-cursors-next (general-override-mode-map "C-c m n")
-  "
-   Mark next"
-  ("l" mc/mark-next-lines "lines")
-  ("t" mc/mark-next-like-this "next")
-  ("w" mc/mark-next-like-this-word "word")
-  ("s" mc/mark-next-like-this-symbol "symbol")
-  ("W" mc/mark-next-word-like-this "whole word")
-  ("S" mc/mark-next-symbol-like-this "whole symbol")
+(after! multiple-cursors
 
-  ("q" nil "quit" :color blue))
+  (defhydra hydra-multiple-cursors-next (general-override-mode-map "C-c m n")
+    "Mark next"
+    ("l" mc/mark-next-lines "lines")
+    ("t" mc/mark-next-like-this "this")
+    ("w" mc/mark-next-like-this-word "word")
+    ("s" mc/mark-next-like-this-symbol "symbol")
+    ("W" mc/mark-next-word-like-this "whole word")
+    ("S" mc/mark-next-symbol-like-this "whole symbol")
 
-(defhydra hydra-multiple-cursors-previous (general-override-mode-map "C-c m p")
-  "
-   Mark previous"
-  ("l" mc/mark-previous-lines "lines")
-  ("t" mc/mark-previous-like-this "previous")
-  ("w" mc/mark-previous-like-this-word "word")
-  ("s" mc/mark-previous-like-this-symbol "symbol")
-  ("W" mc/mark-previous-word-like-this "whole word")
-  ("S" mc/mark-previous-symbol-like-this "whole symbol")
+    ("q" nil "quit" :color blue))
 
-  ("q" nil "quit" :color blue))
+  (defhydra hydra-multiple-cursors-previous (general-override-mode-map "C-c m p")
+    "Mark previous"
+    ("l" mc/mark-previous-lines "lines")
+    ("t" mc/mark-previous-like-this "this")
+    ("w" mc/mark-previous-like-this-word "word")
+    ("s" mc/mark-previous-like-this-symbol "symbol")
+    ("W" mc/mark-previous-word-like-this "whole word")
+    ("S" mc/mark-previous-symbol-like-this "whole symbol")
+
+    ("q" nil "quit" :color blue)))
 
 (map! "C-o" #'hs-toggle-hiding
       "C-c @ C-M-h" #'hs-hide-all
       "C-c @ C-M-s" #'hs-show-all
-      "C-c @ C-M-l" #'hs-hide-level)
+      "C-c @ C-M-l" #'hs-hide-level
+      "C-M-," #'hs-hide-all
+      "C-M-." #'hs-show-all
+      "C-M-/" #'hs-hide-level)
 
 (after! cider
 
