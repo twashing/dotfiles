@@ -212,6 +212,7 @@ Source and config taken from here.
 
 #+END_SRC
 
+
 ** Avy
 
 #+BEGIN_SRC elisp
@@ -347,6 +348,7 @@ Also key bindings for [[https://github.com/abo-abo/hydra][Hydra]] multiple curso
 #+END_SRC
 
 **
+
 
 ** Cider
 

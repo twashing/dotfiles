@@ -1,9 +1,10 @@
 ;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
 
 ;; M-:  # Show minibuffer to eval expressions.
+(remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
 
+;; (desktop-save-mode -1)
 (desktop-save-mode 1)
-
 (add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
 (add-to-list 'desktop-globals-to-save 'kill-ring)
@@ -24,6 +25,9 @@
  ;; numbers are disabled. For relative line numbers, set this to `relative'.
  display-line-numbers-type t
 
+ ;; Start from 1 when inserting numbers
+ mc/insert-numbers-default 1
+
  ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
  ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
  confirm-kill-emacs nil
@@ -35,13 +39,11 @@
 
  ;; When minibuffer offers tab completion, make that case-insensitive
  ;; https://emacs.stackexchange.com/a/32408/10528
- completion-ignore-case t
+ completion-ignore-case t)
 
- ;; Disable annoying whitespace markup in files
- global-whitespace-modes nil
- whitespace-mode nil)
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
+
 
 (global-set-key (kbd "C-c C-s") 'save-buffer)
 
@@ -101,7 +103,7 @@
   (sp-pair "[" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
-      :after smartparens
+      ;; :after smartparens
       "C-M-k" #'sp-copy-sexp
       "C-M-u" #'sp-up-sexp
       "M-u" #'sp-backward-up-sexp
@@ -112,7 +114,8 @@
       "C-M-y" #'sp-backward-slurp-sexp
       "C-x C-M-y" #'sp-backward-barf-sexp
       "C-M-n" #'sp-next-sexp
-      "M-r" #'sp-raise-sexp)
+      "M-r" #'sp-raise-sexp
+      "DEL" #'sp-backward-delete-char)
 
 (after! ace-window
 
@@ -157,6 +160,8 @@
       "C-c m e l" #'mc/edit-lines
       "C-c m e b" #'mc/edit-beginnings-of-lines
       "C-c m e e" #'mc/edit-ends-of-lines)
+
+
 
 (after! multiple-cursors
 
