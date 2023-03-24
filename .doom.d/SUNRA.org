@@ -19,8 +19,16 @@
 
 *** Eval expressions in minibuffer
 
+#+BEGIN_QUOTE
+M-:  # Show minibuffer to eval expressions.
+#+END_QUOTE
+
+*** Highlight + Indent when entering a new file / major mode
+
+This removes whitespace-mode, which doom has disabled.
+
 #+BEGIN_SRC elisp
-;; M-:  # Show minibuffer to eval expressions.
+(remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
 #+END_SRC
 
 *** Kill groups of buffers
@@ -126,6 +134,9 @@ Recreates variables at startup (including buffers, frames, registers...).
  ;; numbers are disabled. For relative line numbers, set this to `relative'.
  display-line-numbers-type t
 
+ ;; Start from 1 when inserting numbers
+ mc/insert-numbers-default 1
+
  ;; "confirm-kill-emacs is non-nil by default. The doom-quit module only adds silly confirmation messages to it. Do this to completely disable it."
  ;; https://github.com/doomemacs/doomemacs/issues/2688#issuecomment-596684817
  confirm-kill-emacs nil
@@ -137,11 +148,7 @@ Recreates variables at startup (including buffers, frames, registers...).
 
  ;; When minibuffer offers tab completion, make that case-insensitive
  ;; https://emacs.stackexchange.com/a/32408/10528
- completion-ignore-case t
-
- ;; Disable annoying whitespace markup in files
- global-whitespace-modes nil
- whitespace-mode nil)
+ completion-ignore-case t)
 #+END_SRC
 
 #+RESULTS:
@@ -254,7 +261,8 @@ Source and config taken from here.
       "C-M-y" #'sp-backward-slurp-sexp
       "C-x C-M-y" #'sp-backward-barf-sexp
       "C-M-n" #'sp-next-sexp
-      "M-r" #'sp-raise-sexp)
+      "M-r" #'sp-raise-sexp
+      "DEL" #'sp-backward-delete-char)
 
 (after! ace-window
 

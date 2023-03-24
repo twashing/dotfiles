@@ -1,10 +1,9 @@
 ;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
 
-;; M-:  # Show minibuffer to eval expressions.
 (remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
 
-;; (desktop-save-mode -1)
 (desktop-save-mode 1)
+
 (add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
 (add-to-list 'desktop-globals-to-save 'kill-ring)
@@ -41,9 +40,7 @@
  ;; https://emacs.stackexchange.com/a/32408/10528
  completion-ignore-case t)
 
-
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
-
 
 (global-set-key (kbd "C-c C-s") 'save-buffer)
 
@@ -103,7 +100,7 @@
   (sp-pair "[" nil :unless '(:rem sp-point-before-word-p)))
 
 (map! :map smartparens-mode-map
-      ;; :after smartparens
+      :after smartparens
       "C-M-k" #'sp-copy-sexp
       "C-M-u" #'sp-up-sexp
       "M-u" #'sp-backward-up-sexp
@@ -160,8 +157,6 @@
       "C-c m e l" #'mc/edit-lines
       "C-c m e b" #'mc/edit-beginnings-of-lines
       "C-c m e e" #'mc/edit-ends-of-lines)
-
-
 
 (after! multiple-cursors
 
