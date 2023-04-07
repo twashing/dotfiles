@@ -292,11 +292,11 @@
 ;;                         (savehist-mode 1)
 ;;                         (add-to-list 'savehist-additional-variables 'corfu-history))))
 
-;; (use-package! corfu-quick
-;;   ;; :after corfu
-;;   :bind (:map corfu-map
-;;          ("M-q" . corfu-quick-complete)
-;;          ("C-q" . corfu-quick-insert)))
+(use-package! corfu-quick
+  ;; :after corfu
+  :bind (:map corfu-map
+         ("M-q" . corfu-quick-complete)
+         ("C-q" . corfu-quick-insert)))
 
 (use-package! flymake
   :config
@@ -342,7 +342,7 @@
 
 (use-package! gptel
   :config
-  (setq! gptel-api-key (getenv "")))
+  (setq! gptel-api-key (getenv "OPENAI_KEY")))
 
 (defun doom/goto-private-config-sunra-el ()
   "Open your private config.el file."
@@ -353,3 +353,7 @@
   "Open your private config.el file."
   (interactive)
   (find-file (expand-file-name "SUNRA.org" doom-user-dir)))
+
+(let ((map global-map))
+  (define-key map (kbd "C-h d r") #'doom/goto-private-config-sunra-el)
+  (define-key map (kbd "C-h d R") #'doom/goto-private-config-sunra-org))
