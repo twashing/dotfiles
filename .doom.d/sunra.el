@@ -235,32 +235,32 @@
   (vertico-buffer-mode)
   (setq completion-styles '(orderless basic)))
 
-(use-package! corfu
-
-  ;; Optional customizations
-  :custom
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto t)                 ;; Enable auto completion
-  (corfu-separator ?\s)          ;; Orderless field separator
-  (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
-  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
-  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-
-  ;; Enable Corfu only for certain modes.
-  :hook ((prog-mode . corfu-mode)
-         (org-mode . corfu-mode)
-         (shell-mode . corfu-mode)
-         (eshell-mode . corfu-mode))
-
-  ;; Recommended: Enable Corfu globally.
-  ;; This is recommended since Dabbrev can be used globally (M-/).
-  ;; See also `corfu-excluded-modes'.
-  :init
-  (global-corfu-mode))
+;; (use-package! corfu
+;;
+;;   ;; Optional customizations
+;;   :custom
+;;   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+;;   (corfu-auto t)                 ;; Enable auto completion
+;;   (corfu-separator ?\s)          ;; Orderless field separator
+;;   (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+;;   (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+;;   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+;;   ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
+;;   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+;;   ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+;;   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+;;
+;;   ;; Enable Corfu only for certain modes.
+;;   :hook ((prog-mode . corfu-mode)
+;;          (org-mode . corfu-mode)
+;;          (shell-mode . corfu-mode)
+;;          (eshell-mode . corfu-mode))
+;;
+;;   ;; Recommended: Enable Corfu globally.
+;;   ;; This is recommended since Dabbrev can be used globally (M-/).
+;;   ;; See also `corfu-excluded-modes'.
+;;   :init
+;;   (global-corfu-mode))
 
 ;; A few more useful configurations...
 (use-package! emacs
@@ -308,34 +308,48 @@
   :ensure t
   :hook (clojure-mode . flymake-kondor-setup))
 
-(after! org-roam
+;; (after! org-roam
+;;
+;;   (setq org-roam-directory (file-truename "~/roam"))
+;;
+;;   ;; add markdown extension to org-roam-file-extensions list
+;;   (setq org-roam-file-extensions '("org" "md")) ; enable Org-roam for a markdown extension
+;;   (setq org-roam-title-sources '((mdtitle title mdheadline headline) (mdalias alias)))
+;;
+;;   (add-to-list 'load-path (file-truename "~/.emacs.d/.local/straight/repos/md-roam"))
+;;
+;;   ;; Configs taken from the home repo
+;;   ;; https://github.com/org-roam/org-roam#configuration
+;;   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+;;   )
 
-  (setq org-roam-directory (file-truename "~/roam"))
+;; (use-package! md-roam
+;;  :config
+;;
+;;  ;; (setq md-roam-file-extension-single "md")
+;;  (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
+;;  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
+;;  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
+;;
+;;  (add-to-list 'org-roam-capture-templates
+;;               '("m" "Markdown" plain "" :target
+;;                 (file+head "${slug}.md"
+;;                            "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
+;;                 :unnarrowed t))
+;;
+;;  (with-eval-after-load 'markdown-mode
+;;   (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 
-  ;; add markdown extension to org-roam-file-extensions list
-  (setq org-roam-file-extensions '("org" "md")) ; enable Org-roam for a markdown extension
-  (setq org-roam-title-sources '((mdtitle title mdheadline headline) (mdalias alias)))
+(use-package! gptel
+  :config
+  (setq! gptel-api-key (getenv "")))
 
-  (add-to-list 'load-path (file-truename "~/.emacs.d/.local/straight/repos/md-roam"))
+(defun doom/goto-private-config-sunra-el ()
+  "Open your private config.el file."
+  (interactive)
+  (find-file (expand-file-name "sunra.el" doom-user-dir)))
 
-  ;; Configs taken from the home repo
-  ;; https://github.com/org-roam/org-roam#configuration
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  )
-
-(use-package! md-roam
- :config
-
- ;; (setq md-roam-file-extension-single "md")
- (md-roam-mode 1) ; md-roam-mode must be active before org-roam-db-sync
- (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
- (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
-
- (add-to-list 'org-roam-capture-templates
-              '("m" "Markdown" plain "" :target
-                (file+head "${slug}.md"
-                           "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
-                :unnarrowed t))
-
- (with-eval-after-load 'markdown-mode
-  (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
+(defun doom/goto-private-config-sunra-org ()
+  "Open your private config.el file."
+  (interactive)
+  (find-file (expand-file-name "SUNRA.org" doom-user-dir)))

@@ -76,3 +76,4 @@
 ;; ============
 (package! substitute)
 (package! free-keys)
+(package! gptel)
