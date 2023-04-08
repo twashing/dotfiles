@@ -594,7 +594,6 @@ And Flymake configs for Eglot.
   (setq flymake-start-on-save-buffer t))
 
 (use-package! flymake-kondor
-  ;; :ensure t
   :hook (clojure-mode . flymake-kondor-setup))
 #+END_SRC
 
