@@ -357,3 +357,8 @@
 (let ((map global-map))
   (define-key map (kbd "C-h d r") #'doom/goto-private-config-sunra-el)
   (define-key map (kbd "C-h d R") #'doom/goto-private-config-sunra-org))
+
+(use-package! gptel
+  :config
+  (load! "openapi-key.el")
+  (setq! gptel-api-key openapi-key))

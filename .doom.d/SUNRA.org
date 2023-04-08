@@ -681,6 +681,13 @@ Setting personal functions to jump to my Sunra config files.
   (define-key map (kbd "C-h d R") #'doom/goto-private-config-sunra-org))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+(use-package! gptel
+  :config
+  (load! "openapi-key.el")
+  (setq! gptel-api-key openapi-key))
+#+END_SRC
+
 Per this Stackexchange thread, there's a mismatch between doom and emacs versions. So pinning packages for now.
 https://emacs.stackexchange.com/questions/75827/doom-emacs-error-running-hook-global-git-commit-mode-because-void-variable
 
@@ -693,6 +700,7 @@ https://emacs.stackexchange.com/questions/75827/doom-emacs-error-running-hook-gl
           :pin "bbc60f68ac190f02da8a100b6fb67cf1c27c53ab"
           :recipe (:host github :repo "magit/with-editor"))
 #+EMD_SRC
+
 
 ** Emacs Client
 
