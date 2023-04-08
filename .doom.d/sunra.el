@@ -305,7 +305,7 @@
   (setq flymake-start-on-save-buffer t))
 
 (use-package! flymake-kondor
-  :ensure t
+  ;; :ensure t
   :hook (clojure-mode . flymake-kondor-setup))
 
 ;; (after! org-roam
@@ -342,7 +342,8 @@
 
 (use-package! gptel
   :config
-  (setq! gptel-api-key (getenv "OPENAI_KEY")))
+  (load! "openapi-key.el")
+  (setq! gptel-api-key openapi-key))
 
 (defun doom/goto-private-config-sunra-el ()
   "Open your private config.el file."
@@ -357,8 +358,3 @@
 (let ((map global-map))
   (define-key map (kbd "C-h d r") #'doom/goto-private-config-sunra-el)
   (define-key map (kbd "C-h d R") #'doom/goto-private-config-sunra-org))
-
-(use-package! gptel
-  :config
-  (load! "openapi-key.el")
-  (setq! gptel-api-key openapi-key))
