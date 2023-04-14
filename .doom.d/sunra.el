@@ -305,7 +305,6 @@
   (setq flymake-start-on-save-buffer t))
 
 (use-package! flymake-kondor
-  ;; :ensure t
   :hook (clojure-mode . flymake-kondor-setup))
 
 ;; (after! org-roam
@@ -340,16 +339,18 @@
 ;;  (with-eval-after-load 'markdown-mode
 ;;   (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 
-(use-package! denote
-  :config
-  (setq denote-directory (expand-file-name "~/Documents/notes/")
-        denote-known-keywords '("emacs" "clojure")
-        denote-infer-keywords t
-        denote-sort-keywords t
-        denote-file-type nil ; Org) is the default, set others here
-        denote-prompts '(title keywords)
-        denote-excluded-directories-regexp nil
-        denote-excluded-keywords-regexp nil))
+(after! denote
+
+  (use-package! denote
+    :config
+    (setq denote-directory (expand-file-name "~/Documents/notes/")
+          denote-known-keywords '("emacs" "clojure")
+          denote-infer-keywords t
+          denote-sort-keywords t
+          denote-file-type nil ; Org is the default, set others here
+          denote-prompts '(title keywords)
+          denote-excluded-directories-regexp nil
+          denote-excluded-keywords-regexp nil)))
 
 (use-package! gptel
   :config

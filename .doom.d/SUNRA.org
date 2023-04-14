@@ -654,16 +654,18 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
 ** Denote (Org-Roam replacement)
 
 #+BEGIN_SRC elisp
-(use-package! denote
-  :config
-  (setq denote-directory (expand-file-name "~/Documents/notes/")
-        denote-known-keywords '("emacs" "clojure")
-        denote-infer-keywords t
-        denote-sort-keywords t
-        denote-file-type nil ; Org) is the default, set others here
-        denote-prompts '(title keywords)
-        denote-excluded-directories-regexp nil
-        denote-excluded-keywords-regexp nil))
+(after! denote
+
+  (use-package! denote
+    :config
+    (setq denote-directory (expand-file-name "~/Documents/notes/")
+          denote-known-keywords '("emacs" "clojure")
+          denote-infer-keywords t
+          denote-sort-keywords t
+          denote-file-type nil ; Org is the default, set others here
+          denote-prompts '(title keywords)
+          denote-excluded-directories-regexp nil
+          denote-excluded-keywords-regexp nil)))
 #+END_SRC
 
 
