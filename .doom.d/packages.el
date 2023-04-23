@@ -87,3 +87,4 @@
           :recipe (:host github :repo "magit/with-editor"))
 
 (package! denote)
+(package! plz)
