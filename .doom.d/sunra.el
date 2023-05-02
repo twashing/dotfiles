@@ -4,6 +4,19 @@
 
 (remove-hook 'doom-first-buffer-hook #'global-whitespace-mode)
 
+(defun sunra/do-before-init ()
+  "Function to run before anything during Doom initialization."
+
+  (global-whitespace-mode -1))
+
+(defun sunra/do-after-init ()
+  "Function to run after anything else during Doom initialization."
+  (message "Hello from sunra/do-after-init!")
+  (global-whitespace-mode -1))
+
+(add-hook 'doom-before-modules-init-hook #'sunra/do-before-init)
+(add-hook 'doom-after-modules-init-hook #'sunra/do-before-init)
+
 (desktop-save-mode 1)
 
 (add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
