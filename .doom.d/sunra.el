@@ -357,16 +357,22 @@
   (load! "openapi-key.el")
   (setq! gptel-api-key openapi-key))
 
-(defun doom/goto-private-config-sunra-el ()
+(defun sunra/goto-emacs-dir ()
+  "Open your private config.el file."
+  (interactive)
+  (dired doom-emacs-dir))
+
+(defun sunra/goto-private-config-sunra-el ()
   "Open your private config.el file."
   (interactive)
   (find-file (expand-file-name "sunra.el" doom-user-dir)))
 
-(defun doom/goto-private-config-sunra-org ()
+(defun sunra/goto-private-config-sunra-org ()
   "Open your private config.el file."
   (interactive)
   (find-file (expand-file-name "SUNRA.org" doom-user-dir)))
 
 (let ((map global-map))
-  (define-key map (kbd "C-h d r") #'doom/goto-private-config-sunra-el)
-  (define-key map (kbd "C-h d R") #'doom/goto-private-config-sunra-org))
+  (define-key map (kbd "C-h d e") #'sunra/goto-emacs-dir)
+  (define-key map (kbd "C-h d r") #'sunra/goto-private-config-sunra-el)
+  (define-key map (kbd "C-h d R") #'sunra/goto-private-config-sunra-org))

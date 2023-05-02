@@ -87,7 +87,6 @@ wgrep-remove-all-change        Remove changes in the whole buffer.
 wgrep-toggle-readonly-area     Toggle read-only area to remove a whole line.
 #+END_QUOTE
 
-
 *** Changes across files
 
 Keyboard macros let us make multi-line changes across files.
@@ -386,7 +385,6 @@ We have to clear out `C-c M-c` before we can rebind it.
 
 ** Miscellaneous
 
-To get information about any of these functions/macros, move the cursor over
 
 #+BEGIN_SRC elisp
 (defun delete-whitespace-except-one ()
@@ -684,19 +682,26 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
 Setting personal functions to jump to my Sunra config files.
 
 #+BEGIN_SRC elisp
-(defun doom/goto-private-config-sunra-el ()
+
+(defun sunra/goto-emacs-dir ()
+  "Open your private config.el file."
+  (interactive)
+  (dired doom-emacs-dir))
+
+(defun sunra/goto-private-config-sunra-el ()
   "Open your private config.el file."
   (interactive)
   (find-file (expand-file-name "sunra.el" doom-user-dir)))
 
-(defun doom/goto-private-config-sunra-org ()
+(defun sunra/goto-private-config-sunra-org ()
   "Open your private config.el file."
   (interactive)
   (find-file (expand-file-name "SUNRA.org" doom-user-dir)))
 
 (let ((map global-map))
-  (define-key map (kbd "C-h d r") #'doom/goto-private-config-sunra-el)
-  (define-key map (kbd "C-h d R") #'doom/goto-private-config-sunra-org))
+  (define-key map (kbd "C-h d e") #'sunra/goto-emacs-dir)
+  (define-key map (kbd "C-h d r") #'sunra/goto-private-config-sunra-el)
+  (define-key map (kbd "C-h d R") #'sunra/goto-private-config-sunra-org))
 #+END_SRC
 
 Per this Stackexchange thread, there's a mismatch between doom and emacs versions. So pinning packages for now.
