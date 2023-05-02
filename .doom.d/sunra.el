@@ -2,6 +2,8 @@
 
 (remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
 
+(remove-hook 'doom-first-buffer-hook #'global-whitespace-mode)
+
 (desktop-save-mode 1)
 
 (add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)

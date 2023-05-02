@@ -25,10 +25,19 @@ M-:  # Show minibuffer to eval expressions.
 
 *** Highlight + Indent when entering a new file / major mode
 
-This removes whitespace-mode, which doom has disabled.
+=doom-highlight-non-default-indentation-h= "Highlight whitespace at odds with `indent-tabs-mode'".
+The intent here is to remove whitespace-mode, which doom has disabled by default.
 
 #+BEGIN_SRC elisp
 (remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
+#+END_SRC
+
+=doom-first-buffer-hook= is a "Transient hooks run before the first interactively opened buffer."
+This should remove the hook that enables `global-whitespace-mode` for the first buffer that is opened,
+ensuring that whitespace mode is never enabled, regardless of the circumstances.
+
+#+BEGIN_SRC elisp
+(remove-hook 'doom-first-buffer-hook #'global-whitespace-mode)
 #+END_SRC
 
 *** Kill groups of buffers
