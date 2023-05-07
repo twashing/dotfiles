@@ -21,9 +21,9 @@
 
 Show minibuffer to eval expressions.
 
-#+BEGIN_QUOTE
+#+BEGIN_SRC
 M-:
-#+END_QUOTE
+#+END_SRC
 
 **** Disable whitespace-mode
 
@@ -79,38 +79,38 @@ For a large structured file (.org .el etc), =consult-outline= and =consult-imenu
 This works as an index of buffer positions, that acts as a "table of contents".
 =embark-occur= produces a persistent buffer.
 
-#+BEGIN_QUOTE
+#+BEGIN_SRC
 consult-outline
 consult-imenu
 embark-occur
-#+END_QUOTE
+#+END_SRC
 
 outline-minor-mode let's you define outline regex as a heading.
 The variable outline-regexp can be changed to control what is a heading.
 A line is a heading if outline-regexp matches something at the
 beginning of the line. The longer the match, the deeper the level.
 
-#+BEGIN_QUOTE
+#+BEGIN_SRC
 outline-minor-mode ;; Let's you define outline regex as a heading
 outline-regexp
-#+END_QUOTE
+#+END_SRC
 
 *** Replace across files, grep, wgrep mode
 
 Search w/ grep (results must be on one line)
 
-#+BEGIN_QUOTE
+#+BEGIN_SRC
 grep
 projectile-grep
 grep-find  # Perform rgrep in the project.
 find-grep
 find-grep-dired  # Find output is put into dired buffer
-#+END_QUOTE
+#+END_SRC
 
 Replace + Write changes of multiple matches
 C-c C-c (commit change)
 
-#+BEGIN_QUOTE
+#+BEGIN_SRC
 wgrep-change-to-wgrep-mode     Change to wgrep mode.
 wgrep-save-all-buffers         Save the buffers that wgrep changed.
 wgrep-finish-edit           (C-x C-s)    Apply changes to file buffers.
@@ -120,18 +120,18 @@ wgrep-mark-deletion            Mark as delete to current line.
 wgrep-remove-change         (C-c C-r)    Remove changes in the region between BEG and …
 wgrep-remove-all-change        Remove changes in the whole buffer.
 wgrep-toggle-readonly-area     Toggle read-only area to remove a whole line.
-#+END_QUOTE
+#+END_SRC
 
 *** Changes across files
 
 Keyboard macros let us make multi-line changes across files.
 
-#+BEGIN_QUOTE
+#+BEGIN_SRC
 kmacro-start-macro-or-insert-counter  # <f3>
 kmacro-end-or-call-macro  # <f4>
 kmacro-ring
 desktop-save-mode  # saves keyboard macros, registers, any variable
-#+END_QUOTE
+#+END_SRC
 
 Recreates variables at startup (including buffers, frames, registers...).
 
@@ -458,12 +458,12 @@ We have to clear out `C-c M-c` before we can rebind it.
 
 Exploring the optimal Emacs Completions with
 
-#+BEGIN_VERSE
+#+BEGIN_EXAMPLE
 Vertigo
 vs Helm
 vs Counsel (used in Doom)
 vs Consult (improvement over counsel? - https://github.com/minad/consult)
-#+END_VERSE
+#+END_EXAMPLE
 
 Using Emacs Episode 80 - Vertico, Marginalia, Consult, and Embark
 - https://www.youtube.com/watch?v=5ffb2at2d7w
@@ -576,12 +576,15 @@ So all I had to do was enable it: `(doom! :completion  vertico)` ([ref](https://
 
 #+BEGIN_QUOTE
 Completions are either provided by commands like dabbrev-completion or by pluggable backends (completion-at-point-functions, Capfs).
+
 Most programming language major modes implement a Capf. Furthermore the language server packages, Eglot and Lsp-mode, use Capfs which talk to the LSP server to retrieve the completions.
 
 Corfu does not include its own completion backends.
 The Emacs built-in Capfs and the Capfs provided by other programming language packages are usually sufficient.
+
 A few additional Capfs and completion utilities are provided by the Cape package.
 #+END_QUOTE
+
 
 From this blurb taken from the [[https://github.com/minad/corfu#corfuel---completion-overlay-region-function][corfu.el repo]], I'm settling on these `completion-aat-point-functions`.
 
