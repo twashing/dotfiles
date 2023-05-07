@@ -1,21 +1,18 @@
 ;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
 
-(remove-hook 'after-change-major-mode-hook #'doom-highlight-non-default-indentation-h)
+(remove-hook 'after-change-major-mode-hook
+             #'doom-highlight-non-default-indentation-h)
 
-(remove-hook 'doom-first-buffer-hook #'global-whitespace-mode)
+(remove-hook 'doom-first-buffer-hook
+             #'global-whitespace-mode)
 
-(defun sunra/do-before-init ()
+(defun sunra/do-before-after-init ()
   "Function to run before anything during Doom initialization."
 
   (global-whitespace-mode -1))
 
-(defun sunra/do-after-init ()
-  "Function to run after anything else during Doom initialization."
-  (message "Hello from sunra/do-after-init!")
-  (global-whitespace-mode -1))
-
-(add-hook 'doom-before-modules-init-hook #'sunra/do-before-init)
-(add-hook 'doom-after-modules-init-hook #'sunra/do-before-init)
+(add-hook 'doom-before-modules-init-hook #'sunra/do-before-after-init)
+(add-hook 'doom-after-modules-init-hook #'sunra/do-before-after-init)
 
 (desktop-save-mode 1)
 
