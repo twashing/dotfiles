@@ -21,9 +21,9 @@
 
 Show minibuffer to eval expressions.
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 M-:
-#+END_SRC
+#+END_EXAMPLE
 
 **** Disable whitespace-mode
 
@@ -68,7 +68,6 @@ Attempting to disable whitespace in all the places.
 *** Kill groups of buffers
 
 Use =ibuffer= (also use w/ embark).
-
 Follow the same pattern as dired... Mark then delete.
 
 *** Index of buffer positions
@@ -79,38 +78,38 @@ For a large structured file (.org .el etc), =consult-outline= and =consult-imenu
 This works as an index of buffer positions, that acts as a "table of contents".
 =embark-occur= produces a persistent buffer.
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 consult-outline
 consult-imenu
 embark-occur
-#+END_SRC
+#+END_EXAMPLE
 
 outline-minor-mode let's you define outline regex as a heading.
 The variable outline-regexp can be changed to control what is a heading.
 A line is a heading if outline-regexp matches something at the
 beginning of the line. The longer the match, the deeper the level.
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 outline-minor-mode ;; Let's you define outline regex as a heading
 outline-regexp
-#+END_SRC
+#+END_EXAMPLE
 
 *** Replace across files, grep, wgrep mode
 
 Search w/ grep (results must be on one line)
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 grep
 projectile-grep
 grep-find  # Perform rgrep in the project.
 find-grep
 find-grep-dired  # Find output is put into dired buffer
-#+END_SRC
+#+END_EXAMPLE
 
 Replace + Write changes of multiple matches
 C-c C-c (commit change)
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 wgrep-change-to-wgrep-mode     Change to wgrep mode.
 wgrep-save-all-buffers         Save the buffers that wgrep changed.
 wgrep-finish-edit           (C-x C-s)    Apply changes to file buffers.
@@ -120,18 +119,18 @@ wgrep-mark-deletion            Mark as delete to current line.
 wgrep-remove-change         (C-c C-r)    Remove changes in the region between BEG and …
 wgrep-remove-all-change        Remove changes in the whole buffer.
 wgrep-toggle-readonly-area     Toggle read-only area to remove a whole line.
-#+END_SRC
+#+END_EXAMPLE
 
 *** Changes across files
 
 Keyboard macros let us make multi-line changes across files.
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 kmacro-start-macro-or-insert-counter  # <f3>
 kmacro-end-or-call-macro  # <f4>
 kmacro-ring
 desktop-save-mode  # saves keyboard macros, registers, any variable
-#+END_SRC
+#+END_EXAMPLE
 
 Recreates variables at startup (including buffers, frames, registers...).
 
@@ -143,11 +142,74 @@ Recreates variables at startup (including buffers, frames, registers...).
 (add-to-list 'desktop-globals-to-save 'kill-ring)
 #+END_SRC
 
-*** Completion
-
 
 
 ** General
+
+*** Keybindings
+
+
+Elisp
+
+#+BEGIN_SRC elisp
+(map! :map global-map
+      "C-c l e m" #'pp-macro-expand-last-expression
+      "C-c l e D" #'eval-defun-at-point)
+#+END_SRC
+
+
+Embark
+
+#+BEGIN_SRC elisp
+(map! :map global-map
+      "C-m a" #'embark-act
+      "C-m e" #'embark-export
+      "C-m c" #'embark-collect)
+#+END_SRC
+
+
+Marks
+
+#+BEGIN_SRC elisp
+(map! :map global-map
+      "C-x C-SPC" #'pop-global-mark
+      "C-x C-m" #'consult-global-mark ;; cycle through mark ring
+)
+
+#+END_SRC
+
+
+Eshell
+#+BEGIN_SRC elisp
+(map! :map global-map
+      "C-c o e" #'+eshell/here
+      "C-c o E" #'+eshell/toggle)
+#+END_SRC
+
+
+Append to ...
+
+#+BEGIN_SRC elisp
+(map! :map global-map
+      "C-M-<" #'append-to-buffer)
+#+END_SRC
+
+
+GPTel
+
+#+BEGIN_EXAMPLE elisp
+gptel-send ;; (C-c RET in gptel-mode)
+#+END_EXAMPLE
+
+
+Avy
+
+#+BEGIN_SRC elisp
+(map! :map global-map
+      "C->" #'avy-goto-char-timer
+      "C-M->" #'avy-goto-char-2)
+#+END_SRC
+
 
 *** Miscellaneous configuration
 
@@ -222,7 +284,7 @@ Recreates variables at startup (including buffers, frames, registers...).
       "M-m p S" #'projectile-save-project-buffers)
 #+END_SRC
 
-*** Substitute
+*** Protesilaos/Substitute
 
 Source and config taken from here.
 - https://github.com/protesilaos/substitute

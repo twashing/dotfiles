@@ -20,6 +20,31 @@
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
 (add-to-list 'desktop-globals-to-save 'kill-ring)
 
+(map! :map global-map
+      "C-c l e m" #'pp-macro-expand-last-expression
+      "C-c l e D" #'eval-defun-at-point)
+
+(map! :map global-map
+      "C-m a" #'embark-act
+      "C-m e" #'embark-export
+      "C-m c" #'embark-collect)
+
+(map! :map global-map
+      "C-x C-SPC" #'pop-global-mark
+      "C-x C-m" #'consult-global-mark ;; cycle through mark ring
+)
+
+(map! :map global-map
+      "C-c o e" #'+eshell/here
+      "C-c o E" #'+eshell/toggle)
+
+(map! :map global-map
+      "C-M-<" #'append-to-buffer)
+
+(map! :map global-map
+      "C->" #'avy-goto-char-timer
+      "C-M->" #'avy-goto-char-2)
+
 (setq
 
  ;; Set *scratch* buffer to lisp-interaction-mode
