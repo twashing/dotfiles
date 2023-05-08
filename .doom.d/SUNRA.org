@@ -151,8 +151,10 @@ Recreates variables at startup (including buffers, frames, registers...).
 
 Elisp
 
+# TODO, clashing with multiple cursors
+
 #+BEGIN_SRC elisp
-(map! :map global-map
+(map! :map general-override-mode-map
       "C-c l e m" #'pp-macro-expand-last-expression
       "C-c l e D" #'eval-defun-at-point)
 #+END_SRC
@@ -161,36 +163,39 @@ Elisp
 Embark
 
 #+BEGIN_SRC elisp
-(map! :map global-map
-      "C-m a" #'embark-act
-      "C-m e" #'embark-export
-      "C-m c" #'embark-collect)
+;; (map! :map general-override-mode-map
+;;       "C-M a" #'embark-act
+;;       "C-M e" #'embark-export
+;;       "C-M c" #'embark-collect)
 #+END_SRC
 
 
 Marks
 
-#+BEGIN_SRC elisp
-(map! :map global-map
-      "C-x C-SPC" #'pop-global-mark
-      "C-x C-m" #'consult-global-mark ;; cycle through mark ring
-)
+=consult-global-mark= lets you cycle through the mark ring.
 
+#+BEGIN_SRC elisp
+(map! :map general-override-mode-map
+      "C-x <up>" #'pop-global-mark
+      "C-x <down>" #'consult-global-mark)
 #+END_SRC
 
 
 Eshell
+
+# TODO, not overriding default keybindings
+
 #+BEGIN_SRC elisp
-(map! :map global-map
-      "C-c o e" #'+eshell/here
-      "C-c o E" #'+eshell/toggle)
+;; (map! :map general-override-mode-map
+;;       "C-c o e" #'+eshell/here
+;;       "C-c o E" #'+eshell/toggle)
 #+END_SRC
 
 
 Append to ...
 
 #+BEGIN_SRC elisp
-(map! :map global-map
+(map! :map general-override-mode-map
       "C-M-<" #'append-to-buffer)
 #+END_SRC
 
@@ -205,7 +210,7 @@ gptel-send ;; (C-c RET in gptel-mode)
 Avy
 
 #+BEGIN_SRC elisp
-(map! :map global-map
+(map! :map general-override-mode-map
       "C->" #'avy-goto-char-timer
       "C-M->" #'avy-goto-char-2)
 #+END_SRC
@@ -269,12 +274,15 @@ Avy
       "M-W" #'delete-trailing-whitespace
       "C-/" #'org-cycle-global)
 
-(map! :after consult
-      :map general-override-mode-map
+;; (map! :after consult
+;;       :map general-override-mode-map
+;;       "M-m s s" #'consult-line
+;;       "M-m s S" #'consult-line-multi
+;;       "M-y" #'consult-yank-from-kill-ring)
+(map! :map general-override-mode-map
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
-
 
 (map! :map general-override-mode-map
       "M-m p p" #'projectile-switch-project

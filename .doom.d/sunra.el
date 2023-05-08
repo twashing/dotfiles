@@ -20,28 +20,27 @@
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
 (add-to-list 'desktop-globals-to-save 'kill-ring)
 
-(map! :map global-map
+(map! :map general-override-mode-map
       "C-c l e m" #'pp-macro-expand-last-expression
       "C-c l e D" #'eval-defun-at-point)
 
-(map! :map global-map
-      "C-m a" #'embark-act
-      "C-m e" #'embark-export
-      "C-m c" #'embark-collect)
+;; (map! :map general-override-mode-map
+;;       "C-M a" #'embark-act
+;;       "C-M e" #'embark-export
+;;       "C-M c" #'embark-collect)
 
-(map! :map global-map
-      "C-x C-SPC" #'pop-global-mark
-      "C-x C-m" #'consult-global-mark ;; cycle through mark ring
-)
+(map! :map general-override-mode-map
+      "C-x <up>" #'pop-global-mark
+      "C-x <down>" #'consult-global-mark)
 
-(map! :map global-map
-      "C-c o e" #'+eshell/here
-      "C-c o E" #'+eshell/toggle)
+;; (map! :map general-override-mode-map
+;;       "C-c o e" #'+eshell/here
+;;       "C-c o E" #'+eshell/toggle)
 
-(map! :map global-map
+(map! :map general-override-mode-map
       "C-M-<" #'append-to-buffer)
 
-(map! :map global-map
+(map! :map general-override-mode-map
       "C->" #'avy-goto-char-timer
       "C-M->" #'avy-goto-char-2)
 
@@ -90,12 +89,15 @@
       "M-W" #'delete-trailing-whitespace
       "C-/" #'org-cycle-global)
 
-(map! :after consult
-      :map general-override-mode-map
+;; (map! :after consult
+;;       :map general-override-mode-map
+;;       "M-m s s" #'consult-line
+;;       "M-m s S" #'consult-line-multi
+;;       "M-y" #'consult-yank-from-kill-ring)
+(map! :map general-override-mode-map
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
       "M-y" #'consult-yank-from-kill-ring)
-
 
 (map! :map general-override-mode-map
       "M-m p p" #'projectile-switch-project
