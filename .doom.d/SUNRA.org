@@ -503,7 +503,9 @@ We have to clear out `C-c M-c` before we can rebind it.
 #+END_SRC
 
 
-** Copy line
+** Copy Functions
+
+Copy line
 
 #+BEGIN_SRC elisp
 (defun copy-line (&optional arg)
@@ -521,6 +523,41 @@ We have to clear out `C-c M-c` before we can rebind it.
 
 #+END_SRC
 
+Copy a random region, anywhere in the frame.
+
+#+BEGIN_SRC elisp
+
+(defun my-avy-read-candidates-return-first ()
+  (let ((canditates (avy--read-candidates)))
+    (caaar canditates)))
+
+(defun my-avy-read-candidates-return-last ()
+  (let ((canditates (avy--read-candidates)))
+    (cdr (caar canditates))))
+
+(defun sunra/copy-region-a ()
+  (interactive)
+
+  (kill-new
+   (buffer-substring-no-properties
+    (my-avy-read-candidates-return-first)
+    (my-avy-read-candidates-return-last))))
+
+(defun sunra/copy-region-b ()
+  (interactive)
+
+  (save-excursion
+
+    (let ((position-a (my-avy-read-candidates-return-first)))
+
+      (goto-char position-a)
+      (funcall (intern (completing-read "Pick function: "
+                                        '(forward-sexp
+                                          forward-word
+                                          forward-line))))
+      (kill-new (buffer-substring-no-properties (point) position-a)))))
+
+#+END_SRC
 
 ** Completions
 

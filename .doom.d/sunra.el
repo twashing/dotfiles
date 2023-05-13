@@ -269,6 +269,36 @@
 (map! "C-c k" #'copy-line
       "C-c K" #'avy-copy-line)
 
+(defun my-avy-read-candidates-return-first ()
+  (let ((canditates (avy--read-candidates)))
+    (caaar canditates)))
+
+(defun my-avy-read-candidates-return-last ()
+  (let ((canditates (avy--read-candidates)))
+    (cdr (caar canditates))))
+
+(defun sunra/copy-region-a ()
+  (interactive)
+
+  (kill-new
+   (buffer-substring-no-properties
+    (my-avy-read-candidates-return-first)
+    (my-avy-read-candidates-return-last))))
+
+(defun sunra/copy-region-b ()
+  (interactive)
+
+  (save-excursion
+
+    (let ((position-a (my-avy-read-candidates-return-first)))
+
+      (goto-char position-a)
+      (funcall (intern (completing-read "Pick function: "
+                                        '(forward-sexp
+                                          forward-word
+                                          forward-line))))
+      (kill-new (buffer-substring-no-properties (point) position-a)))))
+
 (after! vertico
 
   (vertico-buffer-mode)
