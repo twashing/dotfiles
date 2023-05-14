@@ -280,3 +280,6 @@ complete -C aws_completer aws
 if [ -e /Users/timothyw/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/timothyw/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 PATH=$PATH:/opt/metasploit-framework/bin
 export PATH=$PATH:/opt/metasploit-framework/bin
+
+GUIX_PROFILE="$HOME/.guix-profile" ; \
+source "$GUIX_PROFILE/etc/profile"
