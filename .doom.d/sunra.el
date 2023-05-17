@@ -367,14 +367,14 @@
          ("M-q" . corfu-quick-complete)
          ("C-q" . corfu-quick-insert)))
 
-(use-package! flymake
-  :config
-  (setq flymake-start-on-flymake-mode t)
-  (setq flymake-no-changes-timeout nil)
-  (setq flymake-start-on-save-buffer t))
-
-(use-package! flymake-kondor
-  :hook (clojure-mode . flymake-kondor-setup))
+;; (use-package! flymake
+;;   :config
+;;   (setq flymake-start-on-flymake-mode t)
+;;   (setq flymake-no-changes-timeout nil)
+;;   (setq flymake-start-on-save-buffer t))
+;;
+;; (use-package! flymake-kondor
+;;   :hook (clojure-mode . flymake-kondor-setup))
 
 ;; (after! org-roam
 ;;
