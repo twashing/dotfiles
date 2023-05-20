@@ -14,6 +14,9 @@
 (add-hook 'doom-before-modules-init-hook #'sunra/do-before-after-init)
 (add-hook 'doom-after-modules-init-hook #'sunra/do-before-after-init)
 
+(map! :map general-override-mode-map
+      "M-m s o" #'consult-outline)
+
 (desktop-save-mode 1)
 
 (add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
@@ -199,29 +202,7 @@
       "C-c m e b" #'mc/edit-beginnings-of-lines
       "C-c m e e" #'mc/edit-ends-of-lines)
 
-(after! multiple-cursors
-
-  (defhydra hydra-multiple-cursors-next (general-override-mode-map "C-c m n")
-    "Mark next"
-    ("l" mc/mark-next-lines "lines")
-    ("t" mc/mark-next-like-this "this")
-    ("w" mc/mark-next-like-this-word "word")
-    ("s" mc/mark-next-like-this-symbol "symbol")
-    ("W" mc/mark-next-word-like-this "whole word")
-    ("S" mc/mark-next-symbol-like-this "whole symbol")
-
-    ("q" nil "quit" :color blue))
-
-  (defhydra hydra-multiple-cursors-previous (general-override-mode-map "C-c m p")
-    "Mark previous"
-    ("l" mc/mark-previous-lines "lines")
-    ("t" mc/mark-previous-like-this "this")
-    ("w" mc/mark-previous-like-this-word "word")
-    ("s" mc/mark-previous-like-this-symbol "symbol")
-    ("W" mc/mark-previous-word-like-this "whole word")
-    ("S" mc/mark-previous-symbol-like-this "whole symbol")
-
-    ("q" nil "quit" :color blue)))
+(map! "C-z" #'repeat)
 
 (map! "C-o" #'hs-toggle-hiding
       "C-c @ C-M-h" #'hs-hide-all
