@@ -236,7 +236,8 @@
   ;; DONT open new window on cider-connect, et al
   (setq cider-repl-pop-to-buffer-on-connect nil)
   (setq cider-auto-select-test-report-buffer nil)
-  (setq cider-auto-select-error-buffer nil))
+  (setq cider-auto-select-error-buffer nil)
+  (setq cider-show-error-buffer nil))
 
 (map! :after cider
       :map cider-mode-map
