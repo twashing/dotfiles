@@ -9,7 +9,8 @@
 (defun sunra/do-before-after-init ()
   "Function to run before anything during Doom initialization."
 
-  (global-whitespace-mode -1))
+  (global-whitespace-mode -1)
+  (flycheck-mode -1))
 
 (add-hook 'doom-before-modules-init-hook #'sunra/do-before-after-init)
 (add-hook 'doom-after-modules-init-hook #'sunra/do-before-after-init)
@@ -94,11 +95,6 @@
       "M-W" #'delete-trailing-whitespace
       "C-/" #'org-cycle-global)
 
-;; (map! :after consult
-;;       :map general-override-mode-map
-;;       "M-m s s" #'consult-line
-;;       "M-m s S" #'consult-line-multi
-;;       "M-y" #'consult-yank-from-kill-ring)
 (map! :map general-override-mode-map
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
