@@ -216,6 +216,7 @@ Avy
 #+END_SRC
 
 
+
 *** Miscellaneous configuration
 
 #+BEGIN_SRC elisp
@@ -250,6 +251,8 @@ Avy
  ;; When minibuffer offers tab completion, make that case-insensitive
  ;; https://emacs.stackexchange.com/a/32408/10528
  completion-ignore-case t)
+
+(flycheck-mode -1)
 #+END_SRC
 
 #+RESULTS:
@@ -558,6 +561,7 @@ Copy a random region, anywhere in the frame.
       (kill-new (buffer-substring-no-properties (point) position-a)))))
 
 #+END_SRC
+
 
 ** Completions
 

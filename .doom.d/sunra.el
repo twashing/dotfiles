@@ -76,6 +76,8 @@
  ;; https://emacs.stackexchange.com/a/32408/10528
  completion-ignore-case t)
 
+(flycheck-mode -1)
+
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
 (global-set-key (kbd "C-c C-s") 'save-buffer)
