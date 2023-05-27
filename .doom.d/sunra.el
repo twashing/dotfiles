@@ -251,21 +251,59 @@
 
 (defun my-avy-read-candidates-return-first ()
   (let ((canditates (avy--read-candidates)))
-    (caaar canditates)))
+    (car (mapcar #'flatten-list canditates))))
 
 (defun my-avy-read-candidates-return-last ()
   (let ((canditates (avy--read-candidates)))
     (cdr (caar canditates))))
 
-(defun sunra/copy-region-a ()
+(defun sunra/copy-remote-region-a ()
   (interactive)
+  (let* ((triplet (my-avy-read-candidates-return-first))
+         (first-position (nth 0 triplet))
+         (window (nth 2 triplet)))
+    (save-window-excursion
+      (select-window window)
+      ;; Make avy wait a (practically) infinate amount of time
+      (kill-new
+       (buffer-substring-no-properties
+        first-position
+        (my-avy-read-candidates-return-last)))
 
-  (kill-new
-   (buffer-substring-no-properties
-    (my-avy-read-candidates-return-first)
-    (my-avy-read-candidates-return-last))))
+      ;; (let ((avy-timeout-seconds most-positive-fixnum))
+      ;;
+      ;;   (kill-new
+      ;;    (buffer-substring-no-properties
+      ;;     (my-avy-read-candidates-return-first)
+      ;;     (my-avy-read-candidates-return-last))))
+      )))
 
-(defun sunra/copy-region-b ()
+;; (defun my-avy-read-candidates-return-first ()
+;;   (let ((canditates (avy--read-candidates)))
+;;     (caaar canditates)))
+;;
+;; (defun my-avy-read-candidates-return-last ()
+;;   (let ((canditates (avy--read-candidates)))
+;;     (cdr (caar canditates))))
+;;
+;; (defun sunra/copy-remote-region-a ()
+;;   (interactive)
+;;
+;;   ;; Make avy wait a (practically) infinate amount of time
+;;   (message
+;;    (buffer-substring-no-properties
+;;     (my-avy-read-candidates-return-first)
+;;     (my-avy-read-candidates-return-last)))
+;;
+;;   ;; (let ((avy-timeout-seconds most-positive-fixnum))
+;;   ;;
+;;   ;;   (kill-new
+;;   ;;    (buffer-substring-no-properties
+;;   ;;     (my-avy-read-candidates-return-first)
+;;   ;;     (my-avy-read-candidates-return-last))))
+;;   )
+
+(defun sunra/copy-remote-region-b ()
   (interactive)
 
   (save-excursion

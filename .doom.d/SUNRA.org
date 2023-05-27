@@ -1,7 +1,7 @@
 #+title: Sunra
 #+PROPERTY: header-args :tangle sunra.el
 
-#+OPTIONS: TOC:2
+#+OPTIONS: TOC:
 
 # NOTE preserve line breaks
 # https://emacs.stackexchange.com/questions/21556/org-mode-export-how-to-force-newline-on-lines-between-paragraphs
@@ -527,15 +527,18 @@ Copy a random region, anywhere in the frame.
   (let ((canditates (avy--read-candidates)))
     (cdr (caar canditates))))
 
-(defun sunra/copy-region-a ()
+(defun sunra/copy-remote-region-a ()
   (interactive)
 
-  (kill-new
-   (buffer-substring-no-properties
-    (my-avy-read-candidates-return-first)
-    (my-avy-read-candidates-return-last))))
+  ;; Make avy wait a (practically) infinate amount of time
+  (let ((avy-timeout-seconds most-positive-fixnum))
 
-(defun sunra/copy-region-b ()
+    (kill-new
+     (buffer-substring-no-properties
+      (my-avy-read-candidates-return-first)
+      (my-avy-read-candidates-return-last)))))
+
+(defun sunra/copy-remote-region-b ()
   (interactive)
 
   (save-excursion
