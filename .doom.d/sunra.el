@@ -249,13 +249,6 @@
 (map! "C-c k" #'copy-line
       "C-c K" #'avy-copy-line)
 
-(defun my-avy-read-candidates-return-first ()
-  (let ((canditates (avy--read-candidates)))
-    (car (mapcar #'flatten-list canditates))))
-
-(defun my-avy-read-candidates-return-last ()
-  (let ((canditates (avy--read-candidates)))
-    (cdr (caar canditates))))
 
 (defun sunra/copy-remote-region-a ()
   (interactive)
@@ -316,6 +309,63 @@
                                           forward-word
                                           forward-line))))
       (kill-new (buffer-substring-no-properties (point) position-a)))))
+
+
+(require 'cl-lib)
+
+(defun zipmap (keys values)
+  (cl-pairlis keys values))
+
+(defun my-avy-read-process-window-in-list (list)
+  (mapcar
+   (lambda (triplet)
+     (let ((first (nth 0 triplet))
+           (last (nth 2 triplet))
+           line-number
+           substring
+           buffer
+           selection-candidate)
+
+       (save-window-excursion
+         (select-window last)
+         (goto-char first)
+
+         (setq line-number (line-number-at-pos))
+         (setq substring (buffer-substring-no-properties first (nth 1 triplet)))
+         (setq buffer (window-buffer last))
+         (setq selection-candidate (format "%d %s %s" line-number substring buffer)))
+
+       (list selection-candidate line-number substring buffer)))
+   list))
+
+(defun my-avy-read-candidates-prompt (candidates)
+
+  (let* ((cans (my-avy-read-process-window-in-list candidates))
+         (hashes (mapcar (lambda (c)
+                           (secure-hash 'sha1 (car c)))
+                         cans))
+         (cadidates-selections-hash (zipmap hashes candidates))
+
+         ;; Take selection, get hash, compare
+         (the-selection (completing-read "Select a match: " (mapcar #'car cans)))
+         (the-selection-hash (secure-hash 'sha1 the-selection)))
+
+    (alist-get the-selection-hash cadidates-selections-hash nil nil #'string=)))
+
+(defun my-avy-read-candidates-return-first ()
+
+  (let* ((canditates (avy--read-candidates))
+         (flat-cands (mapcar #'flatten-list canditates)))
+
+    (if (> (length flat-cands) 1)
+       (my-avy-read-candidates-prompt flat-cands)
+      (car flat-cands))))
+
+;; TODO Remove
+(defun my-avy-read-candidates-return-last ()
+   (let ((canditates (avy--read-candidates)))
+     (cdr (caar canditates))))
+
 
 (after! vertico
 
