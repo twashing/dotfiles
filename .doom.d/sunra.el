@@ -293,9 +293,11 @@
 
 (defun sunra/avy-read-candidates-return ()
 
-  (let* ((canditates (avy--read-candidates))
-         (flat-cands (mapcar #'flatten-list canditates)))
+  ;; Read candidates from User prompt
+  (let* ((candidates (avy--read-candidates))
+         (flat-cands (mapcar #'flatten-list candidates)))
 
+    ;; Conditionally narrow candidates if many, or select the one
     (if (> (length flat-cands) 1)
        (sunra/avy-read-candidates-prompt flat-cands)
       (car flat-cands))))
@@ -307,11 +309,11 @@
   (let ((avy-timeout-seconds most-positive-fixnum))
 
     (let* ((triplet-start (sunra/avy-read-candidates-return))
-           (position-start (nth 0 triplet-start))
+           (candidate-start-position-start (nth 0 triplet-start))
            (window (nth 2 triplet-start))
 
            (triplet-end (sunra/avy-read-candidates-return))
-           (position-end (nth 0 triplet-end)))
+           (candidate-end-position-end (nth 1 triplet-end)))
 
       (save-window-excursion
 
@@ -319,8 +321,8 @@
 
         (kill-new
          (buffer-substring-no-properties
-          position-start
-          position-end))))))
+          candidate-start-position-start
+          candidate-end-position-end))))))
 
 (after! vertico
 
