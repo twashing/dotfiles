@@ -250,73 +250,12 @@
       "C-c K" #'avy-copy-line)
 
 
-(defun sunra/copy-remote-region-a ()
-  (interactive)
-  (let* ((triplet (my-avy-read-candidates-return-first))
-         (first-position (nth 0 triplet))
-         (window (nth 2 triplet)))
-    (save-window-excursion
-      (select-window window)
-      ;; Make avy wait a (practically) infinate amount of time
-      (kill-new
-       (buffer-substring-no-properties
-        first-position
-        (my-avy-read-candidates-return-last)))
-
-      ;; (let ((avy-timeout-seconds most-positive-fixnum))
-      ;;
-      ;;   (kill-new
-      ;;    (buffer-substring-no-properties
-      ;;     (my-avy-read-candidates-return-first)
-      ;;     (my-avy-read-candidates-return-last))))
-      )))
-
-;; (defun my-avy-read-candidates-return-first ()
-;;   (let ((canditates (avy--read-candidates)))
-;;     (caaar canditates)))
-;;
-;; (defun my-avy-read-candidates-return-last ()
-;;   (let ((canditates (avy--read-candidates)))
-;;     (cdr (caar canditates))))
-;;
-;; (defun sunra/copy-remote-region-a ()
-;;   (interactive)
-;;
-;;   ;; Make avy wait a (practically) infinate amount of time
-;;   (message
-;;    (buffer-substring-no-properties
-;;     (my-avy-read-candidates-return-first)
-;;     (my-avy-read-candidates-return-last)))
-;;
-;;   ;; (let ((avy-timeout-seconds most-positive-fixnum))
-;;   ;;
-;;   ;;   (kill-new
-;;   ;;    (buffer-substring-no-properties
-;;   ;;     (my-avy-read-candidates-return-first)
-;;   ;;     (my-avy-read-candidates-return-last))))
-;;   )
-
-(defun sunra/copy-remote-region-b ()
-  (interactive)
-
-  (save-excursion
-
-    (let ((position-a (my-avy-read-candidates-return-first)))
-
-      (goto-char position-a)
-      (funcall (intern (completing-read "Pick function: "
-                                        '(forward-sexp
-                                          forward-word
-                                          forward-line))))
-      (kill-new (buffer-substring-no-properties (point) position-a)))))
-
-
 (require 'cl-lib)
 
 (defun zipmap (keys values)
   (cl-pairlis keys values))
 
-(defun my-avy-read-process-window-in-list (list)
+(defun sunra/avy-read-process-window-in-list (list)
   (mapcar
    (lambda (triplet)
      (let ((first (nth 0 triplet))
@@ -338,9 +277,9 @@
        (list selection-candidate line-number substring buffer)))
    list))
 
-(defun my-avy-read-candidates-prompt (candidates)
+(defun sunra/avy-read-candidates-prompt (candidates)
 
-  (let* ((cans (my-avy-read-process-window-in-list candidates))
+  (let* ((cans (sunra/avy-read-process-window-in-list candidates))
          (hashes (mapcar (lambda (c)
                            (secure-hash 'sha1 (car c)))
                          cans))
@@ -352,20 +291,36 @@
 
     (alist-get the-selection-hash cadidates-selections-hash nil nil #'string=)))
 
-(defun my-avy-read-candidates-return-first ()
+(defun sunra/avy-read-candidates-return ()
 
   (let* ((canditates (avy--read-candidates))
          (flat-cands (mapcar #'flatten-list canditates)))
 
     (if (> (length flat-cands) 1)
-       (my-avy-read-candidates-prompt flat-cands)
+       (sunra/avy-read-candidates-prompt flat-cands)
       (car flat-cands))))
 
-;; TODO Remove
-(defun my-avy-read-candidates-return-last ()
-   (let ((canditates (avy--read-candidates)))
-     (cdr (caar canditates))))
+(defun sunra/copy-remote-region ()
+  (interactive)
 
+  ;; Make avy wait a (practically) infinate amount of time
+  (let ((avy-timeout-seconds most-positive-fixnum))
+
+    (let* ((triplet-start (sunra/avy-read-candidates-return))
+           (position-start (nth 0 triplet-start))
+           (window (nth 2 triplet-start))
+
+           (triplet-end (sunra/avy-read-candidates-return))
+           (position-end (nth 0 triplet-end)))
+
+      (save-window-excursion
+
+        (select-window window)
+
+        (kill-new
+         (buffer-substring-no-properties
+          position-start
+          position-end))))))
 
 (after! vertico
 
