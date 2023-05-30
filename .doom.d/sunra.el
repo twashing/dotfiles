@@ -249,7 +249,6 @@
 (map! "C-c k" #'copy-line
       "C-c K" #'avy-copy-line)
 
-
 (require 'cl-lib)
 
 (defun zipmap (keys values)

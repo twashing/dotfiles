@@ -515,42 +515,87 @@ Copy line
 
 #+END_SRC
 
-Copy a random region, anywhere in the frame.
+Copy a random region, at any remote location in the frame.
+
+Works with a narrowed (single) avy selection, capturing the beginning of the first selection, and end of the second selection.
+
+Also works, prompting the user to select from a choice of avy candidates.
 
 #+BEGIN_SRC elisp
 
-(defun my-avy-read-candidates-return-first ()
-  (let ((canditates (avy--read-candidates)))
-    (caaar canditates)))
+(require 'cl-lib)
 
-(defun my-avy-read-candidates-return-last ()
-  (let ((canditates (avy--read-candidates)))
-    (cdr (caar canditates))))
+(defun zipmap (keys values)
+  (cl-pairlis keys values))
 
-(defun sunra/copy-remote-region-a ()
+(defun sunra/avy-read-process-window-in-list (list)
+  (mapcar
+   (lambda (triplet)
+     (let ((first (nth 0 triplet))
+           (last (nth 2 triplet))
+           line-number
+           substring
+           buffer
+           selection-candidate)
+
+       (save-window-excursion
+         (select-window last)
+         (goto-char first)
+
+         (setq line-number (line-number-at-pos))
+         (setq substring (buffer-substring-no-properties first (nth 1 triplet)))
+         (setq buffer (window-buffer last))
+         (setq selection-candidate (format "%d %s %s" line-number substring buffer)))
+
+       (list selection-candidate line-number substring buffer)))
+   list))
+
+(defun sunra/avy-read-candidates-prompt (candidates)
+
+  (let* ((cans (sunra/avy-read-process-window-in-list candidates))
+         (hashes (mapcar (lambda (c)
+                           (secure-hash 'sha1 (car c)))
+                         cans))
+         (cadidates-selections-hash (zipmap hashes candidates))
+
+         ;; Take selection, get hash, compare
+         (the-selection (completing-read "Select a match: " (mapcar #'car cans)))
+         (the-selection-hash (secure-hash 'sha1 the-selection)))
+
+    (alist-get the-selection-hash cadidates-selections-hash nil nil #'string=)))
+
+(defun sunra/avy-read-candidates-return ()
+
+  ;; Read candidates from User prompt
+  (let* ((candidates (avy--read-candidates))
+         (flat-cands (mapcar #'flatten-list candidates)))
+
+    ;; Conditionally narrow candidates if many, or select the one
+    (if (> (length flat-cands) 1)
+       (sunra/avy-read-candidates-prompt flat-cands)
+      (car flat-cands))))
+
+(defun sunra/copy-remote-region ()
   (interactive)
 
   ;; Make avy wait a (practically) infinate amount of time
   (let ((avy-timeout-seconds most-positive-fixnum))
 
-    (kill-new
-     (buffer-substring-no-properties
-      (my-avy-read-candidates-return-first)
-      (my-avy-read-candidates-return-last)))))
+    (let* ((triplet-start (sunra/avy-read-candidates-return))
+           (candidate-start-position-start (nth 0 triplet-start))
+           (window (nth 2 triplet-start))
 
-(defun sunra/copy-remote-region-b ()
-  (interactive)
+           (triplet-end (sunra/avy-read-candidates-return))
+           (candidate-end-position-end (nth 1 triplet-end)))
 
-  (save-excursion
+      (save-window-excursion
 
-    (let ((position-a (my-avy-read-candidates-return-first)))
+        (select-window window)
 
-      (goto-char position-a)
-      (funcall (intern (completing-read "Pick function: "
-                                        '(forward-sexp
-                                          forward-word
-                                          forward-line))))
-      (kill-new (buffer-substring-no-properties (point) position-a)))))
+        (kill-new
+         (buffer-substring-no-properties
+          candidate-start-position-start
+          candidate-end-position-end))))))
 
 #+END_SRC
 
