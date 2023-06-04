@@ -1,0 +1,29 @@
+(specifications->manifest
+
+ '("ungoogled-chromium"
+   "gcc-toolchain"
+   "make"
+   "git"
+   "emacs"
+   "vim"
+   "tree"
+   "unzip"
+   "stow"
+   "the-silver-searcher"
+   "musl"
+   "openssl"
+
+   "containerd"
+   "docker"
+   "docker-cli"
+   "curl"
+   "perl"
+   "python"
+   "rust"
+
+   "openvpn"
+   "network-manager-openvpn"
+   "netcat"
+   "nmap"
+   "rust-rustscan"
+   ))
