@@ -25,5 +25,6 @@
    "network-manager-openvpn"
    "netcat"
    "nmap"
+   "net-tools"
    "rust-rustscan"
    ))
