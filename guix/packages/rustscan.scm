@@ -160,4 +160,3 @@ IPv6 CIDRs.")
     (synopsis "Faster Nmap Scanning with Rust")
     (description "Faster Nmap Scanning with Rust")
     (license license:expat)))
-

@@ -1,4 +1,4 @@
-(specifications->manifest
+ (specifications->manifest
 
  '("ungoogled-chromium"
    "gcc-toolchain"
