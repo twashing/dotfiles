@@ -42,8 +42,17 @@
                (base32
                 "1nax6g282480qf0ccmrjilpa0w8gci1njg8jychq3jjhj8qc0vzw"))))
     (build-system pyproject-build-system)
+
+    ;; (arguments `(#:tests? #f))
+
     (arguments
-     `(#:tests? #f))
+     `(#:phases
+       (modify-phases %standard-phases
+                      (lambda* (#:key inputs outputs #:allow-other-keys)
+                               ;; Remove the 'check' phase from the 'standard-phases'
+                               (delete 'check outputs)
+                               #t))))
+
     (propagated-inputs (list python-beautifulsoup4
                              python-certifi
                              python-cffi
