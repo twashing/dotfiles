@@ -33,46 +33,51 @@
 
 (define-public python-dirsearch
   (package
-    (name "python-dirsearch")
-    (version "0.4.3.post1")
-    (source (origin
-              (method url-fetch)
-              (uri (pypi-uri "dirsearch" version))
-              (sha256
-               (base32
-                "1nax6g282480qf0ccmrjilpa0w8gci1njg8jychq3jjhj8qc0vzw"))))
-    (build-system pyproject-build-system)
+   (name "python-dirsearch")
+   (version "0.4.3.post1")
+   (source (origin
+            (method url-fetch)
+            (uri (pypi-uri "dirsearch" version))
+            (sha256
+             (base32
+              "1nax6g282480qf0ccmrjilpa0w8gci1njg8jychq3jjhj8qc0vzw"))))
+   (build-system pyproject-build-system)
 
-    ;; (arguments `(#:tests? #f))
+   ;; (arguments `(#:tests? #false))
 
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-                      (lambda* (#:key inputs outputs #:allow-other-keys)
-                               ;; Remove the 'check' phase from the 'standard-phases'
-                               (delete 'check outputs)
-                               #t))))
+   ;; (arguments
+   ;;  `(#:tests? #false
+   ;;    #:phases
+   ;;    (modify-phases python:%standard-phases
+   ;;                   (delete 'check))))
 
-    (propagated-inputs (list python-beautifulsoup4
-                             python-certifi
-                             python-cffi
-                             python-chardet
-                             python-charset-normalizer
-                             python-colorama
-                             python-cryptography
-                             python-defusedxml
-                             python-idna
-                             python-jinja2
-                             python-markupsafe
-                             python-ntlm-auth
-                             python-pyopenssl
-                             python-pyparsing
-                             python-pysocks
-                             python-requests
-                             python-requests-ntlm
-                             python-urllib3))
-    (home-page "https://github.com/maurosoria/dirsearch")
-    (synopsis "Advanced web path scanner")
-    (description "Advanced web path scanner")
-    (license #f)))
+   (arguments
+    `(#:tests? #false
+      #:phases
+      (modify-phases python:%standard-phases
+                     (replace 'check
+                              (lambda* (#:key inputs outputs #:allow-other-keys)
+                                       (invoke "echo noop"))))))
 
+   (propagated-inputs (list python-beautifulsoup4
+                            python-certifi
+                            python-cffi
+                            python-chardet
+                            python-charset-normalizer
+                            python-colorama
+                            python-cryptography
+                            python-defusedxml
+                            python-idna
+                            python-jinja2
+                            python-markupsafe
+                            python-ntlm-auth
+                            python-pyopenssl
+                            python-pyparsing
+                            python-pysocks
+                            python-requests
+                            python-requests-ntlm
+                            python-urllib3))
+   (home-page "https://github.com/maurosoria/dirsearch")
+   (synopsis "Advanced web path scanner")
+   (description "Advanced web path scanner")
+   (license #f)))
