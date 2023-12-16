@@ -7,6 +7,130 @@
 # https://emacs.stackexchange.com/questions/21556/org-mode-export-how-to-force-newline-on-lines-between-paragraphs
 #+OPTIONS: \n:t
 
+** 2023.06.10
+
+*** A
+
+Define persistent link in Org.
+unique and unbreakable headings in Org files.
+#+BEGIN_SRC elisp
+
+(defun prot-org--id-get (&optional pom create prefix)
+  "Get the CUSTOM_ID property of the entry at point-or-marker POM.
+
+If POM is nil, refer to the entry at point.  If the entry does
+not have an CUSTOM_ID, the function returns nil.  However, when
+CREATE is non nil, create a CUSTOM_ID if none is present already.
+PREFIX will be passed through to `org-id-new'.  In any case, the
+CUSTOM_ID of the entry is returned."
+  (org-with-point-at pom
+    (let ((id (org-entry-get nil "CUSTOM_ID")))
+      (cond
+       ((and id (stringp id) (string-match "\\S-" id))
+        id)
+       (create
+        (setq id (org-id-new (concat prefix "h")))
+        (org-entry-put pom "CUSTOM_ID" id)
+        (org-id-add-location id (format "%s" (buffer-file-name (buffer-base-buffer))))
+        id)))))
+
+(declare-function org-map-entries "org")
+
+;;;###autoload
+(defun prot-org-id-headlines ()
+  "Add missing CUSTOM_ID to all headlines in current file."
+  (interactive)
+  (org-map-entries
+   (lambda () (prot-org--id-get (point) t))))
+
+#+END_SRC
+
+
+*** B
+
+org-insert-structure-template
+
+(setq org-structure-template-alist
+        '(("s" . "src")
+          ("E" . "src emacs-lisp")
+          ("e" . "example")
+          ("q" . "quote")
+          ("v" . "verse")
+          ("V" . "verbatim")
+          ("c" . "center")
+          ("C" . "comment")))
+
+
+*** C
+
+consult-outline ; especially for Org
+consult-imenu   ; for programming
+consult-line    ; in-buffer search with previews
+consult-grep    ; async+live grep with preview
+consult-ripgrep ; same but for ripgrep
+
+
+
+*** D
+
+
+;; Old Emacs (always works)
+(defvar my-embark-region-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "a") 'some-command)
+    (define-key map (kbd "e") 'some-command)
+    map)
+  "My keymap for Embark region actions.")
+
+;; For Emacs 29+
+(defvar-keymap my-embark-region-map
+  :doc "Some documentation"
+  "a" 'some-command
+  "b" 'some-other-command)
+
+
+(setq embark-keymap-alist
+      '((file embark-file-map)
+        (library embark-library-map)
+        (environment-variables embark-file-map) ; they come up in file completion
+        (url embark-url-map)
+        (email embark-email-map)
+        (buffer embark-buffer-map)
+        (tab embark-tab-map)
+        (expression embark-expression-map)
+        (identifier embark-identifier-map)
+        (defun embark-defun-map)
+        (symbol embark-symbol-map)
+        (face embark-face-map)
+        (command embark-command-map)
+        (variable embark-variable-map)
+        (function embark-function-map)
+        (minor-mode embark-command-map)
+        (unicode-name embark-unicode-name-map)
+        (package embark-package-map)
+        (bookmark embark-bookmark-map)
+        ;; (region embark-region-map)
+        (region my-embark-region-map)
+        (sentence embark-sentence-map)
+        (paragraph embark-paragraph-map)
+        (kill-ring embark-kill-ring-map)
+        (heading embark-heading-map)
+        (t embark-general-map)))
+
+
+*** E
+
+;; Insert text even if the buffer is read-only
+(let ((inhibit-read-only t))
+  (insert "\nHello"))
+
+
+*** F
+
+(add-to-list 'display-buffer-alist
+             '("\\*eww\\*"
+               (display-buffer-reuse-mode-window display-buffer-same-window)))
+
 
 ** Preamble
 
@@ -17,7 +141,7 @@
 
 ** Reference
 
-**** Eval expressions in minibuffer
+*** Eval expressions in minibuffer
 
 Show minibuffer to eval expressions.
 
@@ -25,9 +149,10 @@ Show minibuffer to eval expressions.
 M-:
 #+END_EXAMPLE
 
-**** Disable whitespace-mode
 
-***** Disable =doom-highlight-non-default-indentation-h=
+*** Disable whitespace-mode
+
+**** Disable =doom-highlight-non-default-indentation-h=
 
 Highlight + Indent seems to be enabled when entering a new file / major mode. =doom-highlight-non-default-indentation-h= "Highlight whitespace at odds with `indent-tabs-mode'".
 
@@ -38,7 +163,7 @@ By using =remove-hook= the intent here is to remove whitespace-mode, which doom 
              #'doom-highlight-non-default-indentation-h)
 #+END_SRC
 
-***** Disable =doom-first-buffer-hook=
+**** Disable =doom-first-buffer-hook=
 
 =doom-first-buffer-hook= is a "Transient hooks run before the first interactively opened buffer."
 
@@ -49,8 +174,7 @@ Using =remove-hook= should remove the hook that enables =global-whitespace-mode=
              #'global-whitespace-mode)
 #+END_SRC
 
-
-***** Disable whitespace globally
+**** Disable whitespace globally
 
 Attempting to disable whitespace in all the places.
 
@@ -70,6 +194,7 @@ Attempting to disable whitespace in all the places.
 
 Use =ibuffer= (also use w/ embark).
 Follow the same pattern as dired... Mark then delete.
+
 
 *** Index of buffer positions
 
@@ -101,6 +226,7 @@ outline-minor-mode ;; Let's you define outline regex as a heading
 outline-regexp
 #+END_EXAMPLE
 
+
 *** Replace across files, grep, wgrep mode
 
 Search w/ grep (results must be on one line)
@@ -127,6 +253,7 @@ wgrep-remove-change         (C-c C-r)    Remove changes in the region between BE
 wgrep-remove-all-change        Remove changes in the whole buffer.
 wgrep-toggle-readonly-area     Toggle read-only area to remove a whole line.
 #+END_EXAMPLE
+
 
 *** Changes across files
 
@@ -192,7 +319,7 @@ Eshell
 
 # TODO, not overriding default keybindings
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC pelisp
 ;; (map! :map general-override-mode-map
 ;;       "C-c o e" #'+eshell/here
 ;;       "C-c o E" #'+eshell/toggle)
@@ -234,6 +361,12 @@ vc-region-history  ;; C-x v h
 
 *** Miscellaneous configuration
 
+
+#+BEGIN_EXAMPLE elisp
+kill-whole-line  ;; C-S-<backspace>
+#+END_EXAMPLE
+
+
 #+BEGIN_SRC elisp
 (setq
 
@@ -272,11 +405,13 @@ vc-region-history  ;; C-x v h
 
 #+RESULTS:
 
+
 *** Use Org Mode for all files ending with .notes.
 
 #+BEGIN_SRC elisp
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 #+END_SRC
+
 
 *** General Navigation and text actions.
 
@@ -293,17 +428,13 @@ vc-region-history  ;; C-x v h
       "C-/" #'org-cycle-global)
 
 (map! :map general-override-mode-map
-      "M-m s s" #'consult-line
-      "M-m s S" #'consult-line-multi
-      "M-y" #'consult-yank-from-kill-ring)
-
-(map! :map general-override-mode-map
       "M-m p p" #'projectile-switch-project
       "M-m p f" #'projectile-find-file
       "M-m p r" #'projectile-replace
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
 #+END_SRC
+
 
 *** Protesilaos/Substitute
 
@@ -327,6 +458,7 @@ Source and config taken from here.
     (define-key map (kbd "M-# d") #'substitute-target-in-defun)
     (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
 #+END_SRC
+
 
 *** Free Keys
 
@@ -398,7 +530,6 @@ Source and config taken from here.
       "C-M-[" #'scroll-other-window-down
       "C-M-]" #'scroll-other-window
       "C-M-s" #'sp-splice-sexp
-      "C-x b" #'consult-buffer
       "C-M-l" #'transpose-lines)
 #+END_SRC
 
@@ -779,6 +910,30 @@ And Flymake configs for Eglot.
 ;;
 ;; (use-package! flymake-kondor
 ;;   :hook (clojure-mode . flymake-kondor-setup))
+#+END_SRC
+
+
+**** Consult
+
+
+#+BEGIN_SRC elisp
+(map! :map general-override-mode-map
+      "C-x b" #'consult-buffer
+      "M-m s s" #'consult-line
+      "M-m s S" #'consult-line-multi
+      "M-y" #'consult-yank-from-kill-ring)
+#+END_SRC
+
+
+**** Embark Consult
+
+Sets up compatibility layer between the two packages.
+https://elpa.gnu.org/packages/embark-consult.html
+
+This should just work out of the box.
+
+#+BEGIN_SRC elisp
+(use-package! embark-consult)
 #+END_SRC
 
 

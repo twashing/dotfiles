@@ -1,3 +1,31 @@
+(defun prot-org--id-get (&optional pom create prefix)
+  "Get the CUSTOM_ID property of the entry at point-or-marker POM.
+
+If POM is nil, refer to the entry at point.  If the entry does
+not have an CUSTOM_ID, the function returns nil.  However, when
+CREATE is non nil, create a CUSTOM_ID if none is present already.
+PREFIX will be passed through to `org-id-new'.  In any case, the
+CUSTOM_ID of the entry is returned."
+  (org-with-point-at pom
+    (let ((id (org-entry-get nil "CUSTOM_ID")))
+      (cond
+       ((and id (stringp id) (string-match "\\S-" id))
+        id)
+       (create
+        (setq id (org-id-new (concat prefix "h")))
+        (org-entry-put pom "CUSTOM_ID" id)
+        (org-id-add-location id (format "%s" (buffer-file-name (buffer-base-buffer))))
+        id)))))
+
+(declare-function org-map-entries "org")
+
+;;;###autoload
+(defun prot-org-id-headlines ()
+  "Add missing CUSTOM_ID to all headlines in current file."
+  (interactive)
+  (org-map-entries
+   (lambda () (prot-org--id-get (point) t))))
+
 ;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
 
 (remove-hook 'after-change-major-mode-hook
@@ -96,33 +124,28 @@
       "C-/" #'org-cycle-global)
 
 (map! :map general-override-mode-map
-      "M-m s s" #'consult-line
-      "M-m s S" #'consult-line-multi
-      "M-y" #'consult-yank-from-kill-ring)
-
-(map! :map general-override-mode-map
       "M-m p p" #'projectile-switch-project
       "M-m p f" #'projectile-find-file
       "M-m p r" #'projectile-replace
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
 
-(use-package! substitute
-  :config
+;; (use-package! substitute
+;;   :config
+;;
+;;  ;; If you want a message reporting the matches that changed in the
+;;  ;; given context.  We don't do it by default.
+;;  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
 
-  ;; If you want a message reporting the matches that changed in the
-  ;; given context.  We don't do it by default.
-  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
+;;  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
+;;  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
+;;  (let ((map global-map))
+;;    (define-key map (kbd "M-# s") #'substitute-target-below-point)
+;;    (define-key map (kbd "M-# r") #'substitute-target-above-point)
+;;    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
+;;    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
 
-  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
-  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
-  (let ((map global-map))
-    (define-key map (kbd "M-# s") #'substitute-target-below-point)
-    (define-key map (kbd "M-# r") #'substitute-target-above-point)
-    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
-    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
-
-(use-package! free-keys)
+;; (use-package! free-keys)
 
 (setq avy-all-windows 'all-frames)
 (map! "C-c g c" #'avy-goto-char-2)
@@ -171,7 +194,6 @@
       "C-M-[" #'scroll-other-window-down
       "C-M-]" #'scroll-other-window
       "C-M-s" #'sp-splice-sexp
-      "C-x b" #'consult-buffer
       "C-M-l" #'transpose-lines)
 
 (map! "C-c m N l" #'mc/mark-next-lines
@@ -400,6 +422,14 @@
 ;; (use-package! flymake-kondor
 ;;   :hook (clojure-mode . flymake-kondor-setup))
 
+(map! :map general-override-mode-map
+      "C-x b" #'consult-buffer
+      "M-m s s" #'consult-line
+      "M-m s S" #'consult-line-multi
+      "M-y" #'consult-yank-from-kill-ring)
+
+(use-package! embark-consult)
+
 ;; (after! org-roam
 ;;
 ;;   (setq org-roam-directory (file-truename "~/roam"))
@@ -445,10 +475,10 @@
           denote-excluded-directories-regexp nil
           denote-excluded-keywords-regexp nil)))
 
-(use-package! gptel
-  :config
-  (load! "openapi-key.el")
-  (setq! gptel-api-key openapi-key))
+;; (use-package! gptel
+;;   :config
+;;   (load! "openapi-key.el")
+;;   (setq! gptel-api-key openapi-key))
 
 (defun sunra/goto-emacs-dir ()
   "Open your private config.el file."

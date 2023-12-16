@@ -88,3 +88,4 @@
 
 (package! denote)
 (package! plz)
+(package! embark-consult)
