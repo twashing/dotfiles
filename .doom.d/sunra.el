@@ -475,10 +475,16 @@ CUSTOM_ID of the entry is returned."
           denote-excluded-directories-regexp nil
           denote-excluded-keywords-regexp nil)))
 
-;; (use-package! gptel
-;;   :config
-;;   (load! "openapi-key.el")
-;;   (setq! gptel-api-key openapi-key))
+(use-package! gptel
+  :config
+
+  (load! "openapi-key.el")
+  (setq! gptel-api-key openapi-key)
+
+  (load! "anthropic-key.el")
+  (gptel-make-anthropic "Claude"          ;; Any name you want
+    :stream t                             ;; Streaming responses
+    :key anthropic-key))
 
 (defun sunra/goto-emacs-dir ()
   "Open your private config.el file."

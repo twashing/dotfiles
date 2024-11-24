@@ -62,13 +62,13 @@
 ;; ============
 ;; Org Roam
 ;; ============
-(package! dash)
-(package! f)
-(package! s)
-(package! org)
-(package! emacsql-sqlite)
-(package! md-roam :recipe
-  (:host github :repo "nobiot/md-roam"))
+;; (package! dash)
+;; (package! f)
+;; (package! s)
+;; (package! org)
+;; (package! emacsql-sqlite)
+;; (package! md-roam :recipe
+;;   (:host github :repo "nobiot/md-roam"))
 
 
 ;; ============
