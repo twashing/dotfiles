@@ -130,22 +130,22 @@ CUSTOM_ID of the entry is returned."
       "M-m p R" #'projectile-replace-regexp
       "M-m p S" #'projectile-save-project-buffers)
 
-;; (use-package! substitute
-;;   :config
-;;
-;;  ;; If you want a message reporting the matches that changed in the
-;;  ;; given context.  We don't do it by default.
-;;  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
+(use-package! substitute
+  :config
 
-;;  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
-;;  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
-;;  (let ((map global-map))
-;;    (define-key map (kbd "M-# s") #'substitute-target-below-point)
-;;    (define-key map (kbd "M-# r") #'substitute-target-above-point)
-;;    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
-;;    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
+  ;; If you want a message reporting the matches that changed in the
+  ;; given context.  We don't do it by default.
+  (add-hook 'substitute-post-replace-functions #'substitute-report-operation)
 
-;; (use-package! free-keys)
+  ;; We do not bind any keys.  This is just an idea.  The mnemonic is
+  ;; that M-# (or M-S-3) is close to M-% (or M-S-5).
+  (let ((map global-map))
+    (define-key map (kbd "M-# s") #'substitute-target-below-point)
+    (define-key map (kbd "M-# r") #'substitute-target-above-point)
+    (define-key map (kbd "M-# d") #'substitute-target-in-defun)
+    (define-key map (kbd "M-# b") #'substitute-target-in-buffer)))
+
+(use-package! free-keys)
 
 (setq avy-all-windows 'all-frames)
 (map! "C-c g c" #'avy-goto-char-2)
@@ -430,6 +430,19 @@ CUSTOM_ID of the entry is returned."
 
 (use-package! embark-consult)
 
+(after! denote
+
+  (use-package! denote
+    :config
+    (setq denote-directory (expand-file-name "~/notes/")
+          denote-known-keywords '("emacs" "clojure" "guix")
+          denote-infer-keywords t
+          denote-sort-keywords t
+          denote-file-type 'markdown-yaml ; Org is the default, set others here
+          denote-prompts '(title keywords)
+          denote-excluded-directories-regexp nil
+          denote-excluded-keywords-regexp nil)))
+
 ;; (after! org-roam
 ;;
 ;;   (setq org-roam-directory (file-truename "~/roam"))
@@ -462,22 +475,8 @@ CUSTOM_ID of the entry is returned."
 ;;  (with-eval-after-load 'markdown-mode
 ;;   (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 
-(after! denote
-
-  (use-package! denote
-    :config
-    (setq denote-directory (expand-file-name "~/notes/")
-          denote-known-keywords '("emacs" "clojure")
-          denote-infer-keywords t
-          denote-sort-keywords t
-          denote-file-type markdown-yaml ; Org is the default, set others here
-          denote-prompts '(title keywords)
-          denote-excluded-directories-regexp nil
-          denote-excluded-keywords-regexp nil)))
-
 (use-package! gptel
   :config
-
   (load! "openapi-key.el")
   (setq! gptel-api-key openapi-key)
 

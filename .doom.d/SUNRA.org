@@ -937,8 +937,26 @@ This should just work out of the box.
 #+END_SRC
 
 
-** Org-Roam
+** Denote (Org-Roam replacement)
 
+#+BEGIN_SRC elisp
+(after! denote
+
+  (use-package! denote
+    :config
+    (setq denote-directory (expand-file-name "~/notes/")
+          denote-known-keywords '("emacs" "clojure" "guix")
+          denote-infer-keywords t
+          denote-sort-keywords t
+          denote-file-type 'markdown-yaml ; Org is the default, set others here
+          denote-prompts '(title keywords)
+          denote-excluded-directories-regexp nil
+          denote-excluded-keywords-regexp nil)))
+#+END_SRC
+
+*** OLD:ARCHIVE: Org-Roam
+
+This is the old Org-Roam configuration, since replaced by Denote.
 These are references and notes, including howto videos.
 
 - https://www.orgroam.com/
@@ -990,31 +1008,18 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
 #+END_SRC
 
 
-** Denote (Org-Roam replacement)
-
-#+BEGIN_SRC elisp
-(after! denote
-
-  (use-package! denote
-    :config
-    (setq denote-directory (expand-file-name "~/Documents/notes/")
-          denote-known-keywords '("emacs" "clojure")
-          denote-infer-keywords t
-          denote-sort-keywords t
-          denote-file-type nil ; Org is the default, set others here
-          denote-prompts '(title keywords)
-          denote-excluded-directories-regexp nil
-          denote-excluded-keywords-regexp nil)))
-#+END_SRC
-
-
 ** ChatGPT
 
 #+BEGIN_SRC elisp
 (use-package! gptel
   :config
   (load! "openapi-key.el")
-  (setq! gptel-api-key openapi-key))
+  (setq! gptel-api-key openapi-key)
+
+  (load! "anthropic-key.el")
+  (gptel-make-anthropic "Claude"          ;; Any name you want
+    :stream t                             ;; Streaming responses
+    :key anthropic-key))
 #+END_SRC
 
 
