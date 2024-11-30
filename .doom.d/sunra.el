@@ -466,11 +466,11 @@ CUSTOM_ID of the entry is returned."
 
   (use-package! denote
     :config
-    (setq denote-directory (expand-file-name "~/Documents/notes/")
+    (setq denote-directory (expand-file-name "~/notes/")
           denote-known-keywords '("emacs" "clojure")
           denote-infer-keywords t
           denote-sort-keywords t
-          denote-file-type nil ; Org is the default, set others here
+          denote-file-type markdown-yaml ; Org is the default, set others here
           denote-prompts '(title keywords)
           denote-excluded-directories-regexp nil
           denote-excluded-keywords-regexp nil)))
