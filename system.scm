@@ -1,11 +1,9 @@
-;; (use-modules (guix packages)
-;;              (guix gexp)
-;;              (guix profiles))
-
-
-
 (use-modules (gnu)
-             (nongnu packages linux))
+             (nongnu packages linux)
+             (guix profiles)
+             (guix packages)
+             (guix scripts package))
+
 (use-service-modules
   cups
   desktop
@@ -30,33 +28,22 @@
                   (supplementary-groups
                     '("wheel" "netdev" "audio" "video")))
                 %base-user-accounts))
-
   (packages
-
    (append
-
-     (list (specification->package "nss-certs"))
-
-     (manifest->packages
-      (specifications->manifest
-       '("gcc-toolchain"
-         "make"
-         "git"
-         "emacs"
-         "vim"
-         "tree"
-         "ungoogled-chromium"
-         "the-silver-searcher"
-         "ripgrep")))
-
-     (manifest->packages
-        (packages->manifest
-          (list pragmata-pro
-                font-iosevka)))
-     %base-packages
-
-     ))
-
+    (map specification->package
+         '("nss-certs"
+           "gcc-toolchain"
+           "make"
+           "git"
+           "emacs"
+           "vim"
+           "tree"
+           "ungoogled-chromium"
+           "the-silver-searcher"
+           "ripgrep"
+           "font-iosevka"))  ; Add your standard packages here
+    (list pragmata-pro)  ; Add custom packages directly
+    %base-packages))
   (services
     (append
       (list (service gnome-desktop-service-type)
