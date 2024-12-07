@@ -31,8 +31,7 @@
   (packages
    (append
     (map specification->package
-         '("nss-certs"
-           "gcc-toolchain"
+         '("gcc-toolchain"
            "make"
            "git"
            "emacs"
