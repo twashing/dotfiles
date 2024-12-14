@@ -40,10 +40,23 @@
             "emacs"
             "vim"
             "tree"
+            "stow"
+
             "ungoogled-chromium"
             "the-silver-searcher"
             "ripgrep"
-            "font-iosevka"))  ; Add your standard packages here
+            "font-iosevka"
+
+            "containerd"
+            "docker"
+            "docker-cli"
+
+            "netcat"
+            "nmap"
+            "openssl"
+            "openvpn"
+            "network-manager-openvpn"
+            ))  ; Add your standard packages here
      (list pragmata-pro)  ; Add custom packages directly
      %base-packages))
    (services
