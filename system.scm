@@ -11,7 +11,8 @@
   desktop
   networking
   ssh
-  xorg)
+  xorg
+  docker)
 
 (load "guix/fonts.scm")
 
@@ -47,7 +48,9 @@
             "ripgrep"
             "font-iosevka"
 
-            "containerd"
+            ;; The `containerd-service-type` manages the installation and configuration of `containerd`
+            ;; so we don't need to include it separately in the `packages` list
+            ;; "containerd"
             "docker"
             "docker-cli"
 
@@ -67,7 +70,17 @@
            (service tor-service-type)
            (set-xorg-configuration
             (xorg-configuration
-             (keyboard-layout keyboard-layout))))
+             (keyboard-layout keyboard-layout)))
+           (service containerd-service-type
+              (containerd-configuration
+                ;; You can specify additional configuration here if needed
+                ))
+           (service docker-service-type
+                    (docker-configuration
+                     (debug? #t)                     ; Enable debug logging (optional)
+                     ;; (hosts '("unix:///var/run/docker.sock"))  ; Specify the socket
+                     ;; Add more configuration options as needed
+                     )))
      %desktop-services))
    (bootloader
     (bootloader-configuration
