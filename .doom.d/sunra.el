@@ -478,12 +478,20 @@ CUSTOM_ID of the entry is returned."
 (use-package! gptel
   :config
   (load! "openapi-key.el")
+  (load! "gemini-key.el")
+  (load! "anthropic-key.el")
+
   (setq! gptel-api-key openapi-key)
 
-  (load! "anthropic-key.el")
-  (gptel-make-anthropic "Claude"          ;; Any name you want
-    :stream t                             ;; Streaming responses
-    :key anthropic-key))
+  ;; :key can be a function that returns the API key.
+  ;; Any name you want
+  ;; Streaming responses
+  (gptel-make-gemini "Gemini"
+    :key gemini-key
+    :stream t)
+  (gptel-make-anthropic "Claude"
+    :key anthropic-key
+    :stream t))
 
 (defun sunra/goto-emacs-dir ()
   "Open your private config.el file."
