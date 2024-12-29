@@ -38,10 +38,11 @@
           '("gcc-toolchain"
             "make"
             "git"
-            "emacs"
-            "vim"
+            "emacs" "vim"
             "tree"
             "stow"
+            "zip" "unzip"
+            "wget"
 
             "ungoogled-chromium"
             "the-silver-searcher"
