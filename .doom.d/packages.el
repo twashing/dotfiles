@@ -88,4 +88,4 @@
 (package! denote)
 (package! plz)
 (package! embark-consult)
-(package! toc-org)
+(package! org-make-toc)
