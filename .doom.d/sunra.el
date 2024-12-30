@@ -22,6 +22,11 @@
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
 (add-to-list 'desktop-globals-to-save 'kill-ring)
 
+(use-package! toc-org
+
+  :config
+  (add-hook 'org-mode-hook 'toc-org-mode))
+
 (map! :map general-override-mode-map
       "C-c l e m" #'pp-macro-expand-last-expression
       "C-c l e D" #'eval-defun-at-point)

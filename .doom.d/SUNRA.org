@@ -149,6 +149,20 @@ Recreates variables at startup (including buffers, frames, registers...).
 
 ** General
 
+*** Table Of Contents
+
+Using [[https://github.com/snosov1/toc-org][snosov1/toc-org]] , an Emacs utility to have an up-to-date table of contents in the org files.
+
+#+BEGIN_SRC elisp
+
+(use-package! toc-org
+
+  :config
+  (add-hook 'org-mode-hook 'toc-org-mode))
+
+#+END_SRC
+
+
 *** Keybindings
 
 
