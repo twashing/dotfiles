@@ -1,33 +1,3 @@
-(defun prot-org--id-get (&optional pom create prefix)
-  "Get the CUSTOM_ID property of the entry at point-or-marker POM.
-
-If POM is nil, refer to the entry at point.  If the entry does
-not have an CUSTOM_ID, the function returns nil.  However, when
-CREATE is non nil, create a CUSTOM_ID if none is present already.
-PREFIX will be passed through to `org-id-new'.  In any case, the
-CUSTOM_ID of the entry is returned."
-  (org-with-point-at pom
-    (let ((id (org-entry-get nil "CUSTOM_ID")))
-      (cond
-       ((and id (stringp id) (string-match "\\S-" id))
-        id)
-       (create
-        (setq id (org-id-new (concat prefix "h")))
-        (org-entry-put pom "CUSTOM_ID" id)
-        (org-id-add-location id (format "%s" (buffer-file-name (buffer-base-buffer))))
-        id)))))
-
-(declare-function org-map-entries "org")
-
-;;;###autoload
-(defun prot-org-id-headlines ()
-  "Add missing CUSTOM_ID to all headlines in current file."
-  (interactive)
-  (org-map-entries
-   (lambda () (prot-org--id-get (point) t))))
-
-;;; ../.dotfiles/.doom.d/sunra.el -*- lexical-binding: t; -*-
-
 (remove-hook 'after-change-major-mode-hook
              #'doom-highlight-non-default-indentation-h)
 
@@ -477,6 +447,7 @@ CUSTOM_ID of the entry is returned."
 
 (use-package! gptel
   :config
+
   (load! "openapi-key.el")
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
@@ -512,3 +483,13 @@ CUSTOM_ID of the entry is returned."
   (define-key map (kbd "C-h d e") #'sunra/goto-emacs-dir)
   (define-key map (kbd "C-h d r") #'sunra/goto-private-config-sunra-el)
   (define-key map (kbd "C-h d R") #'sunra/goto-private-config-sunra-org))
+
+(setq org-structure-template-alist
+        '(("s" . "src")
+          ("E" . "src emacs-lisp")
+          ("e" . "example")
+          ("q" . "quote")
+          ("v" . "verse")
+          ("V" . "verbatim")
+          ("c" . "center")
+          ("C" . "comment")))
