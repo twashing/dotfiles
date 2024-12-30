@@ -1,8 +1,81 @@
+
+:PROPERTIES:
+:TOC:      :include all :depth 4 :force ((4)) :ignore ((this)) :local ((4))
+:END:
 #+title: Sunra
 #+PROPERTY: header-args :tangle sunra.el
 
-#+OPTIONS: TOC:nil
-:TOC:
+
+* Table of Contents
+:PROPERTIES:
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
+- [[#reference][Reference]]
+    - [[#eval-expressions-in-minibuffer][Eval expressions in minibuffer]]
+    - [[#disable-whitespace-mode][Disable whitespace-mode]]
+      - [[#disable-doom-highlight-non-default-indentation-h][Disable doom-highlight-non-default-indentation-h]]
+      - [[#disable-doom-first-buffer-hook][Disable doom-first-buffer-hook]]
+      - [[#disable-whitespace-globally][Disable whitespace globally]]
+    - [[#kill-groups-of-buffers][Kill groups of buffers]]
+    - [[#index-of-buffer-positions][Index of buffer positions]]
+    - [[#replace-across-files-grep-wgrep-mode][Replace across files, grep, wgrep mode]]
+    - [[#changes-across-files][Changes across files]]
+  - [[#general][General]]
+    - [[#table-of-contents][Table Of Contents]]
+    - [[#keybindings][Keybindings]]
+    - [[#miscellaneous-configuration][Miscellaneous configuration]]
+    - [[#use-org-mode-for-all-files-ending-with-notes][Use Org Mode for all files ending with .notes.]]
+    - [[#general-navigation-and-text-actions][General Navigation and text actions.]]
+    - [[#protesilaossubstitute][Protesilaos/Substitute]]
+    - [[#free-keys][Free Keys]]
+  - [[#avy][Avy]]
+  - [[#navigation][Navigation]]
+  - [[#smartparens-navigation][Smartparens Navigation]]
+  - [[#multiple-cursors][Multiple cursors]]
+  - [[#hide-show][Hide-Show]]
+  - [[#cider][Cider]]
+  - [[#miscellaneous][Miscellaneous]]
+  - [[#copy-functions][Copy Functions]]
+  - [[#completions][Completions]]
+    - [[#context][Context]]
+    - [[#research][Research]]
+    - [[#outcome][Outcome]]
+      - [[#a-these-are-the-packages-i-settled-on][A. These are the packages I settled on.]]
+      - [[#b-lo-and-behold-these-are-most-of-the-choices-that-doom-makes-in-its-completionvertico-module][B. Lo and behold, these are most of the choices that Doom makes in its `completion/vertico` module.]]
+      - [[#capfs][CAPFs]]
+      - [[#consult][Consult]]
+      - [[#embark-consult][Embark Consult]]
+  - [[#denote-org-roam-replacement][Denote (Org-Roam replacement)]]
+    - [[#oldarchive-org-roam][OLD:ARCHIVE: Org-Roam]]
+  - [[#chatgpt][ChatGPT]]
+  - [[#private-sunra-config][Private Sunra Config]]
+  - [[#emacs-client][Emacs Client]]
+  - [[#miscellaneous][Miscellaneous]]
+    - [[#define-persistent-link-in-org][Define persistent link in Org]]
+    - [[#configuration-org-insert-structure-template][Configuration: org-insert-structure-template]]
+    - [[#outlining-structured-files][Outlining Structured Files]]
+    - [[#embark-keymap-configuration][Embark Keymap Configuration]]
+    - [[#insert-text-in-read-only-buffers][Insert Text in read-only Buffers]]
+    - [[#emacs-window-management][Emacs Window Management]]
+  - [[#todos][TODOs]]
+    - [[#add-table-of-contents-to-this-file][Add Table Of Contents to this file]]
+    - [[#org-roam-existing-notes][Org-Roam Existing Notes]]
+    - [[#configure-completion][Configure Completion]]
+    - [[#consult-search-ignore-case][Consult search, ignore case]]
+    - [[#navigate-mark-ring][Navigate Mark Ring]]
+    - [[#master-keymaps][Master Keymaps]]
+    - [[#misc][Misc]]
+    - [[#org-journaling][Org Journaling]]
+    - [[#org-presenting][Org Presenting]]
+    - [[#spellcheck-tools-and-completions][Spellcheck Tools and Completions]]
+  - [[#errors][Errors]]
+    - [[#org-roam-insert-doesnt-find-new-notes][`org-roam-insert` doesn't find new notes]]
+    - [[#ripgrep-is-missing-from-path][Ripgrep is missing from path]]
+    - [[#hydra-mcmark-next-line-double-marks-cursor][Hydra mc/mark-next-line double marks cursor]]
+    - [[#smartparens-open-square-bracket-fails-to-add-closing-bracket-when-touched-by-a-character][smartparens open square bracket fails to add closing bracket, when touched by a character]]
+:END:
+
 
 # NOTE preserve line breaks
 # https://emacs.stackexchange.com/questions/21556/org-mode-export-how-to-force-newline-on-lines-between-paragraphs
@@ -151,7 +224,7 @@ Recreates variables at startup (including buffers, frames, registers...).
 
 *** Table Of Contents
 
-Using [[https://github.com/snosov1/toc-org][snosov1/toc-org]] , an Emacs utility to have an up-to-date table of contents in the org files.
+Using [[https://github.com/alphapapa/org-make-toc][alphapapa/org-make-toc]] for automatic Tables of Contents for Org-Mode files.
 
 #+BEGIN_SRC elisp
 
@@ -1124,9 +1197,6 @@ Insert text even if the buffer is read-only
 
 
 ** TODOs
-
-*** Add Table Of Contents to this file
-
 
 *** Org-Roam Existing Notes
 
