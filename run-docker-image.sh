@@ -1,4 +1,5 @@
 #!/bin/sh
+
 image_path="$(guix system image --network --image-type=docker $1)"
 image_id="$(sudo docker load < $image_path | cut -f3 -d ' ')"
 

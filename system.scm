@@ -60,7 +60,7 @@
             "openssl"
             "openvpn"
             "network-manager-openvpn"
-            ))  ; Add your standard packages here
+            "ghostty"))  ; Add your standard packages here
      (list pragmata-pro)  ; Add custom packages directly
      %base-packages))
    (services
