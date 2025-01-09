@@ -14,8 +14,6 @@
   xorg
   docker)
 
-(load "guix/fonts.scm")
-
 (define physical-operating-system
   (operating-system
    (kernel linux)
@@ -47,6 +45,7 @@
             "ungoogled-chromium"
             "the-silver-searcher"
             "ripgrep"
+            "font-pragmata-pro-liga"
             "font-iosevka"
 
             ;; The `containerd-service-type` manages the installation and configuration of `containerd`

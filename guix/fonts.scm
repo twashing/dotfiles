@@ -14,9 +14,9 @@
   #:use-module (guix gexp)
   #:use-module (gnu packages fontutils))  ; For reference if needed
 
-(define-public pragmata-pro-liga
+(define-public font-pragmata-pro-liga
   (package
-   (name "pragmata-pro-liga")
+   (name "font-pragmata-pro-liga")
    (version "1.0")
 
    (source
@@ -52,4 +52,4 @@
 
    (license #f)))
 
-pragmata-pro-liga
+font-pragmata-pro-liga
