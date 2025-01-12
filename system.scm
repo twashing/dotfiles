@@ -4,7 +4,8 @@
              (nongnu packages linux)
              (guix profiles)
              (guix packages)
-             (guix scripts package))
+             (guix scripts package)
+             (miles packages fonts))
 
 (use-service-modules
   cups
