@@ -41,9 +41,12 @@
             "tree"
             "stow"
             "zip" "unzip"
-            "wget"
+            "wget" "curl"
+            "fzf"
+            "fd"
+            "python-tldr"
+            "zoxide"
 
-            "ungoogled-chromium"
             "the-silver-searcher"
             "ripgrep"
             "font-pragmata-pro-liga"
@@ -57,11 +60,15 @@
 
             "netcat"
             "nmap"
+
+            "sshfs"
+            "rclone"
             "openssl"
+            "gnupg"
             "openvpn"
             "network-manager-openvpn"
-            "ghostty"))  ; Add your standard packages here
-     (list pragmata-pro)  ; Add custom packages directly
+            "ghostty"
+            "ungoogled-chromium"))
      %base-packages))
    (services
     (append
