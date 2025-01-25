@@ -22,7 +22,8 @@
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
 (add-to-list 'desktop-globals-to-save 'kill-ring)
 
-(use-package! org-make-toc)
+;; (use-package! org-make-toc
+;;   :ensure t)
 
 (map! :map general-override-mode-map
       "C-c l e m" #'pp-macro-expand-last-expression

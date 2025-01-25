@@ -222,7 +222,8 @@ Usage instructions [[https://github.com/alphapapa/org-make-toc?tab=readme-ov-fil
 
 #+BEGIN_SRC elisp
 
-(use-package! org-make-toc)
+;; (use-package! org-make-toc
+;;   :ensure t)
 
 #+END_SRC
 
