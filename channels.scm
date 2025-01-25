@@ -26,4 +26,9 @@
       (channel
        (name 'miles)
        (branch "main")
-       (url "https://github.com/twashing/miles.git")))
+       (url "https://github.com/twashing/miles.git")
+       (introduction
+        (make-channel-introduction
+         "d1c3dd176c1cdc6ffbdbd23555957e4809595970"
+         (openpgp-fingerprint
+          "797FC7D59E546A17168A978F54DE4EB3297F3965")))))

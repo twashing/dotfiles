@@ -406,7 +406,7 @@
 
   (use-package! denote
     :config
-    (setq denote-directory (expand-file-name "~/notes/")
+    (setq denote-directory (expand-file-name "~/Projects/notes/")
           denote-known-keywords '("emacs" "clojure" "guix")
           denote-infer-keywords t
           denote-sort-keywords t
