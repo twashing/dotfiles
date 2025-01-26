@@ -58,7 +58,6 @@ $M2_HOME/bin:\
 $GOPATH/bin:\
 $PATH"
 
-export BAT_THEME="Monokai Extended Light"
 
 source /Users/timothyw/.nix-profile/etc/profile.d/nix.sh
 

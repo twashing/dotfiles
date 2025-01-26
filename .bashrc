@@ -137,3 +137,25 @@ export FZF_DEFAULT_OPTS="
 alias fz="fzf --style minimal \
     --preview 'fzf-preview.sh {}' \
     --walker-skip .git,node_modules,target"
+
+
+# #######
+# Bat
+# #######
+
+# export BAT_THEME="Monokai Extended Light"
+export BAT_THEME="Nord"
+
+# git diff
+function batdiff  {
+    git diff --name-only --relative --diff-filter=d | xargs bat --diff
+}
+
+# Man
+export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+
+# Help
+alias bathelp='bat --plain --language=help'
+function help {
+    "$@" --help 2>&1 | bathelp
+}
