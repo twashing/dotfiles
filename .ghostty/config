@@ -9,3 +9,4 @@ cursor-click-to-move = true
 shell-integration-features = no-cursor
 window-padding-x = 10
 window-padding-y = 10
+command = /bin/bash --login

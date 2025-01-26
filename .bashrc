@@ -114,4 +114,26 @@ fi
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# #######
+# Fzf
+# #######
+
+
+# Set up fzf key bindings and fuzzy completion
+
+# fzf --height 40% --layout reverse
+# find bin -type f | fzf -m \
+#     --style minimal \
+#     --preview 'fzf-preview.sh {}'
+# export FZF_DEFAULT_OPTS= '--height 40% --layout reverse -m --style minimal --preview "fzf-preview.sh {}"'
+
+eval "$(fzf --bash)"
+export FZF_DEFAULT_OPTS="
+-m
+--height 40%
+--layout reverse"
+
+alias fz="fzf --style minimal \
+    --preview 'fzf-preview.sh {}' \
+    --walker-skip .git,node_modules,target"

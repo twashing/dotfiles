@@ -127,11 +127,6 @@ alias services_on_ports="lsof -Pnl +M -i4"
 # git reset --hard HEAD
 # git reset HEAD somefile.txt
 
-
-if [ -f ~/.bash_local ]; then
-    . ~/.bash_local
-fi
-
 function _update_ps1() {
     PS1="$(~/powerline-shell.py $? 2> /dev/null)"
 }
