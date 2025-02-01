@@ -449,13 +449,20 @@
 ;;   (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 
 (use-package! gptel
+
   :config
 
   (load! "openapi-key.el")
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
 
-  (setq! gptel-api-key openapi-key)
+  (setq! gptel-api-key openapi-key
+         gptel-prompt-prefix-alist '((markdown-mode . "*Prompt* ")
+                                     (org-mode . "*Prompt* ")
+                                     (text-mode . "*Prompt*  "))
+         gptel-response-prefix-alist '((markdown-mode . "*Response* ")
+                                       (org-mode . "*Response* ")
+                                       (text-mode . "*Response* ")))
 
   ;; :key can be a function that returns the API key.
   ;; Any name you want
@@ -466,6 +473,11 @@
   (gptel-make-anthropic "Claude"
     :key anthropic-key
     :stream t))
+
+(use-package! gptel-quick
+
+  :bind (:map embark-general-map
+              ("?" . #'gptel-quick)))
 
 (defun sunra/goto-emacs-dir ()
   "Open your private config.el file."

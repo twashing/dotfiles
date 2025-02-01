@@ -960,13 +960,20 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
 
 #+BEGIN_SRC elisp
 (use-package! gptel
+
   :config
 
   (load! "openapi-key.el")
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
 
-  (setq! gptel-api-key openapi-key)
+  (setq! gptel-api-key openapi-key
+         gptel-prompt-prefix-alist '((markdown-mode . "*Prompt* ")
+                                     (org-mode . "*Prompt* ")
+                                     (text-mode . "*Prompt*  "))
+         gptel-response-prefix-alist '((markdown-mode . "*Response* ")
+                                       (org-mode . "*Response* ")
+                                       (text-mode . "*Response* ")))
 
   ;; :key can be a function that returns the API key.
   ;; Any name you want
@@ -977,6 +984,11 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
   (gptel-make-anthropic "Claude"
     :key anthropic-key
     :stream t))
+
+(use-package! gptel-quick
+
+  :bind (:map embark-general-map
+              ("?" . #'gptel-quick)))
 #+END_SRC
 
 
