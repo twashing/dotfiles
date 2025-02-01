@@ -63,6 +63,8 @@
 (package! substitute)
 (package! free-keys)
 (package! gptel)
+(package! gptel-quick
+  :recipe (:host github :repo "karthink/gptel-quick"))
 
 (package! transient
   :recipe (:host github :repo "magit/transient"))

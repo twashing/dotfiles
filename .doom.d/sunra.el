@@ -475,7 +475,6 @@
     :stream t))
 
 (use-package! gptel-quick
-
   :bind (:map embark-general-map
               ("?" . #'gptel-quick)))
 
