@@ -83,10 +83,8 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases
-alias ll='ls -alF --color'
-alias lsc='ls -lF --color'
-alias la='ls -A --color'
-# alias l='ls -CF --color'
+alias ll='ls -al --color'
+alias lsc='ls -a --color'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -159,3 +157,10 @@ alias bathelp='bat --plain --language=help'
 function help {
     "$@" --help 2>&1 | bathelp
 }
+
+
+# #######
+# Zoxide
+# #######
+export _ZO_RESOLVE_SYMLINKS=1
+eval "$(zoxide init --cmd cd bash)"
