@@ -1,11 +1,12 @@
-#!/bin/bash
-set -u      # Error on undefined variables
+#!/usr/local/bin/bash
+# #!/bin/bash
+# set -u      # Error on undefined variables
 # set -x      # Print commands as they execute
 # set -e      # Exit on error
 # set -o pipefail # Exit on pipe failures
 
 # Print line number on error
-trap 'echo "Error on line $LINENO"' ERR
+# trap 'echo "Error on line $LINENO"' ERR
 
 
 # ####
@@ -41,56 +42,56 @@ shopt -s extglob
 # Functions
 # ####
 
-function git-log-tree {
+function git_log_tree {
   git log --all --graph --decorate --oneline --simplify-by-decoration
 }
 
-function find-in-jar {
+function find_in_jar {
   find $1 -name "*.jar" -exec sh -c "echo; echo Inspecting: {}; jar tvf {} | grep $2" \;
 }
 
 # taken from: https://twitter.com/_komaz/status/514628905576460288
-function mkcd () {
+function mkcd {
     mkdir -p "$1" && cd "$1"
 }
 
 # taken from: http://cfenollosa.com/misc/tricks.txt
-function psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
+function psgrep { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
 
-function fname() { find . -iname "*$@*"; }
+function fname { find . -iname "*$@*"; }
 
 
 # Docker configuration
 # eval $(docker-machine env default)
-function docker-remove-untagged-images() {
+function docker_remove_untagged_images {
   docker rmi -f $(docker images | grep "^<none>" | awk '{print $3}')
 }
 
-function docker-clear-containers() {
+function docker_clear_containers {
   docker rm -f $(docker ps -a -q)
 }
 
-function docker-clear-images() {
+function docker_clear_images {
   docker rmi -f $(docker images -a -q)
 }
 
-function docker-clear-volumes() {
+function docker_clear_volumes {
   docker volume rm $(docker volume ls -q)
 }
 
-function docker-clear-networks() {
+function docker_clear_networks {
   docker network rm $(docker network ls | tail -n+2 | awk '{if($2 !~ /bridge|none|host/){ print $1 }}')
 }
 
-function docker-attach-to-container() {
+function docker_attach_to_container {
   docker exec -i -t $1 /bin/bash
 }
 
-function docker-container-ip-address() {
+function docker_container_ip_address {
   docker inspect $1
 }
 
-function git-pull-all() {
+function git_pull_all {
   for i in `ls`; do echo "Pulling: $i"; cd $i; git pull -r; cd -; echo; done
 }
 

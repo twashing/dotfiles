@@ -1,11 +1,12 @@
-#!/bin/bash
-set -u      # Error on undefined variables
+#!/usr/local/bin/bash
+# #!/bin/bash
+# set -u      # Error on undefined variables
 # set -x      # Print commands as they execute
 # set -e      # Exit on error
 # set -o pipefail # Exit on pipe failures
 
 # Print line number on error
-trap 'echo "Error on line $LINENO"' ERR
+# trap 'echo "Error on line $LINENO"' ERR
 
 
 
@@ -101,6 +102,15 @@ shopt -s checkwinsize
 
 
 # #######
+# Bash Completions
+# #######
+
+if [ -f ~/Projects/bash-completion/bash_completion ]; then
+    . ~/Projects/bash-completion/bash_completion
+fi
+
+
+# #######
 # Fzf
 # #######
 
@@ -150,3 +160,9 @@ function help {
 # #######
 export _ZO_RESOLVE_SYMLINKS=1
 eval "$(zoxide init --cmd cd bash)"
+
+
+# #######
+# Prompt, Oh My Posh
+# #######
+eval "$(oh-my-posh init bash)"
