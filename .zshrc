@@ -292,4 +292,17 @@ if [ ! -f "$OMP" ]; then
     curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ${HOME}/.local/share
 fi
 
-eval "$(oh-my-posh init zsh)"
+if [ ! -d "$HOME/.config/ohmyposh" ]; then
+
+    mkdir -p "$HOME/.config/ohmyposh"
+
+    # curl -o $HOME/.config/ohmyposh/zen.toml \
+    #     "https://raw.githubusercontent.com/dreamsofautonomy/zen-omp/refs/heads/main/zen.toml"
+    ln -s ~/Projects/dotfiles/ohmyposh.toml $HOME/.config/ohmyposh/zen.toml
+fi
+
+if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+
+    # eval "$(oh-my-posh init zsh)"
+    eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
+fi
