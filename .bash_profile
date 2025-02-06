@@ -9,9 +9,9 @@
 # trap 'echo "Error on line $LINENO"' ERR
 
 
-# ####
+# #######
 # PATH
-# ####
+# #######
 
 if [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
@@ -26,21 +26,21 @@ if [ -d "$HOME/bin" ]; then
 fi
 
 
-# ####
+# #######
 # Navigation
-# ####
+# #######
 set -o emacs
 
 
-# ####
+# #######
 # Turn on extended glob option
-# ####
+# #######
 shopt -s extglob
 
 
-# ####
+# #######
 # Functions
-# ####
+# #######
 
 function git_log_tree {
   git log --all --graph --decorate --oneline --simplify-by-decoration
@@ -96,9 +96,9 @@ function git_pull_all {
 }
 
 
-# ####
+# #######
 # Aliases
-# ####
+# #######
 
 alias ll="ls -la --color"
 alias llc="ls -l --color"
@@ -122,6 +122,31 @@ alias gtree='git log --graph --full-history --all --color --pretty=format:"%x1b[
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
 
+
+# #######
+# Language
+# #######
+
+if [[ -z "$LANG" ]]; then
+  export LANG='en_US.UTF-8'
+fi
+
+
+# #######
+# Less
+# #######
+
+# Set the default Less options.
+# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
+# Remove -X and -F (exit if the content fits on one screen) to enable it.
+export LESS='-F -g -i -M -R -S -w -X -z-4'
+
+# Set the Less input preprocessor.
+# Try both `lesspipe` and `lesspipe.sh` as either might exist on a system.
+if (( $#commands[(i)lesspipe(|.sh)] )); then
+  export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
+fi
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] \$ '
 # export HISTSIZE=
