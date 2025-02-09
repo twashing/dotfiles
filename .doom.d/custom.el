@@ -5,7 +5,8 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages '(gptel-quick))
  '(package-vc-selected-packages
-   '((gptel-quick :url "https://github.com/karthink/gptel-quick" :branch "master"))))
+   '((gptel-quick :url "https://github.com/karthink/gptel-quick" :branch "master")))
+ '(safe-local-variable-values '((sh-indent-comment . t) (shfmt-arguments "-s"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

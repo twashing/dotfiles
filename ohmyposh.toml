@@ -12,14 +12,14 @@ final_space = true
   yellow = '#F3AE35'
 
 [secondary_prompt]
-  # template = '❯❯ '
-  template = '   '
+  template = '❯❯ '
+  # template = '   '
   foreground = 'magenta'
   background = 'transparent'
 
 [transient_prompt]
-  # template = '❯ '
-  template = 'λ '
+  template = '❯ '
+  # template = 'λ '
   background = 'transparent'
   foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
 
@@ -67,19 +67,19 @@ final_space = true
       cache_duration = 'none'
       threshold = 5000
 
-  [[blocks.segments]]
-    template = 'in <p:blue><b>{{ .Name }}</b></> '
-    foreground = 'p:white'
-    background = 'transparent'
-    type = 'shell'
-    style = 'plain'
-
-  [[blocks.segments]]
-    template = 'at <p:blue><b>{{ .CurrentDate | date "15:04:05" }}</b></>'
-    foreground = 'p:white'
-    background = 'transparent'
-    type = 'time'
-    style = 'plain'
+  # [[blocks.segments]]
+  #   template = '<p:blue><b>{{ .Name }}</b></> '
+  #   foreground = 'p:white'
+  #   background = 'transparent'
+  #   type = 'shell'
+  #   style = 'plain'
+  #
+  # [[blocks.segments]]
+  #   template = 'at <p:blue><b>{{ .CurrentDate | date "15:04:05" }}</b></>'
+  #   foreground = 'p:white'
+  #   background = 'transparent'
+  #   type = 'time'
+  #   style = 'plain'
 
 [[blocks]]
   type = 'prompt'
@@ -87,8 +87,8 @@ final_space = true
   newline = true
 
   [[blocks.segments]]
-    # template = '❯'
-    template = 'λ'
+    template = '❯'
+    # template = 'λ'
     background = 'transparent'
     type = 'text'
     style = 'plain'
