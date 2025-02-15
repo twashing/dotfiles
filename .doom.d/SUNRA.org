@@ -961,6 +961,7 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
 #+BEGIN_SRC elisp
 (use-package! gptel
 
+  :bind ("C-M-'" . gptel-send)
   :config
 
   (load! "openapi-key.el")

@@ -450,6 +450,7 @@
 
 (use-package! gptel
 
+  :bind ("C-M-'" . gptel-send)
   :config
 
   (load! "openapi-key.el")
