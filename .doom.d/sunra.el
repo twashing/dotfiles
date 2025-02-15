@@ -457,6 +457,7 @@
   (load! "anthropic-key.el")
 
   (setq! gptel-api-key openapi-key
+         gptel-expert-commands t
          gptel-prompt-prefix-alist '((markdown-mode . "*Prompt* ")
                                      (org-mode . "*Prompt* ")
                                      (text-mode . "*Prompt*  "))
@@ -475,6 +476,7 @@
     :stream t))
 
 (use-package! gptel-quick
+
   :bind (:map embark-general-map
               ("?" . #'gptel-quick)))
 

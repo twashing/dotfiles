@@ -968,6 +968,7 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
   (load! "anthropic-key.el")
 
   (setq! gptel-api-key openapi-key
+         gptel-expert-commands t
          gptel-prompt-prefix-alist '((markdown-mode . "*Prompt* ")
                                      (org-mode . "*Prompt* ")
                                      (text-mode . "*Prompt*  "))
