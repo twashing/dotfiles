@@ -62,7 +62,9 @@
 ;; ============
 (package! substitute)
 (package! free-keys)
-(package! gptel)
+(package! gptel
+  :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
+
 (package! gptel-quick
   :recipe (:host github :repo "karthink/gptel-quick"))
 

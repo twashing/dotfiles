@@ -1015,7 +1015,7 @@ Newer directives override existing ones with the same key."
   (load! "openapi-key.el")
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
-  (load-gptel-directives (concat default-directory "gptel/directives"))
+  (load-gptel-directives (file-name-concat (dir!) "gptel/directives"))
 
   (setq! gptel-api-key openapi-key
          gptel-expert-commands t
