@@ -448,6 +448,19 @@
 ;;  (with-eval-after-load 'markdown-mode
 ;;   (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 
+(defun load-gptel-directives (dir)
+  "Load all directive files from DIR into gptel-directives."
+  (let* ((files (directory-files dir t "\\.md$"))
+         (pairs (mapcar (lambda (file)
+                         (cons
+                          (intern (file-name-base file))
+                          (with-temp-buffer
+                            (insert-file-contents file)
+                            (buffer-string))))
+                       files)))
+    (setq gptel-directives
+          (append pairs gptel-directives))))
+
 (use-package! gptel
 
   :bind ("C-M-'" . gptel-send)
@@ -456,6 +469,7 @@
   (load! "openapi-key.el")
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
+  (load-gptel-directives "./gptel/directives")
 
   (setq! gptel-api-key openapi-key
          gptel-expert-commands t
