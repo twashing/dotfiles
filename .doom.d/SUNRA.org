@@ -958,6 +958,25 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
 
 ** ChatGPT
 
+
+*** Overview
+
+https://github.com/karthink/gptel?tab=readme-ov-file#gptel-a-simple-llm-client-for-emacs
+
+`karthink/gptel` is a simple Large Language Model chat client for Emacs, with support for multiple models and backends. It works in the spirit of Emacs, available at any time and uniformly in any buffer.
+
+
+*** Features
+
+https://github.com/karthink/gptel?tab=readme-ov-file#contents
+
+**** Including howto rewrite a region
+
+https://github.com/karthink/gptel?tab=readme-ov-file#rewrite-refactor-or-fill-in-a-region
+
+
+*** Configuration
+
 #+BEGIN_SRC elisp
 (defun load-gptel-directives (dir)
   "Load all directive files from DIR into gptel-directives."
