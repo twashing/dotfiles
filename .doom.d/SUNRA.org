@@ -1007,6 +1007,11 @@ Newer directives override existing ones with the same key."
     (setq gptel-directives
           (append new-pairs filtered-old))))
 
+(defun load-all! (dir)
+  "Load all .el files from DIR"
+  (dolist (file (directory-files dir t "\\.el$"))
+    (load! file)))
+
 (use-package! gptel
 
   :bind ("C-M-'" . gptel-send)
@@ -1016,6 +1021,7 @@ Newer directives override existing ones with the same key."
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
   (load-gptel-directives (file-name-concat (dir!) "gptel/directives"))
+  (load-all! (file-name-concat (dir!) "gptel/tools/"))
 
   (setq! gptel-api-key openapi-key
          gptel-expert-commands t
