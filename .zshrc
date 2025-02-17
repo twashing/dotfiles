@@ -180,9 +180,15 @@ function git_pull_all {
 # Aliases
 # #######
 
-alias ll="ls -la --color"
-alias llc="ls -l --color"
-alias lsc="ls -a --color"
+# alias ll="ls -la --color"
+# alias llc="ls -l --color"
+# alias lsc="ls -a --color"
+alias ll="eza -la"
+alias ll1="eza -a --long --tree --level=1"
+alias ll2="eza -a --long --tree --level=2"
+alias llc="eza -l"
+
+alias lsc="eza -a"
 alias cls="clear"
 alias emd="cd ~/.emacs.d"
 alias dmd="cd ~/.doom.d"
