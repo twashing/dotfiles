@@ -469,7 +469,7 @@
   (load! "openapi-key.el")
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
-  (load-gptel-directives "./gptel/directives")
+  (load-gptel-directives (concat default-directory "gptel/directives"))
 
   (setq! gptel-api-key openapi-key
          gptel-expert-commands t
