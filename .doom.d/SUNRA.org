@@ -970,26 +970,42 @@ https://github.com/karthink/gptel?tab=readme-ov-file#gptel-a-simple-llm-client-f
 
 https://github.com/karthink/gptel?tab=readme-ov-file#contents
 
-**** Including howto rewrite a region
+**** Rewrite a Region
 
 https://github.com/karthink/gptel?tab=readme-ov-file#rewrite-refactor-or-fill-in-a-region
+
+**** Tool Use
+
+Tool use (experimental)
+https://github.com/karthink/gptel?tab=readme-ov-file#tool-use-experimental
+
+Tool use with gptel: looking for testers!
+https://karthinks.com/software/tool-use-with-gptel-looking-for-testers/
+
+Instructions for testing tool use (on gptel’s issue tracke)
+https://github.com/karthink/gptel/issues/514
 
 
 *** Configuration
 
 #+BEGIN_SRC elisp
 (defun load-gptel-directives (dir)
-  "Load all directive files from DIR into gptel-directives."
+  "Load all directive files from DIR into gptel-directives.
+Newer directives override existing ones with the same key."
   (let* ((files (directory-files dir t "\\.md$"))
-         (pairs (mapcar (lambda (file)
-                         (cons
-                          (intern (file-name-base file))
-                          (with-temp-buffer
-                            (insert-file-contents file)
-                            (buffer-string))))
-                       files)))
+         (new-pairs (mapcar (lambda (file)
+                              (cons
+                               (intern (file-name-base file))
+                               (with-temp-buffer
+                                 (insert-file-contents file)
+                                 (buffer-string))))
+                            files))
+         (existing-keys (mapcar #'car gptel-directives))
+         (filtered-old (cl-remove-if (lambda (pair)
+                                       (member (car pair) (mapcar #'car new-pairs)))
+                                     gptel-directives)))
     (setq gptel-directives
-          (append pairs gptel-directives))))
+          (append new-pairs filtered-old))))
 
 (use-package! gptel
 

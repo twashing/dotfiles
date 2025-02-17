@@ -449,17 +449,22 @@
 ;;   (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 
 (defun load-gptel-directives (dir)
-  "Load all directive files from DIR into gptel-directives."
+  "Load all directive files from DIR into gptel-directives.
+Newer directives override existing ones with the same key."
   (let* ((files (directory-files dir t "\\.md$"))
-         (pairs (mapcar (lambda (file)
-                         (cons
-                          (intern (file-name-base file))
-                          (with-temp-buffer
-                            (insert-file-contents file)
-                            (buffer-string))))
-                       files)))
+         (new-pairs (mapcar (lambda (file)
+                              (cons
+                               (intern (file-name-base file))
+                               (with-temp-buffer
+                                 (insert-file-contents file)
+                                 (buffer-string))))
+                            files))
+         (existing-keys (mapcar #'car gptel-directives))
+         (filtered-old (cl-remove-if (lambda (pair)
+                                       (member (car pair) (mapcar #'car new-pairs)))
+                                     gptel-directives)))
     (setq gptel-directives
-          (append pairs gptel-directives))))
+          (append new-pairs filtered-old))))
 
 (use-package! gptel
 
