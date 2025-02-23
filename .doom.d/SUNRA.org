@@ -986,6 +986,44 @@ Instructions for testing tool use (on gptel’s issue tracke)
 https://github.com/karthink/gptel/issues/514
 
 
+*** File Templating
+
+I needed File templating like what we get in cgrande/enlive.
+https://github.com/cgrand/enlive
+
+The template DSL looks like below, where
+the contents of file =Content.md= (~Bar~) and
+contents of variable =thing= (~querty~), are combined with =A.md.tmpl= and output to =A.md=.
+
+#+BEGIN_EXAMPLE
+#Content.md
+Bar
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+#A.md.tmpl
+Foo {file:Content.md}
+{var:thing}
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+#A.md
+Foo Bar
+querty
+#+END_EXAMPLE
+
+
+None of these solutions quite fit the bill.
+- https://github.com/mineo/yatemplate
+- https://www.emacswiki.org/emacs/TemplatesMode
+- https://www.emacswiki.org/emacs/defaultcontent.el
+
+Most of what's available in Emacs are snippet libraries like joaotavora/yasnippet or minad/tempel
+- https://www.emacswiki.org/emacs/CategoryTemplates
+
+Thus begat =apply-template= and =apply-templates=.
+
+
 *** Configuration
 
 #+BEGIN_SRC elisp
