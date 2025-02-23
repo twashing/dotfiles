@@ -566,7 +566,7 @@
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
 
-  (apply-templates "gptel/directives")
+  (apply-templates (file-name-concat (dir!) "gptel/directives"))
   (load-gptel-directives (file-name-concat (dir!) "gptel/directives"))
   (load-all! (file-name-concat (dir!) "gptel/tools/"))
 
