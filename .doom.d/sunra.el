@@ -212,12 +212,12 @@
   (setq cider-show-error-buffer nil))
 
 (map! :after cider
-      :map cider-mode-map
+      :map general-override-mode-map
       "C-c M-c" #'cider-connect-clj
       "C-c C-k" #'cider-eval-buffer)
 
 (map! :after clojure
-      :map clojure-mode-map
+      :map general-override-mode-map
       "C-c M-c" #'cider-connect-clj)
 
 (with-eval-after-load 'general

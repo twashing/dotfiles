@@ -529,8 +529,6 @@ Also using Emacs built-in =repeat= fn instead =repeat-mode= or =hydra=
       "C-M-/" #'hs-hide-level)
 #+END_SRC
 
-**
-
 
 ** Cider
 
@@ -544,14 +542,110 @@ We have to clear out `C-c M-c` before we can rebind it.
   (setq cider-auto-select-test-report-buffer nil)
   (setq cider-auto-select-error-buffer nil)
   (setq cider-show-error-buffer nil))
+#+END_SRC
 
+
+# A
+
+There was an issue where in clojure-mode, the key bindings I set in my Doom configuration were not taking hold.
+Specifically the ~"C-c M-c" #'cider-connect-clj~ binding did not take hold in a ~.clj~ file.
+Instead the ~"C-c M-c" #'upcase-word~ binding was applied from the ~global-map~.
+
+
+According to "Anthropic/Claude" The issue is due to key binding precedence. The global-map binding was taking precedence over the mode-specific binding.
+To fix this, I had to either:
+
+1. Remove the global binding, or
+2. Use a higher precedence map like ~general-override-mode-map~
+
+#+BEGIN_EXAMPLE elisp
+
+;; Remove the global binding
+(map! :map global-map
+      "C-c C-k" #'eval-buffer
+      ;; "C-c M-c" #'upcase-word  ;; Remove this line
+      "C-x M-x" #'isearch-forward-symbol-at-point)
+
+;; Use override map for Clojure bindings
+(map! :map general-override-mode-map
+      :after clojure
+      "C-c M-c" #'cider-connect-clj)
+#+END_EXAMPLE
+
+This fixed the problem and enfoced the Clojure-specific binding to take precedence.
+
+
+# B
+
+So the key binding precedence from highest to lowest is:
+
+1. ~general-override-mode-map~
+2. Minor mode maps
+3. Local mode maps (like ~clojure-mode-map~)
+4. ~global-map~
+
+For context-specific bindings, you should:
+1. Define the default in ~global-map~
+2. Override in specific mode maps
+3. Use ~general-override-mode-map~ only when other approaches fail
+
+Example:
+
+#+BEGIN_EXAMPLE elisp
+
+;; Global default
+(map! :map global-map
+      "C-c M-c" #'upcase-word)
+
+;; Mode-specific override
+(map! :after clojure
+      :map clojure-mode-map
+      "C-c M-c" #'cider-connect-clj)
+#+END_EXAMPLE
+
+
+This pattern allows for contextual overrides while maintaining a default behavior.
+
+
+# C
+
+In this specific case however, this pattern failed. I was forced to use the ~general-override-mode-map~ (~a.~) in this case however, instead of the more gneneral form (~b.~).
+
+#+BEGIN_EXAMPLE elisp
+
+;; a.
+(map! :after clojure
+      :map general-override-mode-map
+      "C-c M-c" #'cider-connect-clj)
+
+;; b.
+(map! :after clojure
+      :map clojure-mode-map
+      "C-c M-c" #'cider-connect-clj)
+#+END_EXAMPLE
+
+
+This specific case is unusual because ~C-c M-c~ is in the ~C-c~ prefix map, which has special handling in Emacs.
+The standard pattern of mode-map override isn't working because:
+
+1. ~C-c~ prefix keys are "reserved for users" by convention
+2. The global binding is being installed in a way that makes it harder to override
+3. Doom's key binding system (which uses ~general.el~) might be affecting the normal precedence rules (https://github.com/noctuid/general.el).
+
+Using ~general-override-mode-map~ is a "force override" solution that bypasses these complications.
+It's not the ideal pattern, but necessary in cases where normal mode-map precedence isn't sufficient.
+
+If you want to verify this, I checked the effective keymap precedence with ~C-h k C-c M-c~ in a Clojure buffer.
+
+
+#+BEGIN_SRC elisp
 (map! :after cider
-      :map cider-mode-map
+      :map general-override-mode-map
       "C-c M-c" #'cider-connect-clj
       "C-c C-k" #'cider-eval-buffer)
 
 (map! :after clojure
-      :map clojure-mode-map
+      :map general-override-mode-map
       "C-c M-c" #'cider-connect-clj)
 
 (with-eval-after-load 'general
