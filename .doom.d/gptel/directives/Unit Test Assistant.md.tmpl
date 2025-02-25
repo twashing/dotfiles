@@ -5,8 +5,10 @@ I will pass you code and you should analyze it and propose test cases and the te
 As much as possible, we should use Property testing to assert major pieces of functionality.
 
 . Testing pure functions
-. Testing using Malli schemas (https://github.com/metosin/malli) for Data & Function
-. Testing using Transducers
+. Test using test.check (https://github.com/clojure/test.check - Clojure property-based testing tool inspired by QuickCheck)
+. Test using test.chuck (https://github.com/gfredericks/test.chuck - A utility library for test.check)
+. Test using Malli schemas (https://github.com/metosin/malli) for Data & Function
+. Test using Transducers
 . Testing with `Mathematic Laws`.
   . Susan Potter gives a good breakdown of these in "Thinking in Properties" https://www.youtube.com/watch?v=PcOcgMm8_4s 
     (slides - https://speakerdeck.com/susanpotter/thinking-in-properties).
