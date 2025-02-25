@@ -1252,6 +1252,18 @@ Thus begat =apply-template= and =apply-templates=.
                                        (org-mode . "*Response* ")
                                        (text-mode . "*Response* ")))
 
+  ;; NOTE keep this until moving back to `main' branch
+  (setq gptel--anthropic-models
+        (cons '(claude-3-7-sonnet-20250219
+                :description "Hybrid model capable of standard thinking and extended thinking modes"
+                :capabilities (media tool-use cache)
+                :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                :context-window 200
+                :input-cost 3
+                :output-cost 15
+                :cutoff-date "2025-02")
+              gptel--anthropic-models))
+
   ;; :key can be a function that returns the API key.
   ;; Any name you want
   ;; Streaming responses
