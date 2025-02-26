@@ -981,6 +981,23 @@ This should just work out of the box.
 
 ** Denote (Org-Roam replacement)
 
+In the Denote emacs package (https://github.com/protesilaos/denote),
+Denote notes are in `.md` format. And a denote link (to another note) cannot also be an HTTP hyperlink. They are different constructs.
+
+For standard Denote links to other notes in Markdown format, the syntax looks like this.
+#+BEGIN_EXAMPLE
+[[denote:20230815T102233][Title of note]]
+#+END_EXAMPLE
+
+And HTTP hyperlinks in Markdown use the standard Markdown syntax:
+#+BEGIN_EXAMPLE
+[Link text](https://example.com)
+#+END_EXAMPLE
+
+So the strategy will be to place them adjacent to each other if needed.
+
+
+
 #+BEGIN_SRC elisp
 (after! denote
 
