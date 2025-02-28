@@ -76,6 +76,16 @@
 
 ** Reference
 
+
+*** References
+
+The Emacs Package Developer’s Handbook.
+https://github.com/alphapapa/emacs-package-dev-handbook
+
+Awesome Elisp. A curated list of Emacs Lisp development resources.
+https://github.com/emacs-tw/awesome-elisp
+
+
 *** Eval expressions in minibuffer
 
 Show minibuffer to eval expressions.
@@ -93,7 +103,6 @@ https://stackoverflow.com/questions/613022/how-can-i-replace-a-character-with-a-
 ~C-q C-j~
 - C-q for quoted-insert
 - C-j is a newline
-
 
 
 *** Disable whitespace-mode
@@ -221,6 +230,26 @@ Recreates variables at startup (including buffers, frames, registers...).
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
 (add-to-list 'desktop-globals-to-save 'kill-ring)
 #+END_SRC
+
+
+
+*** Emacs Thought Leaders
+
+Karthink
+
+https://github.com/karthink?tab=repositories&q=&type=&language=&sort=stargazers
+https://www.youtube.com/@karthink/videos
+
+Protesilaos
+
+https://github.com/protesilaos
+https://www.youtube.com/c/ProtesilaosStavrou
+https://protesilaos.com/
+https://protesilaos.com/emacs/dotemacs
+
+Andrew Tropin
+
+https://www.youtube.com/playlist?list=PLZmotIJq3yOKmJP_qTozdJ45hnOlOWWC5
 
 
 
@@ -991,6 +1020,18 @@ This should just work out of the box.
 
 
 ** Denote (Org-Roam replacement)
+
+For Knowledge Management. Document everything, making it searchable.
+
+https://github.com/protesilaos/denote
+
+Emacs: introduction to Denote (simple note-taking)
+https://www.youtube.com/watch?v=mLzFJcLpDFI
+
+Is migrating to denote worth it?
+https://www.reddit.com/r/emacs/comments/19do7da/is_migrating_to_denote_worth_it
+
+*** Links
 
 In the Denote emacs package (https://github.com/protesilaos/denote),
 Denote notes are in `.md` format. And a denote link (to another note) cannot also be an HTTP hyperlink. They are different constructs.
