@@ -85,6 +85,17 @@ M-:
 #+END_EXAMPLE
 
 
+*** Howto replace a character with a newline
+
+StackOverflow: How can I replace a character with a newline in Emacs?
+https://stackoverflow.com/questions/613022/how-can-i-replace-a-character-with-a-newline-in-emacs/613029#613029
+
+~C-q C-j~
+- C-q for quoted-insert
+- C-j is a newline
+
+
+
 *** Disable whitespace-mode
 
 **** Disable =doom-highlight-non-default-indentation-h=
