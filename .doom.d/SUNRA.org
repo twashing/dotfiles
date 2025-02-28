@@ -76,7 +76,6 @@
 
 ** Reference
 
-
 *** References
 
 The Emacs Package Developer’s Handbook.
@@ -1122,11 +1121,13 @@ Otherwise I ran into [this error](https://discord.com/channels/40653463724281036
 ** ChatGPT
 
 
+
 *** Overview
 
 https://github.com/karthink/gptel?tab=readme-ov-file#gptel-a-simple-llm-client-for-emacs
 
 `karthink/gptel` is a simple Large Language Model chat client for Emacs, with support for multiple models and backends. It works in the spirit of Emacs, available at any time and uniformly in any buffer.
+
 
 
 *** Features
@@ -1147,6 +1148,7 @@ https://karthinks.com/software/tool-use-with-gptel-looking-for-testers/
 
 Instructions for testing tool use (on gptel’s issue tracke)
 https://github.com/karthink/gptel/issues/514
+
 
 
 *** File Templating
@@ -1185,6 +1187,32 @@ Most of what's available in Emacs are snippet libraries like joaotavora/yasnippe
 - https://www.emacswiki.org/emacs/CategoryTemplates
 
 Thus begat =apply-template= and =apply-templates=.
+
+
+*** Tool Use
+
+LLM "tools" are functions you supply to the LLM... that it can use to do work for you in the world (your file system, web, etc).
+My comment in this article documents my "ah ha" moment.
+https://karthinks.com/software/tool-use-with-gptel-looking-for-testers/#remark42__comment-ff369a61-5e0e-45a1-8834-fdc4a8db0e36
+
+There are a suite of LLM "tools" in the ~gptel/tools~ directory.
+But I wanted to create a tool that generates a tool (that uses `gptel-make-tool`) from an existing elisp function.
+=generate_llm_tool= is a i. function and ii. LLM tool that does just that.
+
+This tool:
+1. Takes a function name and a category as input
+2. Checks if the function exists and is callable
+3. Extracts the function's argument list and documentation
+4. Creates properly formatted argument descriptors for each parameter
+5. Builds a complete gptel-make-tool definition with all the required parts
+6. Returns either the tool definition or an error message
+
+The generated tool will:
+- Use the original function's name as the tool name
+- Use the first line of the docstring as the tool description
+- Use the function itself directly via #'function-name
+- Generate simple argument descriptors based on the parameter names
+- Use the provided category
 
 
 *** Configuration

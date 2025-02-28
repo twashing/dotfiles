@@ -1,5 +1,6 @@
 ;;; ../Projects/dotfiles/.doom.d/gptel/tools/tools.el -*- lexical-binding: t; -*-
 
+
 (gptel-make-tool :name "echo_message"
                  :description "Send a message to the *Messages* buffer"
 
@@ -117,3 +118,60 @@
 	                       :type "string"
 	                       :description "Path to the file to read.  Supports relative paths and ~."))
                  :category "filesystem")
+
+(defun generate_llm_tool (function-name category)
+
+  (let* ((func-symbol (intern-soft function-name))
+         (result "")
+         (error-msg nil))
+
+    ;; Check if function exists and is callable
+    (cond
+     ((not func-symbol)
+      (setq error-msg (format "Function '%s' not found" function-name)))
+
+     ((not (fboundp func-symbol))
+      (setq error-msg (format "'%s' is not a function" function-name)))
+
+     (t
+      (let* ((arglist (help-function-arglist func-symbol t))
+             (doc (or (documentation func-symbol) "No documentation available"))
+             (first-line-of-doc (car (split-string doc "\n")))
+             ;; Filter out &optional, &rest markers from arglist
+             (clean-args (seq-filter (lambda (arg)
+                                       (and (symbolp arg)
+                                            (not (string-prefix-p "&" (symbol-name arg)))))
+                                     arglist))
+             (arg-descriptors
+              (mapcar (lambda (arg)
+                        (format "(:name \"%s\"\n                 :type \"string\"\n                 :description \"Parameter for %s\")"
+                                (symbol-name arg) (symbol-name arg)))
+                      clean-args)))
+
+        ;; Build the gptel-make-tool definition
+        (setq result
+              (format "(gptel-make-tool :name \"%s\"\n                 :description \"%s\"\n\n                 :function #'%s\n                 :args (list %s)\n                 :category \"%s\")"
+                      function-name
+                      (replace-regexp-in-string "\"" "\\\\\"" first-line-of-doc)
+                      function-name
+                      (if arg-descriptors
+                          (mapconcat #'identity arg-descriptors "\n                        ")
+                        "nil")
+                      category)))))
+
+    ;; Return error or result
+    (or error-msg result)))
+
+(gptel-make-tool
+ :name "generate_llm_tool"
+ :description "Generate a gptel-make-tool definition from an existing Elisp function. This examines the function's signature, arguments, and docstring to create a tool that can be used by LLMs."
+
+ :function #'generate_llm_tool
+
+ :args (list '(:name "function-name"
+               :type "string"
+               :description "Name of the Elisp function to convert into a gptel tool")
+             '(:name "category"
+               :type "string"
+               :description "Category for the generated tool (e.g., 'emacs', 'filesystem', etc.)"))
+ :category "development")
