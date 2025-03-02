@@ -621,6 +621,83 @@
   (interactive)
   (find-file (expand-file-name "SUNRA.org" doom-user-dir)))
 
+
+`screenshot` is an Emacs lisp function that can
+i. take a shot of desktop screen or ii. shot of an active Emacs window
+using the CLI =Image Magick=, or ~screencapture~ on MacOS
+
+Usage
+;; (setq debug-on-error t)
+;; (toggle-debug-on-error)
+
+(screenshot)
+(screenshot t)
+
+
+(require 'cl-lib)
+
+(defun screenshot (&optional emacs-frame-only)
+  "Take a screenshot and save it to a file.
+    With prefix argument ARG, capture the current active Emacs frame only.
+    Otherwise, capture the entire screen."
+  (interactive "P")
+  (let* ((default-directory (expand-file-name "~/Pictures/"))
+         (timestamp (format-time-string "%Y%m%d-%H%M%S"))
+         (file-name (concat "screenshot-" timestamp ".png"))
+         (full-path (expand-file-name file-name))
+         (command
+          (cond
+           ;; macOS
+           ((eq system-type 'darwin)
+            (if emacs-frame-only
+                (format "screencapture -l$(osascript -e 'tell app \"Emacs\" to id of window 1') %s"
+                          (shell-quote-argument full-path))
+              (format "screencapture %s"
+                      (shell-quote-argument full-path))))
+           Linux with ImageMagick
+           ((executable-find "import")
+            (if emacs-frame-only
+                (format "import -window %s %s"
+                        (shell-quote-argument (frame-parameter nil 'outer-window-id))
+                        (shell-quote-argument full-path))
+              (format "import -window root %s"
+                      (shell-quote-argument full-path))))
+           ;; Linux with gnome-screenshot
+           ((executable-find "gnome-screenshot")
+            (if emacs-frame-only
+                (format "gnome-screenshot -w -f %s"
+                        (shell-quote-argument full-path))
+              (format "gnome-screenshot -f %s"
+                      (shell-quote-argument full-path))))
+           ;; Linux with scrot
+           ((executable-find "scrot")
+            (if emacs-frame-only
+                (format "scrot -u %s"
+                        (shell-quote-argument full-path))
+              (format "scrot %s"
+                      (shell-quote-argument full-path))))
+           (t (error "No suitable screenshot program found")))))
+
+    (make-directory (file-name-directory full-path) t)
+    (if (zerop (shell-command command))
+        (progn
+          (message "Screenshot saved to %s" full-path)
+          (when (y-or-n-p "Open screenshot? ")
+            (find-file full-path)))
+      (error "Failed to take screenshot"))))
+
+
+
+
+;; make a function
+;; ii. record video (5 seconds, 10 seconds, other interval)
+;; iii. record audio (5 seconds, 10 seconds, other interval
+
+
+;; make a gptel tool
+
+
+
 (let ((map global-map))
   (define-key map (kbd "C-h d e") #'sunra/goto-emacs-dir)
   (define-key map (kbd "C-h d r") #'sunra/goto-private-config-sunra-el)
