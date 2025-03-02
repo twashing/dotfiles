@@ -622,13 +622,13 @@
   (find-file (expand-file-name "SUNRA.org" doom-user-dir)))
 
 
-`screenshot` is an Emacs lisp function that can
-i. take a shot of desktop screen or ii. shot of an active Emacs window
-using the CLI =Image Magick=, or ~screencapture~ on MacOS
-
-Usage
-;; (setq debug-on-error t)
-;; (toggle-debug-on-error)
+;; `screenshot` is an Emacs lisp function that can
+;; i. take a shot of desktop screen or ii. shot of an active Emacs window
+;; using the CLI =Image Magick=, or ~screencapture~ on MacOS
+;;
+;; Usage
+;; ;; (setq debug-on-error t)
+;; ;; (toggle-debug-on-error)
 
 (screenshot)
 (screenshot t)
@@ -688,13 +688,13 @@ Usage
 
 
 
+;; make a gptel tool
 
-;; make a function
+;; using the ffmpeg cli tool, create an Emacs lisp function that
 ;; ii. record video (5 seconds, 10 seconds, other interval)
 ;; iii. record audio (5 seconds, 10 seconds, other interval
 
-
-;; make a gptel tool
+;; (load! "packages/ffmpeg-record")
 
 
 
