@@ -579,6 +579,16 @@
                                        (org-mode . "*Response* ")
                                        (text-mode . "*Response* ")))
 
+  ;; :key can be a function that returns the API key.
+  ;; Any name you want
+  ;; Streaming responses
+  (gptel-make-gemini "Gemini"
+    :key gemini-key
+    :stream t)
+  (gptel-make-anthropic "Claude"
+    :key anthropic-key
+    :stream t)
+
   ;; NOTE keep this until moving back to `main' branch
   (setq gptel--anthropic-models
         (cons '(claude-3-7-sonnet-20250219
@@ -589,17 +599,7 @@
                 :input-cost 3
                 :output-cost 15
                 :cutoff-date "2025-02")
-              gptel--anthropic-models))
-
-  ;; :key can be a function that returns the API key.
-  ;; Any name you want
-  ;; Streaming responses
-  (gptel-make-gemini "Gemini"
-    :key gemini-key
-    :stream t)
-  (gptel-make-anthropic "Claude"
-    :key anthropic-key
-    :stream t))
+              gptel--anthropic-models)))
 
 (use-package! gptel-quick
 
@@ -630,8 +630,8 @@
 ;; ;; (setq debug-on-error t)
 ;; ;; (toggle-debug-on-error)
 
-(screenshot)
-(screenshot t)
+;; (screenshot)
+;; (screenshot t)
 
 
 (require 'cl-lib)
@@ -694,7 +694,7 @@
 ;; ii. record video (5 seconds, 10 seconds, other interval)
 ;; iii. record audio (5 seconds, 10 seconds, other interval
 
-;; (load! "packages/ffmpeg-record")
+(load! "packages/ffmpeg-record")
 
 
 

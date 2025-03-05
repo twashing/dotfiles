@@ -3,9 +3,15 @@
 ;;; Commentary:
 ;; This package provides functions to record video and audio using the FFmpeg CLI tool.
 ;; It allows for recording with predefined durations or custom intervals.
-;; This version avoids any dependencies on cl-lib or related packages.
+;; Requires the exec-path-from-shell package to ensure proper PATH inheritance.
 
 ;;; Code:
+
+(require 'exec-path-from-shell)
+
+;; Initialize exec-path-from-shell to inherit PATH from shell
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 (defgroup ffmpeg-record nil
   "Settings for FFmpeg recording functions."
@@ -31,13 +37,18 @@
   :type 'string
   :group 'ffmpeg-record)
 
-(defcustom ffmpeg-record-audio-format "mp3"
+(defcustom ffmpeg-record-audio-format "m4a"
   "Default format for audio recordings."
   :type 'string
   :group 'ffmpeg-record)
 
 (defcustom ffmpeg-record-audio-codec "aac"
   "Audio codec to use for recordings."
+  :type 'string
+  :group 'ffmpeg-record)
+
+(defcustom ffmpeg-record-audio-device-index "0"
+  "Index of the audio device to use for recording."
   :type 'string
   :group 'ffmpeg-record)
 
@@ -54,28 +65,43 @@
   (let ((timestamp (format-time-string "%Y%m%d-%H%M%S")))
     (expand-file-name (concat "recording-" timestamp "." format) directory)))
 
+(defun ffmpeg-record--list-audio-devices ()
+  "List available audio devices using ffmpeg."
+  (with-temp-buffer
+    (if (eq system-type 'darwin)
+        (call-process "ffmpeg" nil t nil "-f" "avfoundation" "-list_devices" "true" "-i" "")
+      (call-process "ffmpeg" nil t nil "-list_input_devices"))
+    (buffer-string)))
+
+(defun ffmpeg-record-select-audio-device ()
+  "List available audio devices and let user select one."
+  (interactive)
+  (let ((devices-output (ffmpeg-record--list-audio-devices))
+        (device-list nil)
+        (choice nil))
+    (with-temp-buffer
+      (insert devices-output)
+      (goto-char (point-min))
+      (while (re-search-forward "\\[AVFoundation indev.*\\] \\[\\([0-9]+\\)\\] \\(.*\\)" nil t)
+        (push (cons (match-string 2) (match-string 1)) device-list))
+      (setq device-list (nreverse device-list))
+      (setq choice (completing-read "Select audio device: " device-list))
+      (let ((device-index (cdr (assoc choice device-list))))
+        (message "Selected device %s (index: %s)" choice device-index)
+        (customize-set-variable 'ffmpeg-record-audio-device-index device-index)))))
+
 (defun ffmpeg-record--detect-video-input ()
   "Detect the appropriate video input device based on OS."
   (cond
    ((eq system-type 'darwin)
-    "avfoundation:\"FaceTime HD Camera\"")
+    "0") ; macOS video device index
    ((eq system-type 'gnu/linux)
     "/dev/video0")
    ((eq system-type 'windows-nt)
     "video=\"Integrated Camera\"")
    (t (error "Video input not configured for this OS"))))
 
-(defun ffmpeg-record--detect-audio-input ()
-  "Detect the appropriate audio input device based on OS."
-  (cond
-   ((eq system-type 'darwin)
-    "avfoundation:\":0\"")
-   ((eq system-type 'gnu/linux)
-    "pulse")
-   ((eq system-type 'windows-nt)
-    "audio=\"Microphone (Realtek High Definition Audio)\"")
-   (t (error "Audio input not configured for this OS"))))
-
+;; Video recording function with improved process handling
 (defun ffmpeg-record-video (duration)
   "Record video for DURATION seconds using FFmpeg."
   (interactive
@@ -86,48 +112,58 @@
 
   (ffmpeg-record--ensure-directory ffmpeg-record-video-directory)
   (let ((output-file (ffmpeg-record--generate-filename
-                       ffmpeg-record-video-directory
-                       ffmpeg-record-video-format))
-        video-source
-        cmd)
+                      ffmpeg-record-video-directory
+                      ffmpeg-record-video-format))
+        (video-source (ffmpeg-record--detect-video-input))
+        cmdlist)
 
-    ;; Determine appropriate command based on OS
-    (setq video-source
-          (cond ((eq system-type 'darwin) "0")
-                ((eq system-type 'gnu/linux) "/dev/video0")
-                ((eq system-type 'windows-nt) "video=\"Integrated Camera\"")
-                (t (error "Unsupported system type"))))
-
-    (setq cmd
+    ;; Use process arguments as a list rather than a shell command string
+    (setq cmdlist
           (cond ((eq system-type 'darwin)
-                 (format "ffmpeg -y -f avfoundation -framerate %d -t %d -i %s -c:v libx264 -preset fast -pix_fmt yuv420p %s"
-                         ffmpeg-record-video-fps
-                         duration
-                         video-source
-                         output-file))
+                 (list "ffmpeg" "-y" "-f" "avfoundation" "-framerate"
+                       (number-to-string ffmpeg-record-video-fps)
+                       "-t" (number-to-string duration)
+                       "-i" video-source
+                       "-c:v" "libx264" "-preset" "fast" "-pix_fmt" "yuv420p"
+                       output-file))
                 ((eq system-type 'gnu/linux)
-                 (format "ffmpeg -y -f v4l2 -framerate %d -t %d -i %s -c:v libx264 -preset fast -pix_fmt yuv420p %s"
-                         ffmpeg-record-video-fps
-                         duration
-                         video-source
-                         output-file))
+                 (list "ffmpeg" "-y" "-f" "v4l2" "-framerate"
+                       (number-to-string ffmpeg-record-video-fps)
+                       "-t" (number-to-string duration)
+                       "-i" video-source
+                       "-c:v" "libx264" "-preset" "fast" "-pix_fmt" "yuv420p"
+                       output-file))
                 ((eq system-type 'windows-nt)
-                 (format "ffmpeg -y -f dshow -framerate %d -t %d -i %s -c:v libx264 -preset fast -pix_fmt yuv420p %s"
-                         ffmpeg-record-video-fps
-                         duration
-                         video-source
-                         output-file))))
+                 (list "ffmpeg" "-y" "-f" "dshow" "-framerate"
+                       (number-to-string ffmpeg-record-video-fps)
+                       "-t" (number-to-string duration)
+                       "-i" video-source
+                       "-c:v" "libx264" "-preset" "fast" "-pix_fmt" "yuv420p"
+                       output-file))))
 
-    (message "Starting video recording for %d seconds..." duration)
-    (setq ffmpeg-record--process
-          (start-process "ffmpeg-video" "*ffmpeg-recording*" "sh" "-c" cmd))
+    (message "%s" cmdlist)
+    (message "Starting video recording for %d seconds to %s..." duration output-file)
 
-    (set-process-sentinel
-     ffmpeg-record--process
-     (lambda (process event)
-       (when (string-match "finished" event)
-         (message "Video recording completed: %s" output-file))))))
+    ;; Use start-process with explicit argument list instead of shell-command
+    (let ((ffmpeg-record--process
+           (apply 'start-process "ffmpeg-video" "*ffmpeg-recording*" cmdlist)))
 
+      ;; Enhanced process sentinel with better event handling
+      (set-process-sentinel
+       ffmpeg-record--process
+       (lambda (process event)
+         (let ((event-str (string-trim event)))
+           (cond
+            ((string= event-str "finished")
+             (message "Video recording completed: %s" output-file))
+            ((string= event-str "exited abnormally with code 255")
+             (message "FFmpeg process was interrupted"))
+            ((string-prefix-p "exited abnormally" event-str)
+             (with-current-buffer "*ffmpeg-recording*"
+               (message "FFmpeg error: %s. Check *ffmpeg-recording* buffer for details."
+                        event-str))))))))))
+
+;; Audio recording function with improved process handling
 (defun ffmpeg-record-audio (duration)
   "Record audio for DURATION seconds using FFmpeg."
   (interactive
@@ -141,37 +177,87 @@
                       ffmpeg-record-audio-directory
                       ffmpeg-record-audio-format))
         audio-source
-        input-format
-        cmd)
+        cmdlist)
 
-    ;; Determine appropriate command based on OS
+    ;; Build argument list based on OS
     (cond ((eq system-type 'darwin)
-           (setq input-format "avfoundation")
-           (setq audio-source "\":0\""))
+           (setq audio-source (format ":%s" ffmpeg-record-audio-device-index))
+           (setq cmdlist (list "ffmpeg" "-y" "-f" "avfoundation"
+                               "-t" (number-to-string duration)
+                               "-i" audio-source
+                               "-c:a" ffmpeg-record-audio-codec
+                               output-file)))
           ((eq system-type 'gnu/linux)
-           (setq input-format "pulse")
-           (setq audio-source "default"))
+           (setq audio-source "default")
+           (setq cmdlist (list "ffmpeg" "-y" "-f" "pulse"
+                               "-t" (number-to-string duration)
+                               "-i" audio-source
+                               "-c:a" ffmpeg-record-audio-codec
+                               output-file)))
           ((eq system-type 'windows-nt)
-           (setq input-format "dshow")
-           (setq audio-source "audio=\"Microphone (Realtek High Definition Audio)\""))
+           (setq audio-source "audio=\"Microphone (Realtek High Definition Audio)\"")
+           (setq cmdlist (list "ffmpeg" "-y" "-f" "dshow"
+                               "-t" (number-to-string duration)
+                               "-i" audio-source
+                               "-c:a" ffmpeg-record-audio-codec
+                               output-file)))
           (t (error "Unsupported system type")))
 
-    (setq cmd (format "ffmpeg -y -f %s -t %d -i %s -c:a %s %s"
-                      input-format
-                      duration
-                      audio-source
-                      ffmpeg-record-audio-codec
-                      output-file))
+    ;; (message "%s" cmdlist)
+    (message "Starting audio recording for %d seconds to %s..." duration output-file)
 
-    (message "Starting audio recording for %d seconds..." duration)
+    ;; Start process with explicit argument list
     (setq ffmpeg-record--process
-          (start-process "ffmpeg-audio" "*ffmpeg-recording*" "sh" "-c" cmd))
+          (apply 'start-process "ffmpeg-audio" "*ffmpeg-recording*" cmdlist))
 
+    ;; Enhanced process sentinel
     (set-process-sentinel
      ffmpeg-record--process
      (lambda (process event)
-       (when (string-match "finished" event)
-         (message "Audio recording completed: %s" output-file))))))
+       (let ((event-str (string-trim event)))
+         (cond
+          ((string= event-str "finished")
+           (message "Audio recording completed: %s" output-file))
+          ((string= event-str "exited abnormally with code 255")
+           (message "FFmpeg process was interrupted"))
+          ((string-prefix-p "exited abnormally" event-str)
+           (with-current-buffer "*ffmpeg-recording*"
+             (message "FFmpeg error: %s. Check *ffmpeg-recording* buffer for details."
+                      event-str)))))))))
+
+;; Enhanced process stop function
+(defun ffmpeg-record-stop ()
+  "Stop the current FFmpeg recording process."
+  (interactive)
+  (when (and ffmpeg-record--process
+             (process-live-p ffmpeg-record--process))
+    ;; Try graceful termination first
+    (if (eq system-type 'windows-nt)
+        ;; Windows doesn't support SIGTERM the same way
+        (interrupt-process ffmpeg-record--process)
+      (signal-process (process-id ffmpeg-record--process) 'SIGTERM))
+
+    ;; Force kill after a short delay if still running
+    (run-with-timer 1.0 nil
+                   (lambda ()
+                     (when (and ffmpeg-record--process
+                                (process-live-p ffmpeg-record--process))
+                       (delete-process ffmpeg-record--process)
+                       (message "Recording forcibly terminated."))))
+
+    (message "Stopping recording...")
+    (setq ffmpeg-record--process nil)))
+
+;; Optional: function to show process details for debugging
+(defun ffmpeg-record-debug-process ()
+  "Show details about the current ffmpeg process."
+  (interactive)
+  (if (and ffmpeg-record--process (process-live-p ffmpeg-record--process))
+      (message "Process: %s, PID: %s, Status: %s"
+               (process-name ffmpeg-record--process)
+               (process-id ffmpeg-record--process)
+               (process-status ffmpeg-record--process))
+    (message "No active ffmpeg process")))
 
 (defun ffmpeg-record-video-5s ()
   "Record video for 5 seconds."
@@ -204,6 +290,15 @@
 
 (provide 'ffmpeg-record)
 
+;;; ffmpeg-record.el ends here
+
+
+;; ;; Add Homebrew binaries to Emacs exec-path
+;; (add-to-list 'exec-path "/opt/homebrew/bin")
+
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+
 ;; ;; Record video, prompting for duration
 ;; M-x ffmpeg-record-video
 ;;
@@ -218,42 +313,37 @@
 
 
 ;; (ffmpeg-record-video-5s)
+;; (ffmpeg-record-video 5)
+;; (ffmpeg-record-audio-5s)
+;; (ffmpeg-record-audio 5)
+;; (ffmpeg-record-stop)
+;; (ffmpeg-record-debug-process)
 
-(let ((output-file (ffmpeg-record--generate-filename
-                    ffmpeg-record-video-directory
-                    ffmpeg-record-video-format))
-      video-source
-      cmd)
 
-  ;; Determine appropriate command based on OS
-  (setq video-source
-        (cond ((eq system-type 'darwin) "0")
-              ((eq system-type 'gnu/linux) "/dev/video0")
-              ((eq system-type 'windows-nt) "video=\"Integrated Camera\"")
-              (t (error "Unsupported system type"))))
+;; ;; Audio
+;; (setq ffmpeg-record--process
+;;       (apply 'start-process "ffmpeg-audio" "*ffmpeg-recording*"
+;;              (list "ffmpeg" "-y" "-f" "avfoundation" "-i" ":0" "-t" "10" "-c:a" "aac" "/Users/timothyw/Audio/recording-20250302-181844.m4a")))
+;;
+;; (set-process-sentinel
+;;  ffmpeg-record--process
+;;  (lambda (process event)
+;;    (message "%s , %s" process event)))
+;;
+;; ;; Video
+;; (setq ffmpeg-record--process
+;;       (apply 'start-process "ffmpeg-video" "*ffmpeg-recording*"
+;;              (list "ffmpeg" "-y" "-f" "avfoundation" "-framerate" "30" "-pixel_format" "uyvy422" "-i" "0:none" "-t" "10" "-c:v"
+;;                    "libx264" "-preset" "fast" "-pix_fmt" "yuv420p" "/Users/timothyw/Videos/recording-20250302-212245.mp4")))
+;; (set-process-sentinel
+;;  ffmpeg-record--process
+;;  (lambda (process event)
+;;    (message "%s , %s" process event)))
 
-  (setq cmd
-        (cond ((eq system-type 'darwin)
-               (format "ffmpeg -y -f avfoundation -framerate %d -t %d -i %s -c:v libx264 -preset fast -pix_fmt yuv420p %s"
-                       ffmpeg-record-video-fps
-                       duration
-                       video-source
-                       output-file))
-              ((eq system-type 'gnu/linux)
-               (format "ffmpeg -y -f v4l2 -framerate %d -t %d -i %s -c:v libx264 -preset fast -pix_fmt yuv420p %s"
-                       ffmpeg-record-video-fps
-                       duration
-                       video-source
-                       output-file))
-              ((eq system-type 'windows-nt)
-               (format "ffmpeg -y -f dshow -framerate %d -t %d -i %s -c:v libx264 -preset fast -pix_fmt yuv420p %s"
-                       ffmpeg-record-video-fps
-                       duration
-                       video-source
-                       output-file))))
 
-  ;; (message "Video recording: for %d seconds..." duration)
-  (message "Video recording: for %s" cmd)
-  )
+;; ffmpeg -y -f avfoundation -framerate 30 -t 5 -i 0 -c:v libx264 -preset fast -pix_fmt yuv420p /Users/timothyw/Videos/recording-20250302-181453.mp4
+;; ffmpeg -y -f avfoundation -t 5 -i ":0" -c:a aac /Users/timothyw/Audio/recording-20250302-181844.m4a
+
+
 
 ;;; ffmpeg-record.el ends here

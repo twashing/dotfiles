@@ -79,3 +79,4 @@
 (package! plz)
 (package! embark-consult)
 (package! org-make-toc)
+(package! exec-path-from-shell)

@@ -1349,6 +1349,16 @@ The generated tool will:
                                        (org-mode . "*Response* ")
                                        (text-mode . "*Response* ")))
 
+  ;; :key can be a function that returns the API key.
+  ;; Any name you want
+  ;; Streaming responses
+  (gptel-make-gemini "Gemini"
+    :key gemini-key
+    :stream t)
+  (gptel-make-anthropic "Claude"
+    :key anthropic-key
+    :stream t)
+
   ;; NOTE keep this until moving back to `main' branch
   (setq gptel--anthropic-models
         (cons '(claude-3-7-sonnet-20250219
@@ -1359,17 +1369,7 @@ The generated tool will:
                 :input-cost 3
                 :output-cost 15
                 :cutoff-date "2025-02")
-              gptel--anthropic-models))
-
-  ;; :key can be a function that returns the API key.
-  ;; Any name you want
-  ;; Streaming responses
-  (gptel-make-gemini "Gemini"
-    :key gemini-key
-    :stream t)
-  (gptel-make-anthropic "Claude"
-    :key anthropic-key
-    :stream t))
+              gptel--anthropic-models)))
 
 (use-package! gptel-quick
 
