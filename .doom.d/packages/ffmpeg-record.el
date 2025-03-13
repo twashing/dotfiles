@@ -321,7 +321,7 @@
 
 
 ;; NOTE
-;; The idea of this package is to have E max record, audio, and video. This is useful can be used by an LLM or is useful all on its own.
+;; The idea of this package is to have Emacs record, audio, and video. This is useful can be used by an LLM or is useful all on its own.
 ;; These commands work in the shell.
 ;; However on MacOS, there is an unsolved problem of Emacs interacting with a shell process.
 
@@ -332,7 +332,7 @@
 
 
 ;; NOTE Failing elisp code blocks
-
+;;
 ;; ;; Audio
 ;; (setq ffmpeg-record--process
 ;;       (apply 'start-process "ffmpeg-audio" "*ffmpeg-recording*"
@@ -353,6 +353,10 @@
 ;;  ffmpeg-record--process
 ;;  (lambda (process event)
 ;;    (message "%s , %s" process event)))
+
+
+;; NOTE Stackoverflow Question
+;; https://stackoverflow.com/questions/79480200/ffmpeg-video-recording-hangs-in-emacs
 
 
 ;; NOTE Troubleshooting with LLMs

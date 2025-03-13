@@ -162,8 +162,7 @@
     ;; Return error or result
     (or error-msg result)))
 
-(gptel-make-tool
- :name "generate_llm_tool"
+(gptel-make-tool :name "generate_llm_tool"
  :description "Generate a gptel-make-tool definition from an existing Elisp function. This examines the function's signature, arguments, and docstring to create a tool that can be used by LLMs."
 
  :function #'generate_llm_tool

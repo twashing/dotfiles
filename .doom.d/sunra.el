@@ -621,6 +621,54 @@
   (interactive)
   (find-file (expand-file-name "SUNRA.org" doom-user-dir)))
 
+(let ((map global-map))
+  (define-key map (kbd "C-h d e") #'sunra/goto-emacs-dir)
+  (define-key map (kbd "C-h d r") #'sunra/goto-private-config-sunra-el)
+  (define-key map (kbd "C-h d R") #'sunra/goto-private-config-sunra-org))
+
+(package! transient
+      :pin "c2bdf7e12c530eb85476d3aef317eb2941ab9440"
+      :recipe (:host github :repo "magit/transient"))
+
+(package! with-editor
+          :pin "bbc60f68ac190f02da8a100b6fb67cf1c27c53ab"
+          :recipe (:host github :repo "magit/with-editor"))
+
+(require 'cl-lib)
+
+(defun screenshot (&optional emacs-frame-only)
+  "Take a screenshot and save it to a file.
+With prefix argument ARG, capture the current active Emacs frame only.
+Otherwise, capture the entire screen."
+  (interactive "P")
+  (let* ((default-directory (expand-file-name "~/Pictures/"))
+         (timestamp (format-time-string "%Y%m%d-%H%M%S"))
+         (file-name (concat "screenshot-" timestamp ".png"))
+         (full-path (expand-file-name file-name))
+         (command
+          (cond
+           ((eq system-type 'darwin)
+            (if emacs-frame-only
+                (format "screencapture -l$(osascript -e 'tell app \"Emacs\" to id of window 1') %s"
+                        (shell-quote-argument full-path))
+              (format "screencapture %s"
+                      (shell-quote-argument full-path))))
+           ((eq system-type 'gnu/linux)
+            (if emacs-frame-only
+                (format "ffmpeg -y -f x11grab -i 0x%s -vframes 1 %s"
+                        (frame-parameter nil 'outer-window-id)
+                        (shell-quote-argument full-path))
+              (format "ffmpeg -y -f x11grab -i :0 -vframes 1 %s"
+                      (shell-quote-argument full-path))))
+           (t (error "No suitable screenshot command found for this system")))))
+    (make-directory (file-name-directory full-path) t)
+    (if (zerop (shell-command command))
+        (progn
+          (message "Screenshot saved to %s" full-path)
+          (when (y-or-n-p "Open screenshot? ")
+            (find-file full-path)))
+      (error "Failed to take screenshot"))))
+
 
 ;; `screenshot` is an Emacs lisp function that can
 ;; i. take a shot of desktop screen or ii. shot of an active Emacs window
@@ -633,75 +681,81 @@
 ;; (screenshot)
 ;; (screenshot t)
 
+(defun screencapture (screen-id &optional duration)
+  "Record the screen with SCREEN-ID for DURATION seconds using ffmpeg’s avfoundation input.
+   SCREEN-ID is the device index shown when running:
+   ffmpeg -f avfoundation -list_devices true -i \"\"
 
-(require 'cl-lib)
+By default, DURATION is 5 seconds.  The resulting file is placed in ~/Pictures/ with a timestamp.
 
-(defun screenshot (&optional emacs-frame-only)
-  "Take a screenshot and save it to a file.
-    With prefix argument ARG, capture the current active Emacs frame only.
-    Otherwise, capture the entire screen."
-  (interactive "P")
+On non-macOS systems, this function currently signals an error."
+  (interactive "nEnter screen device index: \nnDuration in seconds (default 5): ")
+  (unless duration
+    (setq duration 5))
+
   (let* ((default-directory (expand-file-name "~/Pictures/"))
          (timestamp (format-time-string "%Y%m%d-%H%M%S"))
-         (file-name (concat "screenshot-" timestamp ".png"))
+         (file-name (concat "screencapture-" timestamp ".mp4"))
          (full-path (expand-file-name file-name))
-         (command
-          (cond
-           ;; macOS
-           ((eq system-type 'darwin)
-            (if emacs-frame-only
-                (format "screencapture -l$(osascript -e 'tell app \"Emacs\" to id of window 1') %s"
-                          (shell-quote-argument full-path))
-              (format "screencapture %s"
-                      (shell-quote-argument full-path))))
-           Linux with ImageMagick
-           ((executable-find "import")
-            (if emacs-frame-only
-                (format "import -window %s %s"
-                        (shell-quote-argument (frame-parameter nil 'outer-window-id))
-                        (shell-quote-argument full-path))
-              (format "import -window root %s"
-                      (shell-quote-argument full-path))))
-           ;; Linux with gnome-screenshot
-           ((executable-find "gnome-screenshot")
-            (if emacs-frame-only
-                (format "gnome-screenshot -w -f %s"
-                        (shell-quote-argument full-path))
-              (format "gnome-screenshot -f %s"
-                      (shell-quote-argument full-path))))
-           ;; Linux with scrot
-           ((executable-find "scrot")
-            (if emacs-frame-only
-                (format "scrot -u %s"
-                        (shell-quote-argument full-path))
-              (format "scrot %s"
-                      (shell-quote-argument full-path))))
-           (t (error "No suitable screenshot program found")))))
-
+         ;; Construct the ffmpeg command for avfoundation
+         (command (format "ffmpeg -y -f avfoundation -i %s:0 -t %s %s"
+                          screen-id
+                          duration
+                          (shell-quote-argument full-path))))
     (make-directory (file-name-directory full-path) t)
     (if (zerop (shell-command command))
         (progn
-          (message "Screenshot saved to %s" full-path)
-          (when (y-or-n-p "Open screenshot? ")
-            (find-file full-path)))
-      (error "Failed to take screenshot"))))
+          (message "Screen recording saved to %s" full-path))
+      (error "Failed to record from screen ID %s" screen-id))))
 
+;; Usage
 
+;; Record the desktop from screen 3 for 10 seconds
+;; (screencapture 3 10)
+;;
+;; Record the desktop from screen 2 for 5 seconds
+;; (screencapture 2 5)
 
-;; make a gptel tool
+;; # ffmpeg can list out the available desktop screen devices
+;; ffmpeg -f avfoundation -list_devices true -i ""
+;; ...
+;; [AVFoundation indev @ 0x12a804080] AVFoundation video devices:
+;; [AVFoundation indev @ 0x12a804080] [0] LG UltraFine Display Camera
+;; [AVFoundation indev @ 0x12a804080] [1] FaceTime HD Camera
+;; [AVFoundation indev @ 0x12a804080] [2] Capture screen 0
+;; [AVFoundation indev @ 0x12a804080] [3] Capture screen 1
+;; [AVFoundation indev @ 0x12a804080] AVFoundation audio devices:
+;; [AVFoundation indev @ 0x12a804080] [0] LG UltraFine Display Audio
+;; [AVFoundation indev @ 0x12a804080] [1] MacBook Pro Microphone
+;; [AVFoundation indev @ 0x12a804080] [2] Bose QC45
 
-;; using the ffmpeg cli tool, create an Emacs lisp function that
-;; ii. record video (5 seconds, 10 seconds, other interval)
-;; iii. record audio (5 seconds, 10 seconds, other interval
+(defun prot-org--id-get (&optional pom create prefix)
+  "Get the CUSTOM_ID property of the entry at point-or-marker POM.
 
-(load! "packages/ffmpeg-record")
+If POM is nil, refer to the entry at point.
+If the entry does not have an CUSTOM_ID, the function returns nil. However, when
+CREATE is non nil, create a CUSTOM_ID if none is present already.
+PREFIX will be passed through to `org-id-new'.  In any case, the
+CUSTOM_ID of the entry is returned."
+  (org-with-point-at pom
+    (let ((id (org-entry-get nil "CUSTOM_ID")))
+      (cond
+       ((and id (stringp id) (string-match "\\S-" id))
+        id)
+       (create
+        (setq id (org-id-new (concat prefix "h")))
+        (org-entry-put pom "CUSTOM_ID" id)
+        (org-id-add-location id (format "%s" (buffer-file-name (buffer-base-buffer))))
+        id)))))
 
+(declare-function org-map-entries "org")
 
-
-(let ((map global-map))
-  (define-key map (kbd "C-h d e") #'sunra/goto-emacs-dir)
-  (define-key map (kbd "C-h d r") #'sunra/goto-private-config-sunra-el)
-  (define-key map (kbd "C-h d R") #'sunra/goto-private-config-sunra-org))
+;;;###autoload
+(defun prot-org-id-headlines ()
+  "Add missing CUSTOM_ID to all headlines in current file."
+  (interactive)
+  (org-map-entries
+   (lambda () (prot-org--id-get (point) t))))
 
 (setq org-structure-template-alist
         '(("s" . "src")
