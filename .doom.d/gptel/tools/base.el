@@ -119,6 +119,27 @@
 	                       :description "Path to the file to read.  Supports relative paths and ~."))
                  :category "filesystem")
 
+(gptel-make-tool :name "screenshot"
+                 :description "Take a screenshot and save it to a file."
+
+                 :function #'screenshot
+                 :args (list '(:name "emacs-frame-only"
+                               :type "string"
+                               :description "Parameter for emacs-frame-only"))
+                 :category "desktop")
+
+(gptel-make-tool :name "screencapture"
+                 :description "Record the screen with SCREEN-ID for DURATION seconds using ffmpeg’s avfoundation input."
+
+                 :function #'screencapture
+                 :args (list '(:name "screen-id"
+                               :type "string"
+                               :description "Parameter for screen-id")
+                             '(:name "duration"
+                               :type "string"
+                               :description "Parameter for duration"))
+                 :category "desktop")
+
 (defun generate_llm_tool (function-name category)
 
   (let* ((func-symbol (intern-soft function-name))

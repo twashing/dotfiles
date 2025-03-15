@@ -1385,17 +1385,17 @@ Setting personal functions to jump to my Sunra config files.
 #+BEGIN_SRC elisp
 
 (defun sunra/goto-emacs-dir ()
-  "Open your private config.el file."
+  "Open my ~/.emacs.d directory."
   (interactive)
   (dired doom-emacs-dir))
 
 (defun sunra/goto-private-config-sunra-el ()
-  "Open your private config.el file."
+  "Open my private config.el file."
   (interactive)
   (find-file (expand-file-name "sunra.el" doom-user-dir)))
 
 (defun sunra/goto-private-config-sunra-org ()
-  "Open your private config.el file."
+  "Open my private Config.org file."
   (interactive)
   (find-file (expand-file-name "SUNRA.org" doom-user-dir)))
 
