@@ -1335,6 +1335,7 @@ The generated tool will:
   (load! "openapi-key.el")
   (load! "gemini-key.el")
   (load! "anthropic-key.el")
+  (load! "linkup-api-key.el")
 
   (apply-templates (file-name-concat (dir!) "gptel/directives"))
   (load-gptel-directives (file-name-concat (dir!) "gptel/directives"))
@@ -1529,6 +1530,93 @@ On non-macOS systems, this function currently signals an error."
 ;; [AVFoundation indev @ 0x12a804080] [0] LG UltraFine Display Audio
 ;; [AVFoundation indev @ 0x12a804080] [1] MacBook Pro Microphone
 ;; [AVFoundation indev @ 0x12a804080] [2] Bose QC45
+
+#+END_SRC
+
+
+** Web Search
+
+*** Task
+
+This follows work to allow Emacs (and our LLM(s)) perform web searches.
+
+Research and web search options are in the Jira ticket: Emacs: GPTel Search the Web
+https://interruptsoftware.atlassian.net/browse/TECH-106
+
+The currently selected option is "Linkup".
+
+*** Tool
+
+Linkup is "World’s best search for AI Apps"
+https://www.linkup.so
+https://docs.linkup.so/pages/documentation/get-started/quickstart
+https://docs.linkup.so/pages/documentation/get-started/concepts
+
+=/search= query format is here:
+HTTP POST https://docs.linkup.so/pages/documentation/api-reference/endpoint/post-search
+
+This is a sample curl call.
+#+BEGIN_EXAMPLE
+curl "https://api.linkup.so/v1/search" \
+    -G \
+    -H "Authorization: Bearer $LINKUP_API_KEY" \
+    --data-urlencode "q=What is Microsoft's 2024 revenue?" \
+    --data-urlencode "depth=deep" \
+    --data-urlencode "outputType=sourcedAnswer"
+#+END_EXAMPLE
+
+*** Solution
+
+The =websearch= function makes a REST call to the "Linkup" web search API. It uses Emacs' =plz= HTTP library.
+https://github.com/alphapapa/plz.el
+
+The function takes the parameters ~query~ ~linkup_api_key~ and ~depth~ and plugs them into the REST API call.
+
+#+BEGIN_SRC elisp
+
+(use-package! plz)
+
+(defun websearch (query &optional api-key &optional depth)
+  "Search Linkup API with QUERY using the corresponding API-KEY.
+   Optional DEPTH parameter can be 'deep or 'shallow (defaults to deep).
+   Returns response as parsed JSON or signals an error."
+  (condition-case err
+      (let* ((depth-value (or depth "deep"))
+             (linkup-api-key (or api-key linkup-api-key))
+             (json-object (json-encode
+                           `(("q" . ,query)
+                             ("depth" . ,depth-value)
+                             ("outputType" . "sourcedAnswer")
+                             ("includeImages" . "false"))))
+             (url-request-method "POST")
+             (url-request-extra-headers
+              `(("Authorization" . ,(concat "Bearer " linkup-api-key))
+                ("Content-Type" . "application/json")))
+             (url-request-data json-object)
+             (buffer (url-retrieve-synchronously
+                      "https://api.linkup.so/v1/search" t)))
+        (if buffer
+            (with-current-buffer buffer
+              (goto-char url-http-end-of-headers)
+              (let ((json-response (json-read)))
+                (kill-buffer buffer)
+                (if (and (listp json-response) json-response)
+                    json-response
+                  (error "Invalid response format from Linkup API"))))
+          (error "No response from Linkup API")))
+
+    (json-error
+     (error "Failed to parse Linkup API response: %s" (error-message-string err)))
+
+    (error
+     (error "Linkup search error: %s" (error-message-string err)))))
+
+;; ;; Example usage:
+;; (websearch "What is Microsoft's 2024 revenue?"
+;;            "7c913f85-698f-487f-a95b-a5dc949f50f3")
+;; (websearch "What is Microsoft's 2024 revenue?"
+;;            "7c913f85-698f-487f-a95b-a5dc949f50f3"
+;;            "deep")
 
 #+END_SRC
 

@@ -45,7 +45,7 @@
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
 
-(load! "sunra")
+;; (load! "sunra")
 
 
 ;; https://github.com/tumashu/vertico-posframe
