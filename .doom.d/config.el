@@ -35,6 +35,34 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one)
 
+;; Show all buffers (including ephemeral ones like *cider-repl*) in vertico buffer switcher
+(after! consult
+  ;; Include hidden buffers (those starting with space or asterisk) in buffer list
+  (setq consult-buffer-sources
+        '(consult--source-hidden-buffer
+          consult--source-modified-buffer
+          consult--source-buffer
+          consult--source-recent-file
+          consult--source-file-register
+          consult--source-bookmark
+          consult--source-project-buffer-hidden
+          consult--source-project-recent-file-hidden)))
+
+;; Fix keyboard input loss on macOS
+;; Disable ns-auto-titlebar which causes keyboard focus issues on macOS 15.x
+(after! ns-auto-titlebar
+  (ns-auto-titlebar-mode -1))
+
+;; macOS-specific keyboard focus fixes
+(when (featurep 'ns)
+  ;; Ensure Emacs properly handles keyboard focus
+  (setq ns-pop-up-frames nil)
+  ;; Fix for keyboard input being dropped
+  (setq mac-pass-command-to-system nil)
+  (setq mac-pass-control-to-system nil)
+  ;; Ensure proper event handling
+  (setq ns-function-modifier 'hyper))
+
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
