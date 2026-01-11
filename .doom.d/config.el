@@ -38,6 +38,9 @@
 ;; Don't confirm when exiting Emacs
 (setq confirm-kill-emacs nil)
 
+;; Associate .notes files with org-mode (must be set before desktop restore)
+(add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
+
 ;; Desktop save mode - restore previous session on relaunch
 (desktop-save-mode 1)
 (setq desktop-restore-frames t)           ; Restore frame configuration
@@ -46,6 +49,19 @@
 (setq desktop-load-locked-desktop t)      ; Load desktop even if locked
 (add-to-list 'desktop-globals-to-save 'kill-ring)
 (add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
+
+;; Fix .notes files restored by desktop with wrong mode
+(defun my/fix-notes-file-mode ()
+  "Ensure .notes files are in org-mode after desktop restore."
+  (when (and buffer-file-name
+             (string-match-p "\\.notes\\'" buffer-file-name)
+             (not (derived-mode-p 'org-mode)))
+    (org-mode)))
+(add-hook 'desktop-after-read-hook
+          (lambda ()
+            (dolist (buf (buffer-list))
+              (with-current-buffer buf
+                (my/fix-notes-file-mode)))))
 
 ;; Show all buffers (including ephemeral ones like *cider-repl*) in vertico buffer switcher
 (after! consult

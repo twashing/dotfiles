@@ -17,11 +17,9 @@
   (map! :map general-override-mode-map
         "M-m s o" #'consult-outline))
 
-(desktop-save-mode 1)
-
-(add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
+;; Note: desktop-save-mode config is now in config.el
+;; Just add kmacro-ring here (not in config.el)
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
-(add-to-list 'desktop-globals-to-save 'kill-ring)
 
 ;; (use-package! org-make-toc
 ;;   :ensure t)
@@ -89,7 +87,7 @@
 (after! flycheck
   (global-flycheck-mode -1))
 
-(add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
+;; Note: .notes -> org-mode is now set in config.el (before desktop restore)
 
 (global-set-key (kbd "C-c C-s") 'save-buffer)
 
