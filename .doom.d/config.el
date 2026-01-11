@@ -35,6 +35,9 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one)
 
+;; Don't confirm when exiting Emacs
+(setq confirm-kill-emacs nil)
+
 ;; Show all buffers (including ephemeral ones like *cider-repl*) in vertico buffer switcher
 (after! consult
   ;; Include hidden buffers (those starting with space or asterisk) in buffer list
