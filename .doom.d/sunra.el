@@ -13,8 +13,9 @@
 (add-hook 'doom-before-modules-init-hook #'sunra/do-before-after-init)
 (add-hook 'doom-after-modules-init-hook #'sunra/do-before-after-init)
 
-(map! :map general-override-mode-map
-      "M-m s o" #'consult-outline)
+(after! general
+  (map! :map general-override-mode-map
+        "M-m s o" #'consult-outline))
 
 (desktop-save-mode 1)
 
@@ -25,29 +26,33 @@
 ;; (use-package! org-make-toc
 ;;   :ensure t)
 
-(map! :map general-override-mode-map
-      "C-c l e m" #'pp-macro-expand-last-expression
-      "C-c l e D" #'eval-defun-at-point)
+(after! general
+  (map! :map general-override-mode-map
+        "C-c l e m" #'pp-macro-expand-last-expression
+        "C-c l e D" #'eval-defun-at-point))
 
 ;; (map! :map general-override-mode-map
 ;;       "C-M a" #'embark-act
 ;;       "C-M e" #'embark-export
 ;;       "C-M c" #'embark-collect)
 
-(map! :map general-override-mode-map
-      "C-x <up>" #'pop-global-mark
-      "C-x <down>" #'consult-global-mark)
+(after! general
+  (map! :map general-override-mode-map
+        "C-x <up>" #'pop-global-mark
+        "C-x <down>" #'consult-global-mark))
 
 ;; (map! :map general-override-mode-map
 ;;       "C-c o e" #'+eshell/here
 ;;       "C-c o E" #'+eshell/toggle)
 
-(map! :map general-override-mode-map
-      "C-M-<" #'append-to-buffer)
+(after! general
+  (map! :map general-override-mode-map
+        "C-M-<" #'append-to-buffer))
 
-(map! :map general-override-mode-map
-      "C->" #'avy-goto-char-timer
-      "C-M->" #'avy-goto-char-2)
+(after! general
+  (map! :map general-override-mode-map
+        "C->" #'avy-goto-char-timer
+        "C-M->" #'avy-goto-char-2))
 
 (setq
 
@@ -81,7 +86,8 @@
  ;; https://emacs.stackexchange.com/a/32408/10528
  completion-ignore-case t)
 
-(flycheck-mode -1)
+(after! flycheck
+  (global-flycheck-mode -1))
 
 (add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
 
@@ -96,12 +102,13 @@
       "M-W" #'delete-trailing-whitespace
       "C-/" #'org-cycle-global)
 
-(map! :map general-override-mode-map
-      "M-m p p" #'projectile-switch-project
-      "M-m p f" #'projectile-find-file
-      "M-m p r" #'projectile-replace
-      "M-m p R" #'projectile-replace-regexp
-      "M-m p S" #'projectile-save-project-buffers)
+(after! general
+  (map! :map general-override-mode-map
+        "M-m p p" #'projectile-switch-project
+        "M-m p f" #'projectile-find-file
+        "M-m p r" #'projectile-replace
+        "M-m p R" #'projectile-replace-regexp
+        "M-m p S" #'projectile-save-project-buffers))
 
 (use-package! substitute
   :config
