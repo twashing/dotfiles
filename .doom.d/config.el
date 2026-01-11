@@ -48,6 +48,31 @@
           consult--source-project-buffer-hidden
           consult--source-project-recent-file-hidden)))
 
+;; Add starred/special buffers to workspace buffer switcher
+;; This makes *doom*, *scratch*, *Messages*, *cider-repl*, etc. visible
+(after! (:and vertico consult)
+  (defvar +vertico-starred-buffer-source
+    `(:name "Starred"
+      :narrow ?*
+      :category buffer
+      :face consult-buffer
+      :state ,#'consult--buffer-state
+      :items ,(lambda ()
+                (consult--buffer-query
+                 :sort 'visibility
+                 :as #'buffer-name
+                 :predicate
+                 (lambda (buf)
+                   (string-prefix-p "*" (buffer-name buf))))))
+    "Consult source for starred buffers like *scratch*, *Messages*, etc.")
+
+  (defun +vertico--add-starred-buffers-to-sources (orig-fn)
+    "Advice to add starred buffers source to workspace buffer sources."
+    (append (funcall orig-fn) (list +vertico-starred-buffer-source)))
+
+  (advice-add '+vertico--workspace-generate-sources :around
+              #'+vertico--add-starred-buffers-to-sources))
+
 ;; Fix keyboard input loss on macOS
 ;; Disable ns-auto-titlebar which causes keyboard focus issues on macOS 15.x
 (after! ns-auto-titlebar
