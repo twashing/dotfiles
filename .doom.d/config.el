@@ -38,6 +38,15 @@
 ;; Don't confirm when exiting Emacs
 (setq confirm-kill-emacs nil)
 
+;; Desktop save mode - restore previous session on relaunch
+(desktop-save-mode 1)
+(setq desktop-restore-frames t)           ; Restore frame configuration
+(setq desktop-restore-in-current-display t)
+(setq desktop-restore-eager 8)            ; Restore first 8 buffers immediately
+(setq desktop-load-locked-desktop t)      ; Load desktop even if locked
+(add-to-list 'desktop-globals-to-save 'kill-ring)
+(add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
+
 ;; Show all buffers (including ephemeral ones like *cider-repl*) in vertico buffer switcher
 (after! consult
   ;; Include hidden buffers (those starting with space or asterisk) in buffer list
@@ -51,7 +60,7 @@
           consult--source-project-buffer-hidden
           consult--source-project-recent-file-hidden)))
 
-;; Add starred/special buffers to workspace buffer switcher
+;; Add starred/special buffers and recent files to workspace buffer switcher
 ;; This makes *doom*, *scratch*, *Messages*, *cider-repl*, etc. visible
 (after! (:and vertico consult)
   (defvar +vertico-starred-buffer-source
@@ -69,12 +78,25 @@
                    (string-prefix-p "*" (buffer-name buf))))))
     "Consult source for starred buffers like *scratch*, *Messages*, etc.")
 
-  (defun +vertico--add-starred-buffers-to-sources (orig-fn)
-    "Advice to add starred buffers source to workspace buffer sources."
-    (append (funcall orig-fn) (list +vertico-starred-buffer-source)))
+  (defvar +vertico-recent-file-source
+    `(:name "Recent Files"
+      :narrow ?r
+      :category file
+      :face consult-file
+      :history file-name-history
+      :state ,#'consult--file-state
+      :items ,(lambda ()
+                (mapcar #'abbreviate-file-name recentf-list)))
+    "Consult source for recent files.")
+
+  (defun +vertico--add-extra-sources (orig-fn)
+    "Advice to add starred buffers and recent files to workspace buffer sources."
+    (append (funcall orig-fn)
+            (list +vertico-starred-buffer-source
+                  +vertico-recent-file-source)))
 
   (advice-add '+vertico--workspace-generate-sources :around
-              #'+vertico--add-starred-buffers-to-sources))
+              #'+vertico--add-extra-sources))
 
 ;; Fix keyboard input loss on macOS
 ;; Disable ns-auto-titlebar which causes keyboard focus issues on macOS 15.x
