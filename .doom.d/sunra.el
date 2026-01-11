@@ -1,17 +1,29 @@
+;; Disable whitespace-mode completely
+;; Remove Doom's whitespace-related hooks
 (remove-hook 'after-change-major-mode-hook
              #'doom-highlight-non-default-indentation-h)
-
 (remove-hook 'doom-first-buffer-hook
              #'global-whitespace-mode)
 
-(defun sunra/do-before-after-init ()
-  "Function to run before anything during Doom initialization."
+;; Disable whitespace-mode after Doom fully initializes
+(add-hook 'doom-after-init-hook
+          (lambda ()
+            (global-whitespace-mode -1)
+            ;; Also disable in any existing buffers
+            (dolist (buf (buffer-list))
+              (with-current-buffer buf
+                (whitespace-mode -1)))))
 
-  (global-whitespace-mode -1)
-  (flycheck-mode -1))
+;; Ensure whitespace-mode stays disabled when opening new files
+(add-hook 'find-file-hook (lambda () (whitespace-mode -1)) 100)
+(add-hook 'after-change-major-mode-hook (lambda () (whitespace-mode -1)) 100)
 
-(add-hook 'doom-before-modules-init-hook #'sunra/do-before-after-init)
-(add-hook 'doom-after-modules-init-hook #'sunra/do-before-after-init)
+;; Disable whitespace-mode when desktop restores buffers
+(add-hook 'desktop-after-read-hook
+          (lambda ()
+            (dolist (buf (buffer-list))
+              (with-current-buffer buf
+                (whitespace-mode -1)))))
 
 (after! general
   (map! :map general-override-mode-map
