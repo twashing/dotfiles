@@ -139,6 +139,10 @@
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
 
+;; Show emphasis markers verbatim (don't hide the = in =code= etc.)
+(after! org
+  (setq org-hide-emphasis-markers nil))
+
 (load! "sunra")
 
 
