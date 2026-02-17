@@ -240,27 +240,27 @@
 ;; (with-eval-after-load 'general
 ;;   (define-key general-override-mode-map (kbd "C-c M-c") nil))
 ;;
-;; (defun delete-whitespace-except-one ()
-;;   (interactive)
-;;   (just-one-space -1))
-;;
-;; (map! "C-M-SPC" #'delete-whitespace-except-one
-;;       "C-," #'+default/newline-above
-;;       "C-." #'+default/newline-below)
-;;
-;; (defun copy-line (&optional arg)
-;;   "Do a kill-line but copy rather than kill.  This function directly calls
-;;   kill-line, so see documentation of kill-line for how to use it including prefix
-;;   argument and relevant variables.  This function works by temporarily making the
-;;   buffer read-only."
-;;   (interactive "P")
-;;   (let ((buffer-read-only t)
-;;         (kill-read-only-ok t))
-;;     (kill-line arg)))
-;;
-;; (map! "C-c k" #'copy-line
-;;       "C-c K" #'avy-copy-line)
-;;
+(defun delete-whitespace-except-one ()
+  (interactive)
+  (just-one-space -1))
+
+(map! "C-M-SPC" #'delete-whitespace-except-one
+      "C-," #'+default/newline-above
+      "C-." #'+default/newline-below)
+
+(defun copy-line (&optional arg)
+  "Do a kill-line but copy rather than kill.  This function directly calls
+  kill-line, so see documentation of kill-line for how to use it including prefix
+  argument and relevant variables.  This function works by temporarily making the
+  buffer read-only."
+  (interactive "P")
+  (let ((buffer-read-only t)
+        (kill-read-only-ok t))
+    (kill-line arg)))
+
+(map! "C-c k" #'copy-line
+      "C-c K" #'avy-copy-line)
+
 ;; (require 'cl-lib)
 ;;
 ;; (defun zipmap (keys values)
@@ -412,11 +412,11 @@
 ;; ;; (use-package! flymake-kondor
 ;; ;;   :hook (clojure-mode . flymake-kondor-setup))
 ;;
-;; (map! :map general-override-mode-map
-;;       "C-x b" #'consult-buffer
-;;       "M-m s s" #'consult-line
-;;       "M-m s S" #'consult-line-multi
-;;       "M-y" #'consult-yank-from-kill-ring)
+(map! :map general-override-mode-map
+      "C-x b" #'consult-buffer
+      "M-m s s" #'consult-line
+      "M-m s S" #'consult-line-multi
+      "M-y" #'consult-yank-from-kill-ring)
 ;;
 ;; (use-package! embark-consult)
 ;;
