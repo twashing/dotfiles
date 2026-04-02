@@ -420,18 +420,18 @@
 ;;
 ;; (use-package! embark-consult)
 ;;
-;; (after! denote
-;;
-;;   (use-package! denote
-;;     :config
-;;     (setq denote-directory (expand-file-name "~/Projects/notes/")
-;;           denote-known-keywords '("emacs" "clojure" "guix")
-;;           denote-infer-keywords t
-;;           denote-sort-keywords t
-;;           denote-file-type 'markdown-yaml ; Org is the default, set others here
-;;           denote-prompts '(title keywords)
-;;           denote-excluded-directories-regexp nil
-;;           denote-excluded-keywords-regexp nil)))
+(after! denote
+
+  (use-package! denote
+    :config
+    (setq denote-directory (expand-file-name "~/Projects/notes/")
+          denote-known-keywords '("emacs" "clojure" "guix")
+          denote-infer-keywords t
+          denote-sort-keywords t
+          denote-file-type 'markdown-yaml ; Org is the default, set others here
+          denote-prompts '(title keywords)
+          denote-excluded-directories-regexp nil
+          denote-excluded-keywords-regexp nil)))
 ;;
 ;; ;; (after! org-roam
 ;; ;;
