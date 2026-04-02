@@ -192,8 +192,8 @@ alias llc="eza -l"
 
 alias lsc="eza -a"
 alias cls="clear"
-alias emd="cd ~/.emacs.d"
-alias dmd="cd ~/.doom.d"
+alias emd="cd ~/.config/emacs"
+alias dmd="cd ~/.config/doom"
 
 # Taken from SO:
 # http://stackoverflow.com/questions/13322485/how-to-i-get-the-primary-ip-address-of-the-local-machine-on-linux-and-os-x
@@ -314,3 +314,13 @@ if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
     # eval "$(oh-my-posh init zsh)"
     eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 fi
+
+
+
+
+# #######
+# Emacs
+# #######
+
+# This should in theory point Doom to my GUI Emacs.
+export EMACS=/Applications/Emacs.app/Contents/MacOS/Emacs
