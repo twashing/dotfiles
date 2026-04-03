@@ -411,7 +411,18 @@
 ;; ;;
 ;; ;; (use-package! flymake-kondor
 ;; ;;   :hook (clojure-mode . flymake-kondor-setup))
-;;
+
+;; Corfu: disable auto-completion, require manual invocation
+(after! corfu
+  (setq corfu-auto nil))
+
+;; Cape: manual completion backends bound to C-c p prefix
+(after! cape
+  (map! "C-c p p" #'completion-at-point
+        "C-c p d" #'cape-dabbrev
+        "C-c p f" #'cape-file
+        "C-c p k" #'cape-keyword))
+
 (map! :map general-override-mode-map
       "C-x b" #'consult-buffer
       "M-m s s" #'consult-line
