@@ -423,7 +423,16 @@
         "C-c p f" #'cape-file
         "C-c p k" #'cape-keyword))
 
+;; New frame should show the current buffer, not the dashboard
+(defun +make-frame-with-current-buffer ()
+  "Create a new frame displaying the current buffer."
+  (interactive)
+  (let ((buf (current-buffer)))
+    (select-frame (make-frame))
+    (switch-to-buffer buf)))
+
 (map! :map general-override-mode-map
+      "C-c o f" #'+make-frame-with-current-buffer
       "C-x b" #'consult-buffer
       "M-m s s" #'consult-line
       "M-m s S" #'consult-line-multi
