@@ -67,14 +67,14 @@
 (after! consult
   ;; Include hidden buffers (those starting with space or asterisk) in buffer list
   (setq consult-buffer-sources
-        '(consult--source-hidden-buffer
-          consult--source-modified-buffer
-          consult--source-buffer
-          consult--source-recent-file
-          consult--source-file-register
-          consult--source-bookmark
-          consult--source-project-buffer-hidden
-          consult--source-project-recent-file-hidden)))
+        '(consult-source-hidden-buffer
+          consult-source-modified-buffer
+          consult-source-buffer
+          consult-source-recent-file
+          consult-source-file-register
+          consult-source-bookmark
+          consult-source-project-buffer-hidden
+          consult-source-project-recent-file-hidden)))
 
 ;; Add starred/special buffers and recent files to workspace buffer switcher
 ;; This makes *doom*, *scratch*, *Messages*, *cider-repl*, etc. visible
