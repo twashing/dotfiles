@@ -192,8 +192,8 @@ alias llc="eza -l"
 
 alias lsc="eza -a"
 alias cls="clear"
-alias emd="cd ~/.emacs.d"
-alias dmd="cd ~/.doom.d"
+alias emd="cd ~/.config/emacs"
+alias dmd="cd ~/.config/doom"
 
 # Taken from SO:
 # http://stackoverflow.com/questions/13322485/how-to-i-get-the-primary-ip-address-of-the-local-machine-on-linux-and-os-x
@@ -203,6 +203,25 @@ alias ipaddress="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){
 alias services_on_ports="lsof -Pnl +M -i4"
 
 
+# My git aliases are coming from two sources:
+#
+# 1. Oh My Zsh git plugin (loaded via Zinit) — ~196 aliases
+#
+# This is the main source. ~/.zshrc (symlinked from /Users/timothyw/Projects/dotfiles/.zshrc) loads it with:
+# zinit snippet OMZP::git
+#
+# The actual alias definitions live in:
+# ~/.local/share/zinit/snippets/OMZP::git/OMZP::git
+#
+# This gives me all the standard ones like g, ga, gc, gco, gst, gp, gl, grb, etc.
+#
+# 2. Three custom aliases in my .zshrc (lines 206-208):
+#
+# alias gdif="git diff --name-only"
+# alias gdiff="git diff"
+# alias gtree='git log --graph --full-history --all --color ...'
+#
+# (Same three are also in .bash_profile lines 118-120.)
 alias gdif="git diff --name-only"
 alias gdiff="git diff"
 alias gtree='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
@@ -314,3 +333,13 @@ if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
     # eval "$(oh-my-posh init zsh)"
     eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 fi
+
+
+
+
+# #######
+# Emacs
+# #######
+
+# This should in theory point Doom to my GUI Emacs.
+export EMACS=/Applications/Emacs.app/Contents/MacOS/Emacs

@@ -1,53 +1,68 @@
+;; Disable whitespace-mode completely
+;; Remove Doom's whitespace-related hooks
 (remove-hook 'after-change-major-mode-hook
              #'doom-highlight-non-default-indentation-h)
-
 (remove-hook 'doom-first-buffer-hook
              #'global-whitespace-mode)
 
-(defun sunra/do-before-after-init ()
-  "Function to run before anything during Doom initialization."
+;; Disable whitespace-mode after Doom fully initializes
+(add-hook 'doom-after-init-hook
+          (lambda ()
+            (global-whitespace-mode -1)
+            ;; Also disable in any existing buffers
+            (dolist (buf (buffer-list))
+              (with-current-buffer buf
+                (whitespace-mode -1)))))
 
-  (global-whitespace-mode -1)
-  (flycheck-mode -1))
+;; Ensure whitespace-mode stays disabled when opening new files
+(add-hook 'find-file-hook (lambda () (whitespace-mode -1)) 100)
+(add-hook 'after-change-major-mode-hook (lambda () (whitespace-mode -1)) 100)
 
-(add-hook 'doom-before-modules-init-hook #'sunra/do-before-after-init)
-(add-hook 'doom-after-modules-init-hook #'sunra/do-before-after-init)
+;; Disable whitespace-mode when desktop restores buffers
+(add-hook 'desktop-after-read-hook
+          (lambda ()
+            (dolist (buf (buffer-list))
+              (with-current-buffer buf
+                (whitespace-mode -1)))))
 
-(map! :map general-override-mode-map
-      "M-m s o" #'consult-outline)
+(after! general
+  (map! :map general-override-mode-map
+        "M-m s o" #'consult-outline))
 
-(desktop-save-mode 1)
-
-(add-to-list 'desktop-globals-to-save 'log-edit-comment-ring)
+;; Note: desktop-save-mode config is now in config.el
+;; Just add kmacro-ring here (not in config.el)
 (add-to-list 'desktop-globals-to-save 'kmacro-ring)
-(add-to-list 'desktop-globals-to-save 'kill-ring)
 
 ;; (use-package! org-make-toc
 ;;   :ensure t)
 
-(map! :map general-override-mode-map
-      "C-c l e m" #'pp-macro-expand-last-expression
-      "C-c l e D" #'eval-defun-at-point)
+(after! general
+  (map! :map general-override-mode-map
+        "C-c l e m" #'pp-macro-expand-last-expression
+        "C-c l e D" #'eval-defun-at-point))
 
 ;; (map! :map general-override-mode-map
 ;;       "C-M a" #'embark-act
 ;;       "C-M e" #'embark-export
 ;;       "C-M c" #'embark-collect)
 
-(map! :map general-override-mode-map
-      "C-x <up>" #'pop-global-mark
-      "C-x <down>" #'consult-global-mark)
+(after! general
+  (map! :map general-override-mode-map
+        "C-x <up>" #'pop-global-mark
+        "C-x <down>" #'consult-global-mark))
 
 ;; (map! :map general-override-mode-map
 ;;       "C-c o e" #'+eshell/here
 ;;       "C-c o E" #'+eshell/toggle)
 
-(map! :map general-override-mode-map
-      "C-M-<" #'append-to-buffer)
+(after! general
+  (map! :map general-override-mode-map
+        "C-M-<" #'append-to-buffer))
 
-(map! :map general-override-mode-map
-      "C->" #'avy-goto-char-timer
-      "C-M->" #'avy-goto-char-2)
+(after! general
+  (map! :map general-override-mode-map
+        "C->" #'avy-goto-char-timer
+        "C-M->" #'avy-goto-char-2))
 
 (setq
 
@@ -81,9 +96,10 @@
  ;; https://emacs.stackexchange.com/a/32408/10528
  completion-ignore-case t)
 
-(flycheck-mode -1)
+(after! flycheck
+  (global-flycheck-mode -1))
 
-(add-to-list 'auto-mode-alist '("\\.notes\\'" . org-mode))
+;; Note: .notes -> org-mode is now set in config.el (before desktop restore)
 
 (global-set-key (kbd "C-c C-s") 'save-buffer)
 
@@ -96,12 +112,13 @@
       "M-W" #'delete-trailing-whitespace
       "C-/" #'org-cycle-global)
 
-(map! :map general-override-mode-map
-      "M-m p p" #'projectile-switch-project
-      "M-m p f" #'projectile-find-file
-      "M-m p r" #'projectile-replace
-      "M-m p R" #'projectile-replace-regexp
-      "M-m p S" #'projectile-save-project-buffers)
+(after! general
+  (map! :map general-override-mode-map
+        "M-m p p" #'projectile-switch-project
+        "M-m p f" #'projectile-find-file
+        "M-m p r" #'projectile-replace
+        "M-m p R" #'projectile-replace-regexp
+        "M-m p S" #'projectile-save-project-buffers))
 
 (use-package! substitute
   :config
@@ -223,27 +240,27 @@
 ;; (with-eval-after-load 'general
 ;;   (define-key general-override-mode-map (kbd "C-c M-c") nil))
 ;;
-;; (defun delete-whitespace-except-one ()
-;;   (interactive)
-;;   (just-one-space -1))
-;;
-;; (map! "C-M-SPC" #'delete-whitespace-except-one
-;;       "C-," #'+default/newline-above
-;;       "C-." #'+default/newline-below)
-;;
-;; (defun copy-line (&optional arg)
-;;   "Do a kill-line but copy rather than kill.  This function directly calls
-;;   kill-line, so see documentation of kill-line for how to use it including prefix
-;;   argument and relevant variables.  This function works by temporarily making the
-;;   buffer read-only."
-;;   (interactive "P")
-;;   (let ((buffer-read-only t)
-;;         (kill-read-only-ok t))
-;;     (kill-line arg)))
-;;
-;; (map! "C-c k" #'copy-line
-;;       "C-c K" #'avy-copy-line)
-;;
+(defun delete-whitespace-except-one ()
+  (interactive)
+  (just-one-space -1))
+
+(map! "C-M-SPC" #'delete-whitespace-except-one
+      "C-," #'+default/newline-above
+      "C-." #'+default/newline-below)
+
+(defun copy-line (&optional arg)
+  "Do a kill-line but copy rather than kill.  This function directly calls
+  kill-line, so see documentation of kill-line for how to use it including prefix
+  argument and relevant variables.  This function works by temporarily making the
+  buffer read-only."
+  (interactive "P")
+  (let ((buffer-read-only t)
+        (kill-read-only-ok t))
+    (kill-line arg)))
+
+(map! "C-c k" #'copy-line
+      "C-c K" #'avy-copy-line)
+
 ;; (require 'cl-lib)
 ;;
 ;; (defun zipmap (keys values)
@@ -394,27 +411,47 @@
 ;; ;;
 ;; ;; (use-package! flymake-kondor
 ;; ;;   :hook (clojure-mode . flymake-kondor-setup))
-;;
-;; (map! :map general-override-mode-map
-;;       "C-x b" #'consult-buffer
-;;       "M-m s s" #'consult-line
-;;       "M-m s S" #'consult-line-multi
-;;       "M-y" #'consult-yank-from-kill-ring)
+
+;; Corfu: disable auto-completion, require manual invocation
+(after! corfu
+  (setq corfu-auto nil))
+
+;; Cape: manual completion backends bound to C-c p prefix
+(after! cape
+  (map! "C-c p p" #'completion-at-point
+        "C-c p d" #'cape-dabbrev
+        "C-c p f" #'cape-file
+        "C-c p k" #'cape-keyword))
+
+;; New frame should show the current buffer, not the dashboard
+(defun +make-frame-with-current-buffer ()
+  "Create a new frame displaying the current buffer."
+  (interactive)
+  (let ((buf (current-buffer)))
+    (select-frame (make-frame))
+    (switch-to-buffer buf)))
+
+(map! :map general-override-mode-map
+      "C-c o f" #'+make-frame-with-current-buffer
+      "C-x b" #'consult-buffer
+      "M-m s s" #'consult-line
+      "M-m s S" #'consult-line-multi
+      "M-y" #'consult-yank-from-kill-ring)
 ;;
 ;; (use-package! embark-consult)
 ;;
-;; (after! denote
-;;
-;;   (use-package! denote
-;;     :config
-;;     (setq denote-directory (expand-file-name "~/Projects/notes/")
-;;           denote-known-keywords '("emacs" "clojure" "guix")
-;;           denote-infer-keywords t
-;;           denote-sort-keywords t
-;;           denote-file-type 'markdown-yaml ; Org is the default, set others here
-;;           denote-prompts '(title keywords)
-;;           denote-excluded-directories-regexp nil
-;;           denote-excluded-keywords-regexp nil)))
+(after! denote
+
+  (use-package! denote
+    :config
+    (setq denote-directory (expand-file-name "~/Projects/notes/")
+          denote-known-keywords '("emacs" "clojure" "guix")
+          denote-infer-keywords t
+          denote-sort-keywords t
+          denote-file-type 'markdown-yaml ; Org is the default, set others here
+          denote-prompts '(title keywords)
+          denote-excluded-directories-regexp nil
+          denote-excluded-keywords-regexp nil)))
 ;;
 ;; ;; (after! org-roam
 ;; ;;
@@ -448,164 +485,152 @@
 ;; ;;  (with-eval-after-load 'markdown-mode
 ;; ;;   (advice-add #'markdown-indent-line :before-until #'completion-at-point)))
 ;;
-;; (defun apply-template (template-file output-file &optional context)
-;;   "Apply a template file TEMPLATE-FILE and write the result to OUTPUT-FILE.
-;;    Replaces placeholders of the form:
-;;    - {file:FILENAME} with the contents of FILENAME (resolved relative to TEMPLATE-FILE's directory)
-;;    - {var:VARNAME} with the value associated with VARNAME in CONTEXT (an alist), or an empty string if CONTEXT is nil.
-;;
-;;    Example usage:
-;;    Assuming your project directory contains:
-;;    - \"Content.md\" with contents: \"Bar\"
-;;    - \"A.md.tmpl\" with contents:
-;;         Foo {file:Content.md}
-;;         {var:thing}
-;;
-;;    And you want to create \"A.md\" with the inserted text.
-;;    You can call with or without a context of variables
-;;
-;;    (apply-template \"path/to/project-directory/A.md.tmpl\"
-;;                    \"path/to/project-directory/A.md\"
-;;                    '((\"thing\" . \"querty\")))
-;;
-;;    (apply-template \"path/to/project-directory/A.md.tmpl\"
-;;                    \"path/to/project-directory/A.md\")"
-;;
-;;   (let ((project-dir (file-name-directory template-file)))
-;;
-;;     (with-temp-buffer
-;;
-;;       ;; Read template into a string.
-;;       (insert-file-contents template-file)
-;;       (let ((template (buffer-string)))
-;;
-;;         ;; Replace {file:...} placeholders.
-;;         (setq template
-;;               (replace-regexp-in-string
-;;                "{file:\\([^}]+\\)}"
-;;                (lambda (match)
-;;                  ;; Obtain the file name from the match.
-;;                  (let* ((raw-filename (match-string 1 match))
-;;                         ;; Remove any extraneous escape characters if needed.
-;;                         (filename (replace-regexp-in-string "\\\\" "" raw-filename))
-;;                         (full-path (expand-file-name filename project-dir)))
-;;                    (with-temp-buffer
-;;                      (condition-case err
-;;                          (progn
-;;                            (insert-file-contents full-path)
-;;                            (buffer-string))
-;;                        (error (format "[Error reading file: %s]" full-path))))))
-;;                template t t))
-;;
-;;         ;; Replace {var:...} placeholders.
-;;         (setq template
-;;               (replace-regexp-in-string
-;;                "{var:\\([^}]+\\)}"
-;;                (lambda (match)
-;;                  (if (string-match "{var:\\([^}]+\\)}" match)
-;;                      (if context
-;;                          (or (cdr (assoc (match-string 1 match) context)) "")
-;;                        "")
-;;                    match))
-;;                template t t))
-;;
-;;         ;; Write the resulting string to OUTPUT-FILE.
-;;         (with-temp-file output-file
-;;           (insert template))))))
-;;
-;; (defun apply-templates (dir &optional context)
-;;   "Process all .tmpl files in DIR.
-;;    For each file with a .tmpl suffix, create an output file by removing the .tmpl suffix.
-;;    If CONTEXT (an alist) is provided, it is passed to `apply-template` for variable substitutions.
-;;
-;;    Example usage:
-;;    Suppose you have a directory \"path/to/project-directory\" with:
-;;      - \"A.md.tmpl\"
-;;      - \"main.c.tmpl\"
-;;    And you want to process these templates with a context:
-;;
-;;    (apply-templates \"gptel/directives\"
-;;                     '((\"thing\" . \"querty\")))"
-;;
-;;   (dolist (tmpl-file (directory-files dir t "\\.tmpl$"))
-;;
-;;     (when (file-regular-p tmpl-file)
-;;       (let* ((output-file (replace-regexp-in-string "\\.tmpl$" "" tmpl-file)))
-;;         (apply-template tmpl-file output-file context)
-;;         (message "Processed template: %s -> %s" tmpl-file output-file)))))
-;;
-;; (defun load-gptel-directives (dir)
-;;   "Load all directive files from DIR into gptel-directives.
-;;    Newer directives override existing ones with the same key."
-;;   (let* ((files (directory-files dir t "\\.md$"))
-;;          (new-pairs (mapcar (lambda (file)
-;;                               (cons
-;;                                (intern (file-name-base file))
-;;                                (with-temp-buffer
-;;                                  (insert-file-contents file)
-;;                                  (buffer-string))))
-;;                             files))
-;;          (existing-keys (mapcar #'car gptel-directives))
-;;          (filtered-old (cl-remove-if (lambda (pair)
-;;                                        (member (car pair) (mapcar #'car new-pairs)))
-;;                                      gptel-directives)))
-;;     (setq gptel-directives
-;;           (append new-pairs filtered-old))))
-;;
-;; (defun load-all! (dir)
-;;   "Load all .el files from DIR"
-;;   (dolist (file (directory-files dir t "\\.el$"))
-;;     (load! file)))
-;;
-;; (use-package! gptel
-;;
-;;   :bind ("C-M-'" . gptel-send)
-;;   :config
-;;
-;;   (load! "openapi-key.el")
-;;   (load! "gemini-key.el")
-;;   (load! "anthropic-key.el")
-;;   (load! "linkup-api-key.el")
-;;
-;;   (apply-templates (file-name-concat (dir!) "gptel/directives"))
-;;   (load-gptel-directives (file-name-concat (dir!) "gptel/directives"))
-;;   (load-all! (file-name-concat (dir!) "gptel/tools/"))
-;;
-;;   (setq! gptel-api-key openapi-key
-;;          gptel-expert-commands t
-;;          gptel-prompt-prefix-alist '((markdown-mode . "*Prompt* ")
-;;                                      (org-mode . "*Prompt* ")
-;;                                      (text-mode . "*Prompt*  "))
-;;          gptel-response-prefix-alist '((markdown-mode . "*Response* ")
-;;                                        (org-mode . "*Response* ")
-;;                                        (text-mode . "*Response* ")))
-;;
-;;   ;; :key can be a function that returns the API key.
-;;   ;; Any name you want
-;;   ;; Streaming responses
-;;   (gptel-make-gemini "Gemini"
-;;     :key gemini-key
-;;     :stream t)
-;;   (gptel-make-anthropic "Claude"
-;;     :key anthropic-key
-;;     :stream t)
-;;
-;;   ;; NOTE keep this until moving back to `main' branch
-;;   (setq gptel--anthropic-models
-;;         (cons '(claude-3-7-sonnet-20250219
-;;                 :description "Hybrid model capable of standard thinking and extended thinking modes"
-;;                 :capabilities (media tool-use cache)
-;;                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-;;                 :context-window 200
-;;                 :input-cost 3
-;;                 :output-cost 15
-;;                 :cutoff-date "2025-02")
-;;               gptel--anthropic-models)))
-;;
-;; (use-package! gptel-quick
-;;
-;;   :bind (:map embark-general-map
-;;               ("?" . #'gptel-quick)))
+(defun apply-template (template-file output-file &optional context)
+  "Apply a template file TEMPLATE-FILE and write the result to OUTPUT-FILE.
+   Replaces placeholders of the form:
+   - {file:FILENAME} with the contents of FILENAME (resolved relative to TEMPLATE-FILE's directory)
+   - {var:VARNAME} with the value associated with VARNAME in CONTEXT (an alist), or an empty string if CONTEXT is nil.
+
+   Example usage:
+   Assuming your project directory contains:
+   - \"Content.md\" with contents: \"Bar\"
+   - \"A.md.tmpl\" with contents:
+        Foo {file:Content.md}
+        {var:thing}
+
+   And you want to create \"A.md\" with the inserted text.
+   You can call with or without a context of variables
+
+   (apply-template \"path/to/project-directory/A.md.tmpl\"
+                   \"path/to/project-directory/A.md\"
+                   '((\"thing\" . \"querty\")))
+
+   (apply-template \"path/to/project-directory/A.md.tmpl\"
+                   \"path/to/project-directory/A.md\")"
+
+  (let ((project-dir (file-name-directory template-file)))
+
+    (with-temp-buffer
+
+      ;; Read template into a string.
+      (insert-file-contents template-file)
+      (let ((template (buffer-string)))
+
+        ;; Replace {file:...} placeholders.
+        (setq template
+              (replace-regexp-in-string
+               "{file:\\([^}]+\\)}"
+               (lambda (match)
+                 ;; Obtain the file name from the match.
+                 (let* ((raw-filename (match-string 1 match))
+                        ;; Remove any extraneous escape characters if needed.
+                        (filename (replace-regexp-in-string "\\\\" "" raw-filename))
+                        (full-path (expand-file-name filename project-dir)))
+                   (with-temp-buffer
+                     (condition-case err
+                         (progn
+                           (insert-file-contents full-path)
+                           (buffer-string))
+                       (error (format "[Error reading file: %s]" full-path))))))
+               template t t))
+
+        ;; Replace {var:...} placeholders.
+        (setq template
+              (replace-regexp-in-string
+               "{var:\\([^}]+\\)}"
+               (lambda (match)
+                 (if (string-match "{var:\\([^}]+\\)}" match)
+                     (if context
+                         (or (cdr (assoc (match-string 1 match) context)) "")
+                       "")
+                   match))
+               template t t))
+
+        ;; Write the resulting string to OUTPUT-FILE.
+        (with-temp-file output-file
+          (insert template))))))
+
+(defun apply-templates (dir &optional context)
+  "Process all .tmpl files in DIR.
+   For each file with a .tmpl suffix, create an output file by removing the .tmpl suffix.
+   If CONTEXT (an alist) is provided, it is passed to `apply-template` for variable substitutions.
+
+   Example usage:
+   Suppose you have a directory \"path/to/project-directory\" with:
+     - \"A.md.tmpl\"
+     - \"main.c.tmpl\"
+   And you want to process these templates with a context:
+
+   (apply-templates \"gptel/directives\"
+                    '((\"thing\" . \"querty\")))"
+
+  (dolist (tmpl-file (directory-files dir t "\\.tmpl$"))
+
+    (when (file-regular-p tmpl-file)
+      (let* ((output-file (replace-regexp-in-string "\\.tmpl$" "" tmpl-file)))
+        (apply-template tmpl-file output-file context)
+        (message "Processed template: %s -> %s" tmpl-file output-file)))))
+
+(defun load-gptel-directives (dir)
+  "Load all directive files from DIR into gptel-directives.
+   Newer directives override existing ones with the same key."
+  (let* ((files (directory-files dir t "\\.md$"))
+         (new-pairs (mapcar (lambda (file)
+                              (cons
+                               (intern (file-name-base file))
+                               (with-temp-buffer
+                                 (insert-file-contents file)
+                                 (buffer-string))))
+                            files))
+         (existing-keys (mapcar #'car gptel-directives))
+         (filtered-old (cl-remove-if (lambda (pair)
+                                       (member (car pair) (mapcar #'car new-pairs)))
+                                     gptel-directives)))
+    (setq gptel-directives
+          (append new-pairs filtered-old))))
+
+(defun load-all! (dir)
+  "Load all .el files from DIR"
+  (dolist (file (directory-files dir t "\\.el$"))
+    (load! file)))
+
+(use-package! gptel
+
+  :bind ("C-M-'" . gptel-send)
+  :config
+
+  (load! "openapi-key.el")
+  (load! "gemini-key.el")
+  (load! "anthropic-key.el")
+  (load! "linkup-api-key.el")
+
+  (apply-templates (file-name-concat (dir!) "gptel/directives"))
+  (load-gptel-directives (file-name-concat (dir!) "gptel/directives"))
+  (load-all! (file-name-concat (dir!) "gptel/tools/"))
+
+  (setq! gptel-api-key openapi-key
+         gptel-expert-commands t
+         gptel-prompt-prefix-alist '((markdown-mode . "*Prompt* ")
+                                     (org-mode . "*Prompt* ")
+                                     (text-mode . "*Prompt*  "))
+         gptel-response-prefix-alist '((markdown-mode . "*Response* ")
+                                       (org-mode . "*Response* ")
+                                       (text-mode . "*Response* ")))
+
+  ;; Register Gemini backend with all built-in models
+  (gptel-make-gemini "Gemini"
+    :key gemini-key
+    :stream t)
+
+  ;; Register Anthropic backend with all built-in models
+  (gptel-make-anthropic "Claude"
+    :key anthropic-key
+    :stream t))
+
+(use-package! gptel-quick
+  :after embark
+  :config
+  (define-key embark-general-map "?" #'gptel-quick))
 ;;
 ;; (defun sunra/goto-emacs-dir ()
 ;;   "Open my ~/.emacs.d directory."
